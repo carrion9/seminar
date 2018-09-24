@@ -1,0 +1,10 @@
+.no-seminars-found {
+    font-size: 20px;
+    text-align: center;
+    padding: 20px;
+}
+
+.load-more-seminars {
+    text-align: center;
+    margin-bottom: 40px;
+}
