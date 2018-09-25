@@ -1,5 +1,6 @@
-package com.vetx.starter.model;
+package com.vetx.starter.repository;
 
+import com.vetx.starter.model.Seminar;
 import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

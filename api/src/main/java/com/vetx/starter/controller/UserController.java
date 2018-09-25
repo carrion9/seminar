@@ -2,7 +2,7 @@ package com.vetx.starter.controller;
 
 import com.vetx.starter.exception.ResourceNotFoundException;
 import com.vetx.starter.model.auth.User;
-import com.vetx.starter.model.auth.UserRepository;
+import com.vetx.starter.repository.UserRepository;
 import com.vetx.starter.payload.UserIdentityAvailability;
 import com.vetx.starter.payload.UserProfile;
 import com.vetx.starter.payload.UserSummary;

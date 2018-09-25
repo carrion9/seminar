@@ -32,15 +32,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
   private final JwtAuthenticationEntryPoint unauthorizedHandler;
 
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
   @Autowired
-  public SecurityConfiguration(UserPrincipalService userPrincipalService, JwtAuthenticationEntryPoint unauthorizedHandler) {
+  public SecurityConfiguration(UserPrincipalService userPrincipalService, JwtAuthenticationEntryPoint unauthorizedHandler, JwtAuthenticationFilter jwtAuthenticationFilter) {
     this.userPrincipalService = userPrincipalService;
     this.unauthorizedHandler = unauthorizedHandler;
-  }
-
-  @Bean
-  public JwtAuthenticationFilter jwtAuthenticationFilter() {
-    return new JwtAuthenticationFilter();
+    this.jwtAuthenticationFilter = jwtAuthenticationFilter;
   }
 
   @Override
@@ -97,7 +95,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .authenticated();
 
     // Add our custom JWT security filter
-    http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+    http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
   }
 }

@@ -1,5 +1,7 @@
-package com.vetx.starter.model.auth;
+package com.vetx.starter.repository;
 
+import com.vetx.starter.model.auth.Role;
+import com.vetx.starter.model.auth.RoleName;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

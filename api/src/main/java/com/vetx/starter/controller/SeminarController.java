@@ -1,7 +1,7 @@
 package com.vetx.starter.controller;
 
 import com.vetx.starter.model.Seminar;
-import com.vetx.starter.model.SeminarRepository;
+import com.vetx.starter.repository.SeminarRepository;
 import com.vetx.starter.security.UserPrincipal;
 import com.vetx.starter.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;

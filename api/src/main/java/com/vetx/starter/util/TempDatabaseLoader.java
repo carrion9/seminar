@@ -1,17 +1,13 @@
 package com.vetx.starter.util;
 
-import com.vetx.starter.model.Seminar;
-import com.vetx.starter.model.SeminarRepository;
-import com.vetx.starter.model.SeminarType;
+import com.vetx.starter.repository.SeminarRepository;
 import com.vetx.starter.model.auth.Role;
 import com.vetx.starter.model.auth.RoleName;
-import com.vetx.starter.model.auth.RoleRepository;
-import com.vetx.starter.model.auth.UserRepository;
+import com.vetx.starter.repository.RoleRepository;
+import com.vetx.starter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-import java.time.Instant;
 
 @Component
 public class TempDatabaseLoader implements CommandLineRunner {

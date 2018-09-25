@@ -6,6 +6,8 @@ import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.payload.auth.JwtAuthenticationResponse;
 import com.vetx.starter.payload.auth.LoginRequest;
 import com.vetx.starter.payload.auth.SignUpRequest;
+import com.vetx.starter.repository.RoleRepository;
+import com.vetx.starter.repository.UserRepository;
 import com.vetx.starter.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

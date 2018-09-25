@@ -1,7 +1,7 @@
 package com.vetx.starter.security;
 
 import com.vetx.starter.model.auth.User;
-import com.vetx.starter.model.auth.UserRepository;
+import com.vetx.starter.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
