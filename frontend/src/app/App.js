@@ -9,7 +9,7 @@ import {
 import { getCurrentUser } from '../util/APIUtils';
 import { ACCESS_TOKEN } from '../constants';
 
-import SeminarList from '../seminar/Seminar';
+import SeminarList from '../seminar/SeminarList';
 import NewSeminar from '../seminar/NewSeminar';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';

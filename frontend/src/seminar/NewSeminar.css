@@ -1,0 +1,47 @@
+.new-seminar-container {
+    max-width: 520px;
+    margin: 80px auto 0;
+}
+
+.create-seminar-form-button {
+    width: 100%;
+}
+
+.create-seminar-form-button[disabled], .create-seminar-form-button[disabled]:hover, .create-seminar-form-button[disabled]:focus {
+    opacity: 0.6;
+    color: #fff;
+    background-color: #1890ff;
+    border-color: #1890ff;
+}
+
+
+.dynamic-delete-button {
+    cursor: pointer;
+    position: relative;
+    top: 4px;
+    font-size: 24px;
+    color: #999;
+    transition: all .3s;
+}
+
+.optional-choice {
+    width: calc(100% - 35px);
+    margin-right: 8px;
+}
+
+.dynamic-delete-button:hover {
+    color: #777;
+}
+
+.dynamic-delete-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.seminar-form-row {
+    margin-bottom: 20px;
+}
+
+.seminar-form-row input, .seminar-form-row textarea {
+    margin-bottom: 4px;
+}

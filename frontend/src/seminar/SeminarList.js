@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { getAllSeminars, getUserCreatedSeminars, getUserVotedSeminars } from '../util/APIUtils';
 import Seminar from './Seminar';
-import { castVote } from '../util/APIUtils';
 import LoadingIndicator  from '../common/LoadingIndicator';
 import { Button, Icon, notification } from 'antd';
-import { POLL_LIST_SIZE } from '../constants';
+import { SEMINAR_LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import './SeminarList.css';
 
@@ -25,17 +24,10 @@ class SeminarList extends Component {
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    loadSeminarList(page = 0, size = POLL_LIST_SIZE) {
+    loadSeminarList(page = 0, size = SEMINAR_LIST_SIZE) {
         let promise;
-        if(this.props.username) {
-            if(this.props.type === 'USER_CREATED_POLLS') {
-                promise = getUserCreatedSeminars(this.props.username, page, size);
-            } else if (this.props.type === 'USER_VOTED_POLLS') {
-                promise = getUserVotedSeminars(this.props.username, page, size);
-            }
-        } else {
-            promise = getAllSeminars(page, size);
-        }
+
+        promise = getAllSeminars(page, size);
 
         if(!promise) {
             return;
@@ -117,28 +109,6 @@ class SeminarList extends Component {
         const seminar = this.state.seminars[seminarIndex];
         const selectedChoice = this.state.currentVotes[seminarIndex];
 
-        const voteData = {
-            seminarId: seminar.id,
-            choiceId: selectedChoice
-        };
-
-        castVote(voteData)
-            .then(response => {
-                const seminars = this.state.seminars.slice();
-                seminars[seminarIndex] = response;
-                this.setState({
-                    seminars: seminars
-                });
-            }).catch(error => {
-            if(error.status === 401) {
-                this.props.handleLogout('/login', 'error', 'You have been logged out. Please login to vote');
-            } else {
-                notification.error({
-                    message: 'Seminaring App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
-                });
-            }
-        });
     }
 
     render() {
