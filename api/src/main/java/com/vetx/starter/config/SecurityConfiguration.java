@@ -72,6 +72,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
+        .headers()
+        .frameOptions()
+        .disable()
+        .and()
         .authorizeRequests()
         .antMatchers("/",
             "/favicon.ico",
