@@ -6,6 +6,8 @@ import { Button, Icon, notification } from 'antd';
 import { SEMINAR_LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import './SeminarList.css';
+import { Table } from 'antd';
+import { formatDateTime } from '../util/Helpers';
 
 class SeminarList extends Component {
     constructor(props) {
@@ -18,7 +20,8 @@ class SeminarList extends Component {
             totalPages: 0,
             last: true,
             currentVotes: [],
-            isLoading: false
+            isLoading: false,
+            searchText: ''
         };
         this.loadSeminarList = this.loadSeminarList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -111,41 +114,54 @@ class SeminarList extends Component {
 
     }
 
-    render() {
-        const seminarViews = [];
-        this.state.seminars.forEach((seminar, seminarIndex) => {
-            seminarViews.push(<Seminar
-                key={seminar.id}
-                seminar={seminar}
-                currentVote={this.state.currentVotes[seminarIndex]}
-                handleVoteChange={(event) => this.handleVoteChange(event, seminarIndex)}
-                handleVoteSubmit={(event) => this.handleVoteSubmit(event, seminarIndex)} />)
-        });
+    handleSearch = (selectedKeys, confirm) => () => {
+        confirm();
+        this.setState({ searchText: selectedKeys[0] });
+    }
 
+    handleReset = clearFilters => () => {
+        clearFilters();
+        this.setState({ searchText: '' });
+    }
+
+    render() {
+        const columns = [{
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
+        }, {
+          title: 'Date',
+          dataIndex: 'date',
+          key: 'date',
+          render: (date) => {
+            return formatDateTime(date);
+          },
+        }, {
+          title: 'Type',
+          dataIndex: 'seminarType',
+          key: 'seminarType',
+        }, {
+          title: 'Created by',
+          dataIndex: 'createdBy',
+          key: 'createdBy',
+          render: (creator) => {
+            return creator.name
+          }
+        }];
         return (
-            <div className="seminars-container">
-                {seminarViews}
-                {
-                    !this.state.isLoading && this.state.seminars.length === 0 ? (
-                        <div className="no-seminars-found">
-                            <span>No Seminars Found.</span>
-                        </div>
-                    ): null
-                }
-                {
-                    !this.state.isLoading && !this.state.last ? (
-                        <div className="load-more-seminars">
-                            <Button type="dashed" onClick={this.handleLoadMore} disabled={this.state.isLoading}>
-                                <Icon type="plus" /> Load more
-                            </Button>
-                        </div>): null
-                }
-                {
-                    this.state.isLoading ?
-                        <LoadingIndicator />: null
-                }
+            <div className="seminarList-container">
+                <h1 className="page-title">Seminars</h1>
+                <div className="seminarList-content">
+                    <Table 
+                        columns={columns} 
+                        dataSource={this.state.seminars} 
+                        loading={this.state.isLoading}
+                        onChange={this.handleLoadMore}
+                    />
+                </div>
             </div>
-        );
+        );    
+
     }
 }
 

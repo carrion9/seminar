@@ -5,8 +5,31 @@ import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
 import { formatDateTime } from '../util/Helpers';
 
-import { Radio, Button } from 'antd';
+import { Radio, Button, Col, Row } from 'antd';
 const RadioGroup = Radio.Group;
+
+class SeminarCreator extends Component{
+
+    render(){
+        return(
+            <Link className="creator-link" to={`/user/${this.props.seminar.createdBy.username}`}>
+                <Avatar className="seminar-creator-avatar"
+                        style={{ backgroundColor: getAvatarColor(this.props.seminar.createdBy.name)}} >
+                    {this.props.seminar.createdBy.name[0].toUpperCase()}
+                </Avatar>
+                <span className="seminar-creator-name">
+                    {this.props.seminar.createdBy.name}
+                </span>
+                <span className="seminar-creator-username">
+                    @{this.props.seminar.createdBy.username}
+                </span>
+                <span className="seminar-creation-date">
+                    {formatDateTime(this.props.seminar.date)}
+                </span>
+            </Link>
+            );
+    }
+}
 
 class Seminar extends Component {
 
@@ -14,30 +37,21 @@ class Seminar extends Component {
         return (
             <div className="seminar-content">
                 <div className="seminar-header">
-                    <div className="seminar-creator-info">
-                        <Link className="creator-link" to={`/user/${this.props.seminar.createdBy.username}`}>
-                            <Avatar className="seminar-creator-avatar"
-                                    style={{ backgroundColor: getAvatarColor(this.props.seminar.createdBy.name)}} >
-                                {this.props.seminar.createdBy.name[0].toUpperCase()}
-                            </Avatar>
-                            <span className="seminar-creator-name">
-                                {this.props.seminar.createdBy.name}
-                            </span>
-                            <span className="seminar-creator-username">
-                                @{this.props.seminar.createdBy.username}
-                            </span>
-                            <span className="seminar-creation-date">
-                                {formatDateTime(this.props.seminar.date)}
-                            </span>
-                        </Link>
-                    </div>
+                {/*<SeminarCreator className="seminar-creator-info" seminar={this.props.seminar}/>*/}
                     <div className="seminar-question">
                         {this.props.seminar.name}
-
                     </div>
-                    <span className="seminar-creator-name">
-                            {this.props.seminar.seminarType}
-                        </span>
+                    <div className="seminar-creation-date">
+                        {formatDateTime(this.props.seminar.date)}
+                    </div>
+                    <div className="seminar-creator-name">
+                        {this.props.seminar.seminarType}
+                    </div>
+                    <div className="seminar-footer">
+                        Created by: {this.props.seminar.createdBy.name}({this.props.seminar.createdBy.username}) 
+                        <br/>
+                        Last edit: {/*this.props.seminar.editBy.name}({this.props.seminar.editBy.username*/}) 
+                    </div>
                 </div>
                 {/*<div className="seminar-footer">*/}
                     {/*{*/}
