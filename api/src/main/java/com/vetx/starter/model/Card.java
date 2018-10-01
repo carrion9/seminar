@@ -1,29 +1,31 @@
 package com.vetx.starter.model;
 
 import lombok.Data;
-import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
-public class TraineeCard  {
+public class Card {
   //TODO: dummy, change based on business rules
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  @NaturalId
   @Column(length = 60)
   private CardType cardType;
 
   @Enumerated(EnumType.STRING)
-  @NaturalId
   @Column(length = 60)
   private CardStatus cardStatus;
 
-//  private List<String> specializationList = new ArrayList<>();
+  @ElementCollection(targetClass=SpecialityName.class)
+  @Enumerated(EnumType.STRING)
+  private Set<SpecialityName> passedSpecialities = new HashSet<>();
 }

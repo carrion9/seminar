@@ -10,17 +10,15 @@ import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class Seminar extends UserDateAudit {
-  //TODO: dummy, change based on business rules
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +31,7 @@ public class Seminar extends UserDateAudit {
   private Instant date;
 
   @NotBlank
-  @Column(length = 60)
+  @Column(length = 140)
   private String name;
 
   @OneToMany(
@@ -46,4 +44,7 @@ public class Seminar extends UserDateAudit {
   @BatchSize(size = 30)
   private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 
+  @ElementCollection(targetClass=SpecialityName.class)
+  @Enumerated(EnumType.STRING)
+  private Collection<SpecialityName> seminarSpecialities = new HashSet<>();
 }

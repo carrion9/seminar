@@ -3,19 +3,18 @@ package com.vetx.starter.model;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class Trainee extends UserDateAudit {
-  //TODO: dummy, change based on business rules
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,5 +42,12 @@ public class Trainee extends UserDateAudit {
 
   @NotBlank
   @Size(max = 140)
-  private Long amaNumber;
+  private String AMA;
+
+  @OneToOne(
+      cascade = CascadeType.ALL,
+      fetch = FetchType.EAGER,
+      orphanRemoval = true
+  )
+  private Card card;
 }

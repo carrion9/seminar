@@ -13,5 +13,7 @@ public class SeminarResponse {
   private Instant date;
   private String name;
   private UserSummary createdBy;
+  private UserSummary updatedBy;
   private Instant creationDateTime;
+  private Instant updateTime;
 }

@@ -11,7 +11,7 @@ import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @JsonIgnoreProperties(
     value = {"createdBy", "updatedBy"},
     allowGetters = true

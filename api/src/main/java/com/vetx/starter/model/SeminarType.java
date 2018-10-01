@@ -1,6 +1,9 @@
 package com.vetx.starter.model;
 
 public enum SeminarType {
-  BASIC,
-  SECOND_DAY,
+  MOTOROIL_BASIC,
+  ELPE_BASIC,
+  ELPE_SECOND,
+  ELPE_FIRST_RETRY,
+  ELPE_SECOND_RETRY
 }
