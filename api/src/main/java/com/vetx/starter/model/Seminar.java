@@ -27,14 +27,13 @@ public class Seminar extends UserDateAudit {
   private Long id;
 
   @Enumerated(EnumType.STRING)
-  @NaturalId
-  @Column(length = 60)
   private SeminarType seminarType;
 
   @NotBlank
   private Instant date;
 
   @NotBlank
+  @Column(length = 60)
   private String name;
 
   @OneToMany(

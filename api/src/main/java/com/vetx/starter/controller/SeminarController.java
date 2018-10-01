@@ -1,8 +1,11 @@
 package com.vetx.starter.controller;
 
 import com.vetx.starter.model.Seminar;
+import com.vetx.starter.payload.PagedResponse;
+import com.vetx.starter.payload.SeminarResponse;
 import com.vetx.starter.repository.SeminarRepository;
 import com.vetx.starter.security.UserPrincipal;
+import com.vetx.starter.service.SeminarService;
 import com.vetx.starter.util.AppConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,22 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/seminar")
 public class SeminarController {
 
-  private SeminarRepository seminarRepository;
+  private SeminarService seminarService;
 
   @Autowired
-  public SeminarController(SeminarRepository seminarRepository) {
-    this.seminarRepository = seminarRepository;
+  public SeminarController(SeminarService seminarService) {
+    this.seminarService = seminarService;
   }
 
   @GetMapping()
-  public Page<Seminar> getSeminars(
+  public PagedResponse<SeminarResponse> getSeminars(
       UserPrincipal currentUser,
       @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
       @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 
-    Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
-
-    return seminarRepository.findAll(pageable);
+    return seminarService.getAllSeminars(currentUser, page, size);
   }
 
 }

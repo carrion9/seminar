@@ -2,7 +2,7 @@ export const API_BASE_URL = 'http://localhost:5000/api';
 //export const API_BASE_URL = '/api';
 export const ACCESS_TOKEN = 'accessToken';
 
-export const SEMINAR_LIST_SIZE = 30;
+export const SEMINAR_LIST_SIZE = 5;
 export const MAX_CHOICES = 6;
 
 export const NAME_MIN_LENGTH = 4;

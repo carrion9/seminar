@@ -27,28 +27,32 @@ class Seminar extends Component {
                                 @{this.props.seminar.createdBy.username}
                             </span>
                             <span className="seminar-creation-date">
-                                {formatDateTime(this.props.seminar.creationDateTime)}
+                                {formatDateTime(this.props.seminar.date)}
                             </span>
                         </Link>
                     </div>
                     <div className="seminar-question">
-                        {this.props.seminar.seminarType}
+                        {this.props.seminar.name}
+
                     </div>
+                    <span className="seminar-creator-name">
+                            {this.props.seminar.seminarType}
+                        </span>
                 </div>
-                <div className="seminar-footer">
-                    {
-                        !(this.props.seminar.selectedChoice || this.props.seminar.expired) ?
-                            (<Button className="vote-button" disabled={!this.props.currentVote} onClick={this.props.handleVoteSubmit}>Vote</Button>) : null
-                    }
-                    <span className="total-votes">{this.props.seminar.totalVotes} votes</span>
-                    <span className="separator">β€Ά</span>
-                    <span className="time-left">
-                        {
-                            this.props.seminar.expired ? "Final results" :
-                                this.getTimeRemaining(this.props.seminar)
-                        }
-                    </span>
-                </div>
+                {/*<div className="seminar-footer">*/}
+                    {/*{*/}
+                        {/*!(this.props.seminar.selectedChoice || this.props.seminar.expired) ?*/}
+                            {/*(<Button className="vote-button" disabled={!this.props.currentVote} onClick={this.props.handleVoteSubmit}>Vote</Button>) : null*/}
+                    {/*}*/}
+                    {/*<span className="total-votes">{this.props.seminar.totalVotes} votes</span>*/}
+                    {/*<span className="separator">β€Ά</span>*/}
+                    {/*<span className="time-left">*/}
+                        {/*{*/}
+                            {/*this.props.seminar.expired ? "Final results" :*/}
+                                {/*this.getTimeRemaining(this.props.seminar)*/}
+                        {/*}*/}
+                    {/*</span>*/}
+                {/*</div>*/}
             </div>
         );
     }

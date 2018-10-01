@@ -64,7 +64,7 @@ class App extends Component {
     }
 
     // Handle Logout, Set currentUser and isAuthenticated state which will be passed to other components
-    handleLogout(redirectTo="/", notificationType="success", description="You're successfully logged out.") {
+    handleLogout(redirectTo="/login", notificationType="success", description="You're successfully logged out.") {
         localStorage.removeItem(ACCESS_TOKEN);
 
         this.setState({
@@ -107,18 +107,24 @@ class App extends Component {
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
-                            <Route exact path="/"
-                                   render={(props) => <SeminarList isAuthenticated={this.state.isAuthenticated}
-                                                                currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props} />}>
+                            <Route
+                                exact path="/" render={(props) => <SeminarList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
                             </Route>
-                            <Route path="/login"
-                                   render={(props) => <Login onLogin={this.handleLogin} {...props} />}></Route>
-                            <Route path="/signup" component={Signup}></Route>
-                            <Route path="/user/:username"
-                                   render={(props) => <Profile isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} {...props}  />}>
+                            <Route
+                                path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}>
                             </Route>
-                            <PrivateRoute authenticated={this.state.isAuthenticated} path="/seminar/new" component={NewSeminar} handleLogout={this.handleLogout}></PrivateRoute>
-                            <Route component={NotFound}></Route>
+                            <Route
+                                path="/signup" component={Signup}>
+                            </Route>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/seminar/new" component={NewSeminar} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/user/:username" component={Profile} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <Route
+                                component={NotFound}>
+                            </Route>
                         </Switch>
                     </div>
                 </Content>

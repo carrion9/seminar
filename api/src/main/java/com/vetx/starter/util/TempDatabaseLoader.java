@@ -25,11 +25,11 @@ public class TempDatabaseLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) {
-    try {
-      this.roleRepository.save(Role.builder().name(RoleName.ROLE_ADMIN).build());
-      this.roleRepository.save(Role.builder().name(RoleName.ROLE_GUEST).build());
-      this.roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());
-    }
-    catch (Exception ignored){}
+//    try {
+//      this.roleRepository.save(Role.builder().name(RoleName.ROLE_ADMIN).build());
+//      this.roleRepository.save(Role.builder().name(RoleName.ROLE_GUEST).build());
+//      this.roleRepository.save(Role.builder().name(RoleName.ROLE_USER).build());
+//    }
+//    catch (Exception ignored){}
   }
 }
