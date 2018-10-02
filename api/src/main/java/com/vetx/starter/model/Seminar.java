@@ -24,6 +24,9 @@ public class Seminar extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long key;
+
   @Enumerated(EnumType.STRING)
   private SeminarType seminarType;
 

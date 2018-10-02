@@ -28,7 +28,7 @@ export function getAllSeminars(page, size) {
     size = size || SEMINAR_LIST_SIZE;
 
     return request({
-        url: API_BASE_URL + "/seminars?page=" + page + "&size=" + size,
+        url: API_BASE_URL + "/seminars?page=" + page + "&size=" + size + "&sort=key,asc",
         method: 'GET'
     });
 }
