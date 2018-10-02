@@ -14,11 +14,11 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'checkstyle'
+// apply plugin: 'checkstyle'
 
-checkstyle {
-    toolVersion "7.6.1"
-}
+// checkstyle {
+//     toolVersion "7.6.1"
+// }
 
 group = 'com.vetx'
 version = '0.0.1-SNAPSHOT'
