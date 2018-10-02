@@ -1,55 +1,74 @@
 import React, { Component } from 'react';
-import { getAllContractors, getUserCreatedcontractors, getUserVotedcontractors } from '../util/APIUtils';
-import { CONTRACTOR_LIST_SIZE } from '../constants';
+import { getAllContractors, getUserCreatedContractors, getUserVotedContractors } from '../util/APIUtils';
 import LoadingIndicator  from '../common/LoadingIndicator';
-import { withRouter } from 'react-router-dom';
 import { Button, Icon, notification } from 'antd';
+import { CONTRACTOR_LIST_SIZE } from '../constants';
+import { withRouter } from 'react-router-dom';
 import './ContractorList.css';
 import { Table } from 'antd';
+import { formatDateTime } from '../util/Helpers';
 
 class ContractorList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
+            columns : [{
               title: 'Name',
               dataIndex: 'name',
+              sorter: true,
               key: 'name',
             }, {
               title: 'Date',
               dataIndex: 'date',
+              sorter: true,
               key: 'date',
+              render: (date) => (
+                formatDateTime(date)
+              )
             }, {
               title: 'Type',
               dataIndex: 'contractorType',
+              sorter: true,
               key: 'contractorType',
             }, {
               title: 'Created by',
               dataIndex: 'createdBy',
+              sorter: true,
               key: 'createdBy',
-              render: (creator) => {
-                return creator.name
-              }
+            }, {
+              title: 'Created at',
+              dataIndex: 'createdAt',
+              sorter: true,
+              key: 'createdAt',
+              render: (createdAt) => (
+                 formatDateTime(createdAt)
+              )
+            }, {
+              title: 'Updated by',
+              dataIndex: 'updatedBy',
+              sorter: true,
+              key: 'updatedBy',
+            }, {
+              title: 'Updated at',
+              dataIndex: 'updatedAt',
+              sorter: true,
+              key: 'updatedAt',
+              render: (updatedAt) => (
+                 formatDateTime(updatedAt)
+              )
             }],
             contractors: [],
-            page: 0,
-            size: 10,
-            totalElements: 0,
-            totalPages: 0,
-            last: true,
-            currentVotes: [],
             isLoading: false,
-            searchText: '',
             pagination: {},
         };
-        this.loadcontractorList = this.loadcontractorList.bind(this);
+        this.loadContractorList = this.loadContractorList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    loadcontractorList(page = 1, size = CONTRACTOR_LIST_SIZE) {
+    loadContractorList(page = 1, size = CONTRACTOR_LIST_SIZE, sorter) {
         let promise;
 
-        promise = getAllContractors(page -1 , size);
+        promise = getAllContractors(page -1 , size, sorter);
 
         if(!promise) {
             return;
@@ -67,11 +86,6 @@ class ContractorList extends Component {
                 pagination.total = response.page.totalElements;
                 this.setState({
                     contractors: response._embedded.contractors,
-                    page: pagination.current,
-                    size: response.page.size,
-                    totalElements: response.page.totalElements,
-                    totalPages: response.page.totalPages,
-                    last: response.page.last +1,
                     isLoading: false,
                     pagination: pagination
                 })
@@ -84,7 +98,7 @@ class ContractorList extends Component {
     }
 
     componentWillMount() {
-        this.loadcontractorList();
+        this.loadContractorList();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -92,25 +106,19 @@ class ContractorList extends Component {
             // Reset State
             this.setState({
                 contractors: [],
-                page: 0,
-                size: 10,
-                totalElements: 0,
-                totalPages: 0,
-                last: true,
-                currentVotes: [],
                 isLoading: false
             });
-            this.loadcontractorList();
+            this.loadContractorList();
         }
     }
 
-    handleLoadMore(pagination) {
+    handleLoadMore(pagination, filter, sorter) {
         const pager = this.state.pagination;
         pager.current = pagination.current;
         this.setState({
             pagination: pager,
         });     
-        this.loadcontractorList(this.state.pagination.current);
+        this.loadContractorList(this.state.pagination.current, CONTRACTOR_LIST_SIZE, sorter);
     }
 
     render() {

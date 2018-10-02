@@ -1,10 +1,10 @@
-.no-seminars-found {
+.no-contractors-found {
     font-size: 20px;
     text-align: center;
     padding: 20px;
 }
 
-.load-more-seminars {
+.load-more-contractors {
     text-align: center;
     margin-bottom: 40px;
 }
@@ -29,7 +29,7 @@
   color: #f50;
 }
 
-.contractorList-container {
+/*.contractorList-container {
     max-width: 420px;
     margin: 80px auto 0;
-}
+}*/
