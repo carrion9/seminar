@@ -21,7 +21,8 @@ class SeminarList extends Component {
             last: true,
             currentVotes: [],
             isLoading: false,
-            searchText: ''
+            searchText: '',
+            pagination: {},
         };
         this.loadSeminarList = this.loadSeminarList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -44,16 +45,20 @@ class SeminarList extends Component {
             .then(response => {
                 const seminars = this.state.seminars.slice();
                 const currentVotes = this.state.currentVotes.slice();
-
+                const pagination = this.state.pagination;
+                pagination.pageSize = response.size;
+                pagination.total = response.totalElements;
+                pagination.onChange = this.handleLoadMore
                 this.setState({
                     seminars: seminars.concat(response.content),
-                    page: response.page,
+                    page: pagination.current,
                     size: response.size,
                     totalElements: response.totalElements,
                     totalPages: response.totalPages,
                     last: response.last,
                     currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
-                    isLoading: false
+                    isLoading: false,
+                    pagination: pagination
                 })
             }).catch(error => {
             this.setState({
@@ -84,8 +89,13 @@ class SeminarList extends Component {
         }
     }
 
-    handleLoadMore() {
-        this.loadSeminarList(this.state.page + 1);
+    handleLoadMore(pagination) {
+        const pager = this.state.pagination;
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager,
+        });     
+        this.loadSeminarList(this.state.pagination.current);
     }
 
     handleVoteChange(event, seminarIndex) {
@@ -156,6 +166,7 @@ class SeminarList extends Component {
                         columns={columns} 
                         dataSource={this.state.seminars} 
                         loading={this.state.isLoading}
+                        pagination={this.state.pagination}
                         onChange={this.handleLoadMore}
                     />
                 </div>
