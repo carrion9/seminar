@@ -28,10 +28,10 @@ class SeminarList extends Component {
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    loadSeminarList(page = 0, size = SEMINAR_LIST_SIZE) {
+    loadSeminarList(page = 1, size = SEMINAR_LIST_SIZE) {
         let promise;
 
-        promise = getAllSeminars(page, size);
+        promise = getAllSeminars(page -1 , size);
 
         if(!promise) {
             return;
@@ -44,19 +44,17 @@ class SeminarList extends Component {
         promise
             .then(response => {
                 const seminars = this.state.seminars.slice();
-                const currentVotes = this.state.currentVotes.slice();
                 const pagination = this.state.pagination;
-                pagination.pageSize = response.size;
-                pagination.total = response.totalElements;
-                pagination.onChange = this.handleLoadMore
+                pagination.pageSize = response.page.size;
+                pagination.total = response.page.totalElements;
+                pagination.onChange = this.handleLoadMore;
                 this.setState({
-                    seminars: seminars.concat(response.content),
+                    seminars: response._embedded.seminars,
                     page: pagination.current,
-                    size: response.size,
-                    totalElements: response.totalElements,
-                    totalPages: response.totalPages,
-                    last: response.last,
-                    currentVotes: currentVotes.concat(Array(response.content.length).fill(null)),
+                    size: response.page.size,
+                    totalElements: response.page.totalElements,
+                    totalPages: response.page.totalPages,
+                    last: response.page.last +1,
                     isLoading: false,
                     pagination: pagination
                 })
