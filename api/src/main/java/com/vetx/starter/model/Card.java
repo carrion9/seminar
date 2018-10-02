@@ -17,6 +17,9 @@ public class Card {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long key;
+
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
   private CardType cardType;

@@ -21,6 +21,9 @@ public class SeminarTrainee extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long key;
+
   private Long cost;
 
   private Long actualCost;

@@ -25,6 +25,9 @@ public class Contractor extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long key;
+
   @NotBlank
   @Size(max = 140)
   private String name;

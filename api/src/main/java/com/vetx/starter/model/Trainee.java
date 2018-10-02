@@ -10,6 +10,8 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -19,6 +21,9 @@ public class Trainee extends UserDateAudit {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long key;
 
   @NotBlank
   @Size(max = 140)
@@ -44,10 +49,15 @@ public class Trainee extends UserDateAudit {
   @Size(max = 140)
   private String AMA;
 
-  @OneToOne(
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true
-  )
-  private Card card;
+  @Enumerated(EnumType.STRING)
+  @Column(length = 60)
+  private CardType cardType;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length = 60)
+  private CardStatus cardStatus;
+
+  @ElementCollection(targetClass=SpecialityName.class)
+  @Enumerated(EnumType.STRING)
+  private Set<SpecialityName> passedSpecialities = new HashSet<>();
 }

@@ -17,3 +17,16 @@ INSERT INTO `SEMINAR` VALUES (9, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31
 INSERT INTO `SEMINAR` VALUES (10, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 1, 1, '2019-08-28 09:42:31.461',10, 'Seminar Ten', 'MOTOROIL_BASIC');
 INSERT INTO `SEMINAR` VALUES (11, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 1, 1, '2019-09-28 09:42:31.461',11, 'Seminar Eleven', 'ELPE_SECOND');
 INSERT INTO `SEMINAR` VALUES (12, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 1, 1, '2019-11-28 09:42:31.461',12, 'Seminar Last', 'MOTOROIL_BASIC');
+INSERT INTO `CONTRACTOR` VALUES (1, '2018-09-28 09:42:31.461', '2017-09-28 09:42:31.461', 1, 1, 'ΧΟΛΑΡΓΟΥ', 'Activist', 'Aspasias 80', '1234567489', 'jtsompos@gmail.com', 1, 'MEGAS ERGOLAVOS 1', 2106520959, 'Koliatoy Christina');
+INSERT INTO `CONTRACTOR` VALUES (2, '2018-10-28 09:42:31.461', '2017-11-28 09:42:31.461', 1, 2, 'ΧΟΛΑΡΓΟΥ', 'Activist', 'Aspasias 80', '12345674893', 'jtsompos@gmail.com', 2, 'MEGAS ERGOLAVOS 2', 2106520959, 'Koliatoy Niki');
+INSERT INTO `CONTRACTOR` VALUES (3, '2018-11-28 09:42:31.461', '2017-12-28 09:42:31.461', 1, 2, 'ΧΟΛΑΡΓΟΥ', 'ActivistMain', 'Aspasias 80', '123456748923', 'jtsompos@gmail.com', 3, 'MEGAS ERGOLAVOS 3', 2106520959, 'Koliatoy Klea');
+INSERT INTO `CONTRACTOR` VALUES (4, '2018-12-28 09:42:31.461', '2017-05-28 09:42:31.461', 2, 2, 'ΧΟΛΑΡΓΟΥ', 'ActivistLower', 'Aspasias 80', '12345674891', 'jtsompos@gmail.com', 4, 'MEGAS ERGOLAVOS 4', 2106520959, 'Koliatoy Maria');
+INSERT INTO `CONTRACTOR` VALUES (5, '2018-05-28 09:42:31.461', '2017-07-28 09:42:31.461', 1, 2, 'ΧΟΛΑΡΓΟΥ', 'Activist', 'Aspasias 80', '12345674893', 'jtsompos@gmail.com', 5, 'MEGAS ERGOLAVOS 5', 2106520959, 'Nina Christina');
+INSERT INTO `CONTRACTOR` VALUES (6, '2018-05-28 09:42:31.461', '2017-07-28 09:42:31.461', 1, 2, 'ΧΟΛΑΡΓΟΥ', 'Activist', 'Aspasias 80', '12345674893', 'jtsompos@gmail.com', 6, 'MEGAS ERGOLAVOS 7', 2106520959, 'Nina Christina');
+INSERT INTO `CONTRACTOR` VALUES (7, '2018-05-28 09:42:31.461', '2017-07-28 09:42:31.461', 1, 2, 'ΧΟΛΑΡΓΟΥ', 'Activist', 'Aspasias 80', '12345674893', 'jtsompos@gmail.com', 7, 'MEGAS ERGOLAVOS 7', 2106520959, 'Nina Christina');
+-- INSER INTO `CARD` VALUES (1, 'PRINTED', 'RED', 2);
+-- INSER INTO `TRAINEE` VALUES (1, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 1, 1, '123456798',1, 'Παναγιώτης', 1, 'Ιωάννης', 'Ελληνική', 'Τσόμπος', 1);
+-- INSER INTO `CARD` VALUES (2, 'PRINTED', 'RED', 2);
+-- INSER INTO `TRAINEE` VALUES (2, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 1, 1, '123456798',1, 'Παναγιώτης', 1, 'Ιωάννης', 'Ελληνική', 'Τσόμπος', 1);
+-- INSER INTO `CARD` VALUES (2, 'PRINTED', 'RED', 2);
+-- INSER INTO `TRAINEE` VALUES (2, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 1, 1, '123456798',1, 'Παναγιώτης', 1, 'Ιωάννης', 'Ελληνική', 'Τσόμπος', 1);
