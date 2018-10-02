@@ -16,10 +16,12 @@ class SeminarList extends Component {
             columns : [{
               title: 'Name',
               dataIndex: 'name',
+              sorter: true,
               key: 'name',
             }, {
               title: 'Date',
               dataIndex: 'date',
+              sorter: true,
               key: 'date',
               render: (date) => (
                 formatDateTime(date)
@@ -27,14 +29,17 @@ class SeminarList extends Component {
             }, {
               title: 'Type',
               dataIndex: 'seminarType',
+              sorter: true,
               key: 'seminarType',
             }, {
               title: 'Created by',
               dataIndex: 'createdBy',
+              sorter: true,
               key: 'createdBy',
             }, {
               title: 'Created at',
               dataIndex: 'createdAt',
+              sorter: true,
               key: 'createdAt',
               render: (createdAt) => (
                  formatDateTime(createdAt)
@@ -42,10 +47,12 @@ class SeminarList extends Component {
             }, {
               title: 'Updated by',
               dataIndex: 'updatedBy',
+              sorter: true,
               key: 'updatedBy',
             }, {
               title: 'Updated at',
               dataIndex: 'updatedAt',
+              sorter: true,
               key: 'updatedAt',
               render: (updatedAt) => (
                  formatDateTime(updatedAt)
@@ -59,10 +66,10 @@ class SeminarList extends Component {
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    loadSeminarList(page = 1, size = SEMINAR_LIST_SIZE) {
+    loadSeminarList(page = 1, size = SEMINAR_LIST_SIZE, sorter) {
         let promise;
 
-        promise = getAllSeminars(page -1 , size);
+        promise = getAllSeminars(page -1 , size, sorter);
 
         if(!promise) {
             return;
@@ -106,13 +113,13 @@ class SeminarList extends Component {
         }
     }
 
-    handleLoadMore(pagination) {
+    handleLoadMore(pagination, filter, sorter) {
         const pager = this.state.pagination;
         pager.current = pagination.current;
         this.setState({
             pagination: pager,
         });     
-        this.loadSeminarList(this.state.pagination.current);
+        this.loadSeminarList(this.state.pagination.current, SEMINAR_LIST_SIZE, sorter);
     }
 
     render() {

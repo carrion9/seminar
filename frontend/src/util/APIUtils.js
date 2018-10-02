@@ -23,12 +23,12 @@ const request = (options) => {
     );
 };
 
-export function getAllSeminars(page, size) {
+export function getAllSeminars(page, size, sorter) {
     page = page || 0;
     size = size || SEMINAR_LIST_SIZE;
-
+    sorter ? sorter : sorter={field:"key",order:"adc"};
     return request({
-        url: API_BASE_URL + "/seminars?page=" + page + "&size=" + size + "&sort=key,asc",
+        url: API_BASE_URL + "/seminars?page=" + page + "&size=" + size + "&sort=" +sorter.field + "," + sorter.order,
         method: 'GET'
     });
 }
