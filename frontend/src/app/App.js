@@ -11,6 +11,7 @@ import { ACCESS_TOKEN } from '../constants';
 
 import SeminarList from '../seminar/SeminarList';
 import NewSeminar from '../seminar/NewSeminar';
+import ContractorList from '../contractor/ContractorList';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -109,6 +110,9 @@ class App extends Component {
                         <Switch>
                             <Route
                                 exact path="/" render={(props) => <SeminarList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
+                            </Route>
+                            <Route
+                                exact path="/contractors" render={(props) => <ContractorList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
                             </Route>
                             <Route
                                 path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}>

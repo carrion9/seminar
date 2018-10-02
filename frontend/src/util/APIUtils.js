@@ -1,4 +1,4 @@
-import { API_BASE_URL, SEMINAR_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import { API_BASE_URL, SEMINAR_LIST_SIZE, CONTRACTOR_LIST_SIZE, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -38,6 +38,16 @@ export function createSeminar(seminarData) {
         url: API_BASE_URL + "/seminar",
         method: 'POST',
         body: JSON.stringify(seminarData)
+    });
+}
+
+export function getAllContractors(page, size) {
+    page = page || 0;
+    size = size || CONTRACTOR_LIST_SIZE;
+
+    return request({
+        url: API_BASE_URL + "/contractors?page=" + page + "&size=" + size + "&sort=key,asc",
+        method: 'GET'
     });
 }
 

@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import { getAllSeminars, getUserCreatedSeminars, getUserVotedSeminars } from '../util/APIUtils';
-import Seminar from './Seminar';
+import { getAllContractors, getUserCreatedcontractors, getUserVotedcontractors } from '../util/APIUtils';
+import { CONTRACTOR_LIST_SIZE } from '../constants';
 import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Icon, notification } from 'antd';
-import { SEMINAR_LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
-import './SeminarList.css';
+import { Button, Icon, notification } from 'antd';
+import './ContractorList.css';
 import { Table } from 'antd';
-import { formatDateTime } from '../util/Helpers';
 
-class SeminarList extends Component {
+class ContractorList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns : [{
+            columns: [{
               title: 'Name',
               dataIndex: 'name',
               key: 'name',
@@ -21,48 +19,37 @@ class SeminarList extends Component {
               title: 'Date',
               dataIndex: 'date',
               key: 'date',
-              render: (date) => (
-                formatDateTime(date)
-              )
             }, {
               title: 'Type',
-              dataIndex: 'seminarType',
-              key: 'seminarType',
+              dataIndex: 'contractorType',
+              key: 'contractorType',
             }, {
               title: 'Created by',
               dataIndex: 'createdBy',
               key: 'createdBy',
-            }, {
-              title: 'Created at',
-              dataIndex: 'createdAt',
-              key: 'createdAt',
-              render: (createdAt) => (
-                 formatDateTime(createdAt)
-              )
-            }, {
-              title: 'Updated by',
-              dataIndex: 'updatedBy',
-              key: 'updatedBy',
-            }, {
-              title: 'Updated at',
-              dataIndex: 'updatedAt',
-              key: 'updatedAt',
-              render: (updatedAt) => (
-                 formatDateTime(updatedAt)
-              )
+              render: (creator) => {
+                return creator.name
+              }
             }],
-            seminars: [],
+            contractors: [],
+            page: 0,
+            size: 10,
+            totalElements: 0,
+            totalPages: 0,
+            last: true,
+            currentVotes: [],
             isLoading: false,
+            searchText: '',
             pagination: {},
         };
-        this.loadSeminarList = this.loadSeminarList.bind(this);
+        this.loadcontractorList = this.loadcontractorList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    loadSeminarList(page = 1, size = SEMINAR_LIST_SIZE) {
+    loadcontractorList(page = 1, size = CONTRACTOR_LIST_SIZE) {
         let promise;
 
-        promise = getAllSeminars(page -1 , size);
+        promise = getAllContractors(page -1 , size);
 
         if(!promise) {
             return;
@@ -74,12 +61,17 @@ class SeminarList extends Component {
 
         promise
             .then(response => {
-                const seminars = this.state.seminars.slice();
+                const contractors = this.state.contractors.slice();
                 const pagination = this.state.pagination;
                 pagination.pageSize = response.page.size;
                 pagination.total = response.page.totalElements;
                 this.setState({
-                    seminars: response._embedded.seminars,
+                    contractors: response._embedded.contractors,
+                    page: pagination.current,
+                    size: response.page.size,
+                    totalElements: response.page.totalElements,
+                    totalPages: response.page.totalPages,
+                    last: response.page.last +1,
                     isLoading: false,
                     pagination: pagination
                 })
@@ -92,17 +84,23 @@ class SeminarList extends Component {
     }
 
     componentWillMount() {
-        this.loadSeminarList();
+        this.loadcontractorList();
     }
 
     componentWillReceiveProps(nextProps) {
         if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
-                seminars: [],
+                contractors: [],
+                page: 0,
+                size: 10,
+                totalElements: 0,
+                totalPages: 0,
+                last: true,
+                currentVotes: [],
                 isLoading: false
             });
-            this.loadSeminarList();
+            this.loadcontractorList();
         }
     }
 
@@ -112,17 +110,17 @@ class SeminarList extends Component {
         this.setState({
             pagination: pager,
         });     
-        this.loadSeminarList(this.state.pagination.current);
+        this.loadcontractorList(this.state.pagination.current);
     }
 
     render() {
         return (
-            <div className="seminarList-container">
-                <h1 className="page-title">Seminars</h1>
-                <div className="seminarList-content">
+            <div className="contractorList-container">
+                <h1 className="page-title">Contractors</h1>
+                <div className="contractorList-content">
                     <Table 
                         columns={this.state.columns} 
-                        dataSource={this.state.seminars} 
+                        dataSource={this.state.contractors} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
                         onChange={this.handleLoadMore}
@@ -134,4 +132,4 @@ class SeminarList extends Component {
     }
 }
 
-export default withRouter(SeminarList);
+export default withRouter(ContractorList);
