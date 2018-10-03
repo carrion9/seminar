@@ -34,6 +34,7 @@ public class Seminar extends UserDateAudit {
   private Instant date;
 
   @NotBlank
+  @NaturalId
   @Column(length = 140)
   private String name;
 

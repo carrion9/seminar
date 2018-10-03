@@ -13,15 +13,24 @@ const request = (options) => {
     options = Object.assign({}, defaults, options);
 
     return fetch(options.url, options)
-    .then(response => 
-        response.json().then(json => {
+    .then(response => {
             if(!response.ok) {
-                return Promise.reject(json);
+                return Promise.reject(response.json());
             }
-            return json;
-        })
+            if (response.status === 204) {
+                return Promise.resolve(response);
+            }
+            return response.json();
+        }
     );
 };
+
+export function deleteItem(item) {
+    return request({
+        url: item._links.self.href,
+        method: 'DELETE'
+    })
+}
 
 export function getAllSeminars(page, size, sorter) {
     page = page || 0;
@@ -41,7 +50,7 @@ export function getAllSeminars(page, size, sorter) {
 
 export function createSeminar(seminarData) {
     return request({
-        url: API_BASE_URL + "/seminar",
+        url: API_BASE_URL + "/seminars",
         method: 'POST',
         body: JSON.stringify(seminarData)
     });

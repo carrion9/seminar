@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { getAllSeminars, getUserCreatedSeminars, getUserVotedSeminars } from '../util/APIUtils';
+import { getAllSeminars, deleteItem } from '../util/APIUtils';
 import Seminar from './Seminar';
 import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Icon, notification } from 'antd';
+import { Button, Table, notification, Popconfirm, message } from 'antd';
 import { SEMINAR_LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import './SeminarList.css';
-import { Table } from 'antd';
+import { Link } from 'react-router-dom';
 import { formatDateTime } from '../util/Helpers';
 
 class SeminarList extends Component {
@@ -15,16 +15,12 @@ class SeminarList extends Component {
         this.state = {
             columns : [{
               title: 'Name',
-              dataIndex: 'name',
+              // dataIndex: 'name',
               sorter: true,
               key: 'name',
-              render: (key ) => {
-                return (
-                      <a href={key} style={{ marginRight: 8 }} >
-                        {key}
-                      </a>
-                      )
-              }
+              render: (name, seminar ) => (
+                  <Link to={"seminars/" + seminar.key}>{seminar.name}</Link>
+              )
             }, {
               title: 'Date',
               dataIndex: 'date',
@@ -66,21 +62,19 @@ class SeminarList extends Component {
               )
             }, {
               key: 'edit',
-              render: () => {
+              render: (seminar) => {
                 return (
-                      <a href="#" style={{ marginRight: 8 }} >
-                        edit
-                      </a>
+                    <Button>Edit</Button>
                       )
               }
             }, {
               key: 'delete',
-              render: () => {
-                return (
-                      <a href="#" style={{ marginRight: 8 }} >
-                        delete
-                      </a>
-                      )
+              render: (seminar) => {
+                  return (
+                      <Popconfirm title="Are you sure delete this task?" onConfirm={this.confirm.bind(this, seminar)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                        <Button type="danger" >Delete</Button>
+                      </Popconfirm>
+                  )
               }
             }],
             seminars: [],
@@ -89,6 +83,25 @@ class SeminarList extends Component {
         };
         this.loadSeminarList = this.loadSeminarList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
+    }
+
+    confirm(seminar) {
+        this.delete.bind(this, seminar);
+        this.delete(seminar);
+        message.success('Deleted');
+    }
+
+    cancel(e) {
+        message.error('Canceled delete');
+    }
+
+    delete(seminar){
+        let promise;
+
+        promise = deleteItem(seminar);
+
+        const seminars = this.state.seminars.filter(i => i.key !== seminar.key)
+        this.setState({seminars})
     }
 
     loadSeminarList(page = 1, size = SEMINAR_LIST_SIZE, sorter) {
