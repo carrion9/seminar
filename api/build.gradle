@@ -38,6 +38,7 @@ dependencies {
     compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
     compile('org.projectlombok:lombok')
     compile('com.h2database:h2')
+    compile('org.apache.poi:poi:4.0.0')
     runtime('org.springframework.boot:spring-boot-devtools')
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
