@@ -35,9 +35,8 @@ export function deleteItem(item) {
 export function getAllSeminars(page, size, sorter) {
     page = page || 0;
     size = size || SEMINAR_LIST_SIZE;
-    sorter = sorter || {field:"key",order:"asc"};
-    if (!sorter.field) {
-        return;
+    if (!sorter || !sorter.field) {
+        sorter = {field:"key",order:"asc"};
     }
     sorter.order === "ascend" ? sorter.order = "asc" : null;
     sorter.order === "descend" ? sorter.order = "desc" : null;
