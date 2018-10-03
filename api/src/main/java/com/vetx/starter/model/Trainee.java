@@ -3,14 +3,14 @@ package com.vetx.starter.model;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -47,6 +47,7 @@ public class Trainee extends UserDateAudit {
 
   @NotBlank
   @Size(max = 140)
+  @NaturalId
   private String AMA;
 
   @Enumerated(EnumType.STRING)
@@ -57,7 +58,19 @@ public class Trainee extends UserDateAudit {
   @Column(length = 60)
   private CardStatus cardStatus;
 
-  @ElementCollection(targetClass=SpecialityName.class)
-  @Enumerated(EnumType.STRING)
-  private Set<SpecialityName> passedSpecialities = new HashSet<>();
+  @OneToMany(
+      mappedBy = "trainee",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY,
+      orphanRemoval = true
+  )
+  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+
+  @OneToMany(
+      mappedBy = "trainee",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY,
+      orphanRemoval = true
+  )
+  private Set<TraineeSpeciality> traineeSpecialitySet = new HashSet<>();
 }

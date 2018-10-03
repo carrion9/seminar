@@ -44,11 +44,13 @@ public class Seminar extends UserDateAudit {
       fetch = FetchType.LAZY,
       orphanRemoval = true
   )
-  @Fetch(FetchMode.SELECT)
-  @BatchSize(size = 30)
   private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 
-  @ElementCollection(targetClass=SpecialityName.class)
-  @Enumerated(EnumType.STRING)
-  private Collection<SpecialityName> seminarSpecialities = new HashSet<>();
+  @OneToMany(
+      mappedBy = "seminar",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY,
+      orphanRemoval = true
+  )
+  private Set<SeminarSpeciality> seminarSpecialitySet = new HashSet<>();
 }

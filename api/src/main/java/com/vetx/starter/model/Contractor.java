@@ -5,14 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.validation.constraints.Digits;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -58,4 +56,12 @@ public class Contractor extends UserDateAudit {
   @NotBlank
   @Size()
   private Long afm;
+
+  @OneToMany(
+      mappedBy = "seminar",
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY,
+      orphanRemoval = true
+  )
+  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 }
