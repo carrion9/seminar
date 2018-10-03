@@ -44,6 +44,7 @@ public class Seminar extends UserDateAudit {
       fetch = FetchType.LAZY,
       orphanRemoval = true
   )
+  @Builder.Default
   private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 
   @OneToMany(
@@ -52,5 +53,6 @@ public class Seminar extends UserDateAudit {
       fetch = FetchType.LAZY,
       orphanRemoval = true
   )
+  @Builder.Default
   private Set<SeminarSpeciality> seminarSpecialitySet = new HashSet<>();
 }

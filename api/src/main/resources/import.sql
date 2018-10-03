@@ -31,8 +31,13 @@ INSERT INTO `TRAINEE` VALUES (4, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31
 INSERT INTO `TRAINEE` VALUES (5, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '123f456798', 'PENDING', 'YELLOW',1, 'Παναγιώτης', 5, 'Anna', 'Ελληνική', 'Nikakou');
 INSERT INTO `TRAINEE` VALUES (6, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '1234356798', 'DELIVERED', 'YELLOW',1, 'Παναγιώτης', 6, 'Ιωάννης', 'Ελληνική', 'Sotiria');
 INSERT INTO `TRAINEE` VALUES (7, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '1234566798', 'PENDING', 'GREEN',1, 'Παναγιώτης', 7, 'Niki', 'Ελληνική', 'Τσόμπος');
-INSERT INTO `TRAINEE` VALUES (8, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '1234456798', 'PRINTED', 'RED',1, 'Παναγιώτης', 8, 'Tito', 'Ελληνική', 'Fikias');
+INSERT INTO `TRAINEE` VALUES (8, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '123445679348', 'PRINTED', 'RED',1, 'Παναγιώτης', 8, 'Tito', 'Ελληνική', 'Fikias');
 INSERT INTO `TRAINEE` VALUES (9, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '123445456798', 'DELIVERED', 'YELLOW',1, 'Παναγιώτης', 9, 'Christos', 'Ελληνική', 'Nikolakakis');
 INSERT INTO `TRAINEE` VALUES (10, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '12123456798', 'PENDING', 'GREEN',1, 'Παναγιώτης', 10, 'Face', 'Ελληνική', 'Antoniou');
 INSERT INTO `TRAINEE` VALUES (11, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '12342156798', 'DELIVERED', 'RED',1, 'Παναγιώτης', 11, 'Annan', 'Ελληνική', 'Terens');
 INSERT INTO `TRAINEE` VALUES (12, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos', '1234536798', 'PRINTED', 'YELLOW',1, 'Παναγιώτης', 12, 'Ding', 'Ελληνική', 'Pollakis');
+INSERT INTO `SEMINAR_TRAINEE` VALUES (1, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos',60,60,1,1,1,1);
+INSERT INTO `SEMINAR_TRAINEE` VALUES (2, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos',60,60,2,1,1,2);
+INSERT INTO `SEMINAR_TRAINEE` VALUES (3, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos',60,60,3,1,1,3);
+INSERT INTO `SEMINAR_TRAINEE` VALUES (4, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos',60,60,4,1,1,4);
+INSERT INTO `SEMINAR_TRAINEE` VALUES (5, '2018-09-28 09:42:31.461', '2018-09-28 09:42:31.461', 'John Tsompos', 'John Tsompos',60,60,5,1,1,5);

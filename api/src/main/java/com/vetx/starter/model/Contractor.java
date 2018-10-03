@@ -1,9 +1,7 @@
 package com.vetx.starter.model;
 
 import com.vetx.starter.model.audit.UserDateAudit;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -16,6 +14,8 @@ import java.util.List;
 @Entity
 @Builder
 @EqualsAndHashCode(callSuper = true)
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class Contractor extends UserDateAudit {
   //TODO: dummy, change based on business rules
 
@@ -63,5 +63,6 @@ public class Contractor extends UserDateAudit {
       fetch = FetchType.LAZY,
       orphanRemoval = true
   )
+  @Builder.Default
   private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 }
