@@ -1,61 +1,65 @@
 import React, { Component } from 'react';
-import { getAllContractors, getUserCreatedContractors, getUserVotedContractors } from '../util/APIUtils';
+import { getAllContractors, deleteItem } from '../util/APIUtils';
+import Contractor from './Contractor';
 import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Icon, notification } from 'antd';
-import { CONTRACTOR_LIST_SIZE } from '../constants';
+import { Button, Table, notification, Popconfirm, message } from 'antd';
+import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import './ContractorList.css';
-import { Table } from 'antd';
-import { formatDateTime } from '../util/Helpers';
+import { Link } from 'react-router-dom';
+import {formatHumanDate, humanize, formatDate} from '../util/Helpers';
 
 class ContractorList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             columns : [{
+              title: 'AFM',
+              dataIndex: 'afm',
+              sorter: true,
+              key: 'afm',
+              render: (name, contractor ) => (
+                  <Link to={"contractors/" + contractor.key}>{contractor.afm}</Link>
+              )
+            }, {
               title: 'Name',
               dataIndex: 'name',
               sorter: true,
               key: 'name',
-            }, {
-              title: 'Date',
-              dataIndex: 'date',
-              sorter: true,
-              key: 'date',
-              render: (date) => (
-                formatDateTime(date)
+              render: (name, contractor ) => (
+                  <Link to={"contractors/" + contractor.key}>{contractor.name}</Link>
               )
             }, {
-              title: 'Type',
-              dataIndex: 'contractorType',
+              title: 'Representative Name',
+              dataIndex: 'representativeName',
               sorter: true,
-              key: 'contractorType',
+              key: 'representativeName',
             }, {
-              title: 'Created by',
-              dataIndex: 'createdBy',
+              title: 'Phone Number',
+              dataIndex: 'phoneNumber',
               sorter: true,
-              key: 'createdBy',
+              key: 'phoneNumber',
             }, {
-              title: 'Created at',
-              dataIndex: 'createdAt',
+              title: 'Email',
+              dataIndex: 'email',
               sorter: true,
-              key: 'createdAt',
-              render: (createdAt) => (
-                 formatDateTime(createdAt)
-              )
+              key: 'email',
             }, {
-              title: 'Updated by',
-              dataIndex: 'updatedBy',
-              sorter: true,
-              key: 'updatedBy',
+              key: 'edit',
+              render: (contractor) => {
+                return (
+                    <Button>Edit</Button>
+                      )
+              }
             }, {
-              title: 'Updated at',
-              dataIndex: 'updatedAt',
-              sorter: true,
-              key: 'updatedAt',
-              render: (updatedAt) => (
-                 formatDateTime(updatedAt)
-              )
+              key: 'delete',
+              render: (contractor) => {
+                  return (
+                      <Popconfirm title="Are you sure delete this task?" onConfirm={this.confirm.bind(this, contractor)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                        <Button type="danger" >Delete</Button>
+                      </Popconfirm>
+                  )
+              }
             }],
             contractors: [],
             isLoading: false,
@@ -65,7 +69,26 @@ class ContractorList extends Component {
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    loadContractorList(page = 1, size = CONTRACTOR_LIST_SIZE, sorter) {
+    confirm(contractor) {
+        this.delete.bind(this, contractor);
+        this.delete(contractor);
+        message.success('Deleted');
+    }
+
+    cancel(e) {
+        message.error('Canceled delete');
+    }
+
+    delete(contractor){
+        let promise;
+
+        promise = deleteItem(contractor);
+
+        const contractors = this.state.contractors.filter(i => i.key !== contractor.key)
+        this.setState({contractors})
+    }
+
+    loadContractorList(page = 1, size = LIST_SIZE, sorter) {
         let promise;
 
         promise = getAllContractors(page -1 , size, sorter);
@@ -118,7 +141,7 @@ class ContractorList extends Component {
         this.setState({
             pagination: pager,
         });     
-        this.loadContractorList(this.state.pagination.current, CONTRACTOR_LIST_SIZE, sorter);
+        this.loadContractorList(this.state.pagination.current, LIST_SIZE, sorter);
     }
 
     render() {
@@ -128,6 +151,11 @@ class ContractorList extends Component {
                 <div className="contractorList-content">
                     <Table 
                         columns={this.state.columns} 
+                        // onRow={(contractor) => {
+                        //         return {
+                        //           onClick: () => {window.location=contractor._links.self.href}
+                        //         };
+                        //       }}  
                         dataSource={this.state.contractors} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}

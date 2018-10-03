@@ -15,6 +15,7 @@ import Seminar from '../seminar/Seminar';
 import ContractorList from '../contractor/ContractorList';
 import NewContractor from '../contractor/NewContractor';
 import Contractor from '../contractor/Contractor';
+import TraineeList from '../trainee/TraineeList';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -116,6 +117,9 @@ class App extends Component {
                             </Route>
                             <Route
                                 exact path="/contractors" render={(props) => <ContractorList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
+                            </Route>
+                            <Route
+                                exact path="/trainees" render={(props) => <TraineeList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
                             </Route>
                             <Route
                                 path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}>
