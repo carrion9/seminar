@@ -7,7 +7,7 @@ import { SEMINAR_LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import './SeminarList.css';
 import { Link } from 'react-router-dom';
-import { formatDateTime } from '../util/Helpers';
+import {formatHumanDate, humanize, formatDate} from '../util/Helpers';
 
 class SeminarList extends Component {
     constructor(props) {
@@ -27,13 +27,16 @@ class SeminarList extends Component {
               sorter: true,
               key: 'date',
               render: (date) => (
-                formatDateTime(date)
+                formatHumanDate(date)
               )
             }, {
               title: 'Type',
               dataIndex: 'seminarType',
               sorter: true,
               key: 'seminarType',
+              render: (seminarType) => (
+                  humanize(seminarType)
+              )
             }, {
               title: 'Created by',
               dataIndex: 'createdBy',
@@ -45,7 +48,7 @@ class SeminarList extends Component {
               sorter: true,
               key: 'createdAt',
               render: (createdAt) => (
-                 formatDateTime(createdAt)
+                 formatDate(createdAt)
               )
             }, {
               title: 'Updated by',
@@ -58,7 +61,7 @@ class SeminarList extends Component {
               sorter: true,
               key: 'updatedAt',
               render: (updatedAt) => (
-                 formatDateTime(updatedAt)
+                 formatDate(updatedAt)
               )
             }, {
               key: 'edit',
