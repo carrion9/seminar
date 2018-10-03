@@ -11,7 +11,10 @@ import { ACCESS_TOKEN } from '../constants';
 
 import SeminarList from '../seminar/SeminarList';
 import NewSeminar from '../seminar/NewSeminar';
+import Seminar from '../seminar/Seminar';
 import ContractorList from '../contractor/ContractorList';
+import NewContractor from '../contractor/NewContractor';
+import Contractor from '../contractor/Contractor';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -122,6 +125,15 @@ class App extends Component {
                             </Route>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/seminar/new" component={NewSeminar} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/seminars/:id" component={Seminar} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/contractor/new" component={NewContractor} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/seminars/:id" component={Contractor} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/user/:username" component={Profile} handleLogout={this.handleLogout}>

@@ -26,18 +26,23 @@ class AppHeader extends Component {
           menuItems = [
             <Menu.Item key="/">
               <Link to="/">
-                <Icon type="home" className="nav-icon" />
+                  <img src={seminarIcon} alt="contractors" className="seminar-icon" />
               </Link>
             </Menu.Item>,
-            <Menu.Item key="/seminar/new">
-            <Link to="/seminar/new">
-              <img src={seminarIcon} alt="seminar" className="seminar-icon" />
-            </Link>
-          </Menu.Item>,
-          <Menu.Item key="/profile" className="profile-menu">
-                <ProfileDropdownMenu 
-                  currentUser={this.props.currentUser} 
-                  handleMenuClick={this.handleMenuClick}/>
+            <Menu.Item key="/contractors">
+              <Link to="/contractors">
+                  <Icon type="home" className="nav-icon" />
+              </Link>
+            </Menu.Item>,
+            <Menu.Item key="/trainees">
+              <Link to="/trainees">
+                  <Icon type="contacts" alt="trainees" />
+              </Link>
+            </Menu.Item>,
+            <Menu.Item key="/profile" className="profile-menu">
+            <ProfileDropdownMenu
+              currentUser={this.props.currentUser}
+              handleMenuClick={this.handleMenuClick}/>
             </Menu.Item>
           ]; 
         } else {
