@@ -1,50 +1,66 @@
 import React, { Component } from 'react';
-import { getAllSeminars, deleteItem } from '../util/APIUtils';
-import Seminar from './Seminar';
+import { getAllTrainees, deleteItem } from '../util/APIUtils';
 import LoadingIndicator  from '../common/LoadingIndicator';
 import { Button, Table, notification, Popconfirm, message } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
-import './SeminarList.css';
+import './TraineeList.css';
 import { Link } from 'react-router-dom';
 import {formatHumanDate, humanize, formatDate} from '../util/Helpers';
 
-class SeminarList extends Component {
+class TraineeList extends Component {
     constructor(props) {
         super(props);
         this.state = {
             columns : [{
-              title: 'Name',
+              title: 'AMA',
+              dataIndex: 'ama',
+              sorter: true,
+              key: 'ama',
+              render: (name, trainee ) => (
+                  <Link to={"trainees/" + trainee.key}>{trainee.ama}</Link>
+              )
+            }, {
+              title: 'Full Name',
               dataIndex: 'name',
               sorter: true,
               key: 'name',
-              render: (name, seminar ) => (
-                  <Link to={"seminars/" + seminar.key}>{seminar.name}</Link>
+              render: (name, trainee ) => (
+                  <Link to={"trainees/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
               )
             }, {
-              title: 'Date',
-              dataIndex: 'date',
+              title: 'Fathers Name',
+              dataIndex: 'fathersName',
               sorter: true,
-              key: 'date',
-              render: (date) => (
-                formatHumanDate(date)
-              )
+              key: 'fathersName',
             }, {
-              title: 'Type',
-              dataIndex: 'seminarType',
+              title: 'Nationality',
+              dataIndex: 'nationality',
               sorter: true,
-              key: 'seminarType',
-              render: (seminarType) => (
-                  humanize(seminarType)
-              )
+              key: 'nationality',
+            }, {
+              title: 'Cart Type',
+              dataIndex: 'cardType',
+              sorter: true,
+              key: 'cardType',
+            }, {
+              title: 'Cart Status',
+              dataIndex: 'cardStatus',
+              sorter: true,
+              key: 'cardStatus',
+            }, {
+              title: 'Document Code',
+              dataIndex: 'documentCode',
+              sorter: true,
+              key: 'documentCode',
             }, {
               title: 'Created',
               dataIndex: 'createdBy',
               sorter: true,
               key: 'created',
-              render: (created, seminar) => {
+              render: (created, trainee) => {
                 return(
-                    <span>{seminar.createdBy} at {formatDate(seminar.createdAt)}</span>
+                    <span>{trainee.createdBy} at {formatDate(trainee.createdAt)}</span>
                  )
               }
             }, {
@@ -52,39 +68,39 @@ class SeminarList extends Component {
               dataIndex: 'updatedBy',
               sorter: true,
               key: 'updatedBy',
-              render: (updated, seminar) => {
+              render: (updated, trainee) => {
                 return(
-                    <span>{seminar.updatedBy} at {formatDate(seminar.updatedAt)}</span>
+                    <span>{trainee.updatedBy} at {formatDate(trainee.updatedAt)}</span>
                   )
               }
             }, {
               key: 'edit',
-              render: (seminar) => {
+              render: (trainee) => {
                 return (
                     <Button>Edit</Button>
                       )
               }
             }, {
               key: 'delete',
-              render: (seminar) => {
+              render: (trainee) => {
                   return (
-                      <Popconfirm title="Are you sure delete this task?" onConfirm={this.confirm.bind(this, seminar)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                      <Popconfirm title="Are you sure delete this task?" onConfirm={this.confirm.bind(this, trainee)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
                         <Button type="danger" >Delete</Button>
                       </Popconfirm>
                   )
               }
             }],
-            seminars: [],
+            trainees: [],
             isLoading: false,
             pagination: {},
         };
-        this.loadSeminarList = this.loadSeminarList.bind(this);
+        this.loadTraineeList = this.loadTraineeList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
-    confirm(seminar) {
-        this.delete.bind(this, seminar);
-        this.delete(seminar);
+    confirm(trainee) {
+        this.delete.bind(this, trainee);
+        this.delete(trainee);
         message.success('Deleted');
     }
 
@@ -92,19 +108,19 @@ class SeminarList extends Component {
         message.error('Canceled delete');
     }
 
-    delete(seminar){
+    delete(trainee){
         let promise;
 
-        promise = deleteItem(seminar);
+        promise = deleteItem(trainee);
 
-        const seminars = this.state.seminars.filter(i => i.key !== seminar.key)
-        this.setState({seminars})
+        const trainees = this.state.trainees.filter(i => i.key !== trainee.key)
+        this.setState({trainees})
     }
 
-    loadSeminarList(page = 1, size = LIST_SIZE, sorter) {
+    loadTraineeList(page = 1, size = LIST_SIZE, sorter) {
         let promise;
 
-        promise = getAllSeminars(page -1 , size, sorter);
+        promise = getAllTrainees(page -1 , size, sorter);
 
         if(!promise) {
             return;
@@ -116,12 +132,12 @@ class SeminarList extends Component {
 
         promise
             .then(response => {
-                const seminars = this.state.seminars.slice();
+                const trainees = this.state.trainees.slice();
                 const pagination = this.state.pagination;
                 pagination.pageSize = response.page.size;
                 pagination.total = response.page.totalElements;
                 this.setState({
-                    seminars: response._embedded.seminars,
+                    trainees: response._embedded.trainees,
                     isLoading: false,
                     pagination: pagination
                 })
@@ -134,17 +150,17 @@ class SeminarList extends Component {
     }
 
     componentWillMount() {
-        this.loadSeminarList();
+        this.loadTraineeList();
     }
 
     componentWillReceiveProps(nextProps) {
         if(this.props.isAuthenticated !== nextProps.isAuthenticated) {
             // Reset State
             this.setState({
-                seminars: [],
+                trainees: [],
                 isLoading: false
             });
-            this.loadSeminarList();
+            this.loadTraineeList();
         }
     }
 
@@ -154,22 +170,22 @@ class SeminarList extends Component {
         this.setState({
             pagination: pager,
         });     
-        this.loadSeminarList(this.state.pagination.current, LIST_SIZE, sorter);
+        this.loadTraineeList(this.state.pagination.current, LIST_SIZE, sorter);
     }
 
     render() {
         return (
-            <div className="seminarList-container">
-                <h1 className="page-title">Seminars</h1>
-                <div className="seminarList-content">
+            <div className="traineeList-container">
+                <h1 className="page-title">Trainees</h1>
+                <div className="traineeList-content">
                     <Table 
                         columns={this.state.columns} 
-                        // onRow={(seminar) => {
+                        // onRow={(trainee) => {
                         //         return {
-                        //           onClick: () => {window.location=seminar._links.self.href}
+                        //           onClick: () => {window.location=trainee._links.self.href}
                         //         };
                         //       }}  
-                        dataSource={this.state.seminars} 
+                        dataSource={this.state.trainees} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
                         onChange={this.handleLoadMore}
@@ -181,4 +197,4 @@ class SeminarList extends Component {
     }
 }
 
-export default withRouter(SeminarList);
+export default withRouter(TraineeList);

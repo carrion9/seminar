@@ -1,4 +1,4 @@
-import { API_BASE_URL, SEMINAR_LIST_SIZE, CONTRACTOR_LIST_SIZE, ACCESS_TOKEN } from '../constants';
+import { API_BASE_URL, LIST_SIZE, ACCESS_TOKEN } from '../constants';
 
 const request = (options) => {
     const headers = new Headers({
@@ -34,7 +34,7 @@ export function deleteItem(item) {
 
 export function getAllSeminars(page, size, sorter) {
     page = page || 0;
-    size = size || SEMINAR_LIST_SIZE;
+    size = size || LIST_SIZE;
     if (!sorter || !sorter.field) {
         sorter = {field:"key",order:"asc"};
     }
@@ -55,12 +55,32 @@ export function createSeminar(seminarData) {
     });
 }
 
-export function getAllContractors(page, size) {
+export function getAllContractors(page, size, sorter) {
     page = page || 0;
-    size = size || CONTRACTOR_LIST_SIZE;
+    size = size || LIST_SIZE;
+    if (!sorter || !sorter.field) {
+        sorter = {field:"key",order:"asc"};
+    }
+    sorter.order === "ascend" ? sorter.order = "asc" : null;
+    sorter.order === "descend" ? sorter.order = "desc" : null;
 
     return request({
-        url: API_BASE_URL + "/contractors?page=" + page + "&size=" + size + "&sort=key,asc",
+        url: API_BASE_URL + "/contractors?page=" + page + "&size=" + size + "&sort=" +sorter.field + "," + sorter.order,
+        method: 'GET'
+    });
+}
+
+export function getAllTrainees(page, size, sorter) {
+    page = page || 0;
+    size = size || LIST_SIZE;
+    if (!sorter || !sorter.field) {
+        sorter = {field:"key",order:"asc"};
+    }
+    sorter.order === "ascend" ? sorter.order = "asc" : null;
+    sorter.order === "descend" ? sorter.order = "desc" : null;
+
+    return request({
+        url: API_BASE_URL + "/trainees?page=" + page + "&size=" + size + "&sort=" +sorter.field + "," + sorter.order,
         method: 'GET'
     });
 }
