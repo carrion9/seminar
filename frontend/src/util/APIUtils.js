@@ -26,7 +26,13 @@ const request = (options) => {
 export function getAllSeminars(page, size, sorter) {
     page = page || 0;
     size = size || SEMINAR_LIST_SIZE;
-    sorter ? sorter : sorter={field:"key",order:"adc"};
+    sorter = sorter || {field:"key",order:"asc"};
+    if (!sorter.field) {
+        return;
+    }
+    sorter.order === "ascend" ? sorter.order = "asc" : null;
+    sorter.order === "descend" ? sorter.order = "desc" : null;
+
     return request({
         url: API_BASE_URL + "/seminars?page=" + page + "&size=" + size + "&sort=" +sorter.field + "," + sorter.order,
         method: 'GET'
