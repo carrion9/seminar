@@ -18,6 +18,13 @@ class SeminarList extends Component {
               dataIndex: 'name',
               sorter: true,
               key: 'name',
+              render: (key ) => {
+                return (
+                      <a href={key} style={{ marginRight: 8 }} >
+                        {key}
+                      </a>
+                      )
+              }
             }, {
               title: 'Date',
               dataIndex: 'date',
@@ -57,6 +64,24 @@ class SeminarList extends Component {
               render: (updatedAt) => (
                  formatDateTime(updatedAt)
               )
+            }, {
+              key: 'edit',
+              render: () => {
+                return (
+                      <a href="#" style={{ marginRight: 8 }} >
+                        edit
+                      </a>
+                      )
+              }
+            }, {
+              key: 'delete',
+              render: () => {
+                return (
+                      <a href="#" style={{ marginRight: 8 }} >
+                        delete
+                      </a>
+                      )
+              }
             }],
             seminars: [],
             isLoading: false,
@@ -129,6 +154,11 @@ class SeminarList extends Component {
                 <div className="seminarList-content">
                     <Table 
                         columns={this.state.columns} 
+                        // onRow={(seminar) => {
+                        //         return {
+                        //           onClick: () => {window.location=seminar._links.self.href}
+                        //         };
+                        //       }}  
                         dataSource={this.state.seminars} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
