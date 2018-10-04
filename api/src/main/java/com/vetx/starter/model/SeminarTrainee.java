@@ -1,5 +1,7 @@
 package com.vetx.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,19 +28,28 @@ public class SeminarTrainee extends UserDateAudit {
 
   private Long actualCost;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name="contractor_id")
   private Contractor contractor;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name="seminar_id")
   private Seminar seminar;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name="trainee_id")
   private Trainee trainee;
 
+  @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminarTrainee",
+      targetEntity = SeminarTraineeSpeciality.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   private Set<SeminarTraineeSpeciality> seminarTraineeSpecialitySet = new HashSet<>();

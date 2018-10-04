@@ -1,5 +1,6 @@
 package com.vetx.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -27,9 +28,13 @@ public class SeminarTraineeSpeciality {
 
   private boolean passed = false;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name="speciality_id")
   private Speciality speciality;
 
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JsonBackReference
+  @ManyToOne
+  @JoinColumn(name="seminarTrainee_id")
   private SeminarTrainee seminarTrainee;
 }

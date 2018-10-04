@@ -1,5 +1,6 @@
 package com.vetx.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
@@ -38,19 +39,25 @@ public class Seminar extends UserDateAudit {
   @Column(length = 140)
   private String name;
 
+  @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",
+      targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   @Builder.Default
   private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 
+  @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",
+      targetEntity = SeminarSpeciality.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   @Builder.Default

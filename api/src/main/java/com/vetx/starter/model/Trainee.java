@@ -1,5 +1,6 @@
 package com.vetx.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,18 +59,24 @@ public class Trainee extends UserDateAudit {
   @Column(length = 60)
   private CardStatus cardStatus;
 
+  @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",
+      targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
 
+  @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",
+      targetEntity = TraineeSpeciality.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   private Set<TraineeSpeciality> traineeSpecialitySet = new HashSet<>();

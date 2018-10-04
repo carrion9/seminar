@@ -1,5 +1,6 @@
 package com.vetx.starter.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
 
@@ -17,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Contractor extends UserDateAudit {
-  //TODO: dummy, change based on business rules
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,10 +57,13 @@ public class Contractor extends UserDateAudit {
   @Size()
   private Long afm;
 
+  @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",
+      targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
+      fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   @Builder.Default
