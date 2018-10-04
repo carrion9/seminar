@@ -44,7 +44,6 @@ public class SeminarTrainee extends UserDateAudit {
   private Trainee trainee;
 
   @JsonManagedReference
-  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminarTrainee",
       targetEntity = SeminarTraineeSpeciality.class,
