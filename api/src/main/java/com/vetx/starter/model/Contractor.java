@@ -3,6 +3,7 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,7 +15,7 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Contractor extends UserDateAudit {
@@ -23,6 +24,7 @@ public class Contractor extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NaturalId
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
@@ -54,7 +56,7 @@ public class Contractor extends UserDateAudit {
   private String DOY;
 
   @NotBlank
-  @Size()
+  @NaturalId
   private Long afm;
 
   @JsonManagedReference

@@ -3,6 +3,7 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.NaturalId;
@@ -13,7 +14,8 @@ import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Builder
+@EqualsAndHashCode(callSuper = false)
 public class SeminarTrainee extends UserDateAudit {
 
   @Id
