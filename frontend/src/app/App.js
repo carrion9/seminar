@@ -131,13 +131,13 @@ class App extends Component {
                                 authenticated={this.state.isAuthenticated} path="/seminar/new" component={NewSeminar} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
-                                authenticated={this.state.isAuthenticated} path="/seminars/:id" component={Seminar} handleLogout={this.handleLogout}>
+                                authenticated={this.state.isAuthenticated} path="/seminar/:id" component={Seminar} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/contractor/new" component={NewContractor} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
-                                authenticated={this.state.isAuthenticated} path="/seminars/:id" component={Contractor} handleLogout={this.handleLogout}>
+                                authenticated={this.state.isAuthenticated} path="/contractor/:id" component={Contractor} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/user/:username" component={Profile} handleLogout={this.handleLogout}>

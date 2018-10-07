@@ -47,6 +47,13 @@ export function getAllSeminars(page, size, sorter) {
     });
 }
 
+export function getSeminarById(id) {
+    return request({
+        url: API_BASE_URL + "/seminars/" + id,
+        method: 'GET'
+    });
+}
+
 export function createSeminar(seminarData) {
     return request({
         url: API_BASE_URL + "/seminars",

@@ -19,7 +19,7 @@ class SeminarList extends Component {
               sorter: true,
               key: 'name',
               render: (name, seminar ) => (
-                  <Link to={"seminars/" + seminar.key}>{seminar.name}</Link>
+                  <Link to={{ pathname: "seminar/" + seminar.key, state:{seminar: this.seminar} }}>{seminar.name}</Link>
               )
             }, {
               title: 'Date',
