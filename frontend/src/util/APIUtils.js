@@ -85,6 +85,21 @@ export function getAllTrainees(page, size, sorter) {
     });
 }
 
+export function getAllSpecialties(page, size, sorter, filter) {
+    page = page || 0;
+    size = size || LIST_SIZE;
+    if (!sorter || !sorter.field) {
+        sorter = {field:"key",order:"asc"};
+    }
+    sorter.order === "ascend" ? sorter.order = "asc" : null;
+    sorter.order === "descend" ? sorter.order = "desc" : null;
+
+    return request({
+        url: API_BASE_URL + "/specialties?page=" + page + "&size=" + size + "&sort=" +sorter.field + "," + sorter.order,
+        method: 'GET'
+    });
+}
+
 export function login(loginRequest) {
     return request({
         url: API_BASE_URL + "/auth/signin",

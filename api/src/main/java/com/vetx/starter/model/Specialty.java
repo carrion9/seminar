@@ -1,6 +1,7 @@
 package com.vetx.starter.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,10 +14,10 @@ import java.util.List;
 
 @Entity
 @Data
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Speciality {
+public class Specialty extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,33 +32,33 @@ public class Speciality {
 
   @JsonManagedReference
   @OneToMany(
-      mappedBy = "speciality",
-      targetEntity = SeminarSpeciality.class,
+      mappedBy = "specialty",
+      targetEntity = SeminarSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<SeminarSpeciality> seminarSpecialityList = new ArrayList<>();
+  private List<SeminarSpecialty> seminarSpecialtyList = new ArrayList<>();
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",
-      targetEntity = TraineeSpeciality.class,
+      targetEntity = TraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<TraineeSpeciality> traineeSpecialityList = new ArrayList<>();
+  private List<TraineeSpecialty> traineeSpecialtyList = new ArrayList<>();
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminarTrainee",
-      targetEntity = SeminarTraineeSpeciality.class,
+      targetEntity = SeminarTraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<SeminarTraineeSpeciality> seminarTraineeSpecialityList = new ArrayList<>();
+  private List<SeminarTraineeSpecialty> seminarTraineeSpecialtyList = new ArrayList<>();
 }

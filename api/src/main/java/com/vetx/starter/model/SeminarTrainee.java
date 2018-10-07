@@ -48,10 +48,10 @@ public class SeminarTrainee extends UserDateAudit {
   @JsonManagedReference
   @OneToMany(
       mappedBy = "seminarTrainee",
-      targetEntity = SeminarTraineeSpeciality.class,
+      targetEntity = SeminarTraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private Set<SeminarTraineeSpeciality> seminarTraineeSpecialitySet = new HashSet<>();
+  private Set<SeminarTraineeSpecialty> seminarTraineeSpecialtySet = new HashSet<>();
 }

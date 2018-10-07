@@ -52,11 +52,11 @@ public class Seminar extends UserDateAudit {
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",
-      targetEntity = SeminarSpeciality.class,
+      targetEntity = SeminarSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
   @Builder.Default
-  private Set<SeminarSpeciality> seminarSpecialitySet = new HashSet<>();
+  private Set<SeminarSpecialty> seminarSpecialtySet = new HashSet<>();
 }

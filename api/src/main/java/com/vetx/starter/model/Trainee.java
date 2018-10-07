@@ -76,10 +76,10 @@ public class Trainee extends UserDateAudit {
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",
-      targetEntity = TraineeSpeciality.class,
+      targetEntity = TraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private Set<TraineeSpeciality> traineeSpecialitySet = new HashSet<>();
+  private Set<TraineeSpecialty> traineeSpecialtySet = new HashSet<>();
 }
