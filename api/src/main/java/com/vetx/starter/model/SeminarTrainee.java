@@ -53,5 +53,5 @@ public class SeminarTrainee extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private Set<SeminarTraineeSpecialty> seminarTraineeSpecialtySet = new HashSet<>();
+  private Set<SeminarTraineeSpecialty> seminarTraineeSpecialties = new HashSet<>();
 }

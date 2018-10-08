@@ -10,7 +10,9 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -31,6 +33,7 @@ public class Specialty extends UserDateAudit {
   private String name;
 
   @JsonManagedReference
+  @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "specialty",
       targetEntity = SeminarSpecialty.class,
@@ -38,7 +41,7 @@ public class Specialty extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<SeminarSpecialty> seminarSpecialtyList = new ArrayList<>();
+  private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
@@ -49,7 +52,7 @@ public class Specialty extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<TraineeSpecialty> traineeSpecialtyList = new ArrayList<>();
+  private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
@@ -60,5 +63,5 @@ public class Specialty extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<SeminarTraineeSpecialty> seminarTraineeSpecialtyList = new ArrayList<>();
+  private Set<SeminarTraineeSpecialty> seminarTraineeSpecialties = new HashSet<>();
 }

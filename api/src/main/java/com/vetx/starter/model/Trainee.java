@@ -70,7 +70,7 @@ public class Trainee extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
@@ -81,5 +81,5 @@ public class Trainee extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private Set<TraineeSpecialty> traineeSpecialtySet = new HashSet<>();
+  private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
 }

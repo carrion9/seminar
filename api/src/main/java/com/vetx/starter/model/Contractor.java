@@ -9,8 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
@@ -69,5 +68,5 @@ public class Contractor extends UserDateAudit {
       orphanRemoval = true
   )
   @Builder.Default
-  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 }

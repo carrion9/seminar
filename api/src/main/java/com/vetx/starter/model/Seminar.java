@@ -36,6 +36,7 @@ public class Seminar extends UserDateAudit {
   @Column(length = 140)
   private String name;
 
+  @Builder.Default
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
@@ -45,9 +46,9 @@ public class Seminar extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  @Builder.Default
-  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
+  @Builder.Default
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
@@ -57,6 +58,5 @@ public class Seminar extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  @Builder.Default
-  private Set<SeminarSpecialty> seminarSpecialtySet = new HashSet<>();
+  private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
 }
