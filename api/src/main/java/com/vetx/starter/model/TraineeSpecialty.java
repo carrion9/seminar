@@ -15,7 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class TraineeSpeciality {
+public class TraineeSpecialty {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +30,8 @@ public class TraineeSpeciality {
 
   @JsonBackReference
   @ManyToOne
-  @JoinColumn(name="speciality_id")
-  private Speciality speciality;
+  @JoinColumn(name="specialty_id")
+  private Specialty specialty;
 
   @JsonBackReference
   @ManyToOne

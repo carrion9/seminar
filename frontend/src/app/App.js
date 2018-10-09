@@ -16,6 +16,7 @@ import ContractorList from '../contractor/ContractorList';
 import NewContractor from '../contractor/NewContractor';
 import Contractor from '../contractor/Contractor';
 import TraineeList from '../trainee/TraineeList';
+import SpecialtyList from '../specialty/SpecialtyList';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -141,6 +142,9 @@ class App extends Component {
                             </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/user/:username" component={Profile} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/specialties" component={SpecialtyList} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <Route
                                 component={NotFound}>

@@ -2,6 +2,7 @@ package com.vetx.starter.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.NaturalId;
@@ -16,7 +17,8 @@ import java.util.Set;
 
 @Data
 @Entity
-@EqualsAndHashCode(callSuper = true)
+@Builder
+@EqualsAndHashCode(callSuper = false)
 public class Trainee extends UserDateAudit {
 
   @Id
@@ -49,7 +51,7 @@ public class Trainee extends UserDateAudit {
   @NotBlank
   @Size(max = 140)
   @NaturalId
-  private String AMA;
+  private String ama;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
@@ -68,16 +70,16 @@ public class Trainee extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",
-      targetEntity = TraineeSpeciality.class,
+      targetEntity = TraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  private Set<TraineeSpeciality> traineeSpecialitySet = new HashSet<>();
+  private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
 }

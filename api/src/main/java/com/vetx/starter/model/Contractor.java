@@ -3,18 +3,18 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
+import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Data
 @Entity
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Contractor extends UserDateAudit {
@@ -23,6 +23,7 @@ public class Contractor extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NaturalId
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
@@ -54,7 +55,7 @@ public class Contractor extends UserDateAudit {
   private String DOY;
 
   @NotBlank
-  @Size()
+  @NaturalId
   private Long afm;
 
   @JsonManagedReference
@@ -67,5 +68,5 @@ public class Contractor extends UserDateAudit {
       orphanRemoval = true
   )
   @Builder.Default
-  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 }

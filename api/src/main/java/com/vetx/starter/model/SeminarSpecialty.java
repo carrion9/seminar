@@ -7,13 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import javax.validation.constraints.PositiveOrZero;
 
 @Entity
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class SeminarSpeciality {
+public class SeminarSpecialty {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +24,8 @@ public class SeminarSpeciality {
 
   @JsonBackReference
   @ManyToOne
-  @JoinColumn(name="speciality_id")
-  private Speciality speciality;
+  @JoinColumn(name="specialty_id")
+  private Specialty specialty;
 
   @JsonBackReference
   @ManyToOne

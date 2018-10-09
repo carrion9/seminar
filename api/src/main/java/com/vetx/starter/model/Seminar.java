@@ -3,9 +3,6 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -18,7 +15,7 @@ import java.util.*;
 @Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 public class Seminar extends UserDateAudit {
 
   @Id
@@ -39,6 +36,7 @@ public class Seminar extends UserDateAudit {
   @Column(length = 140)
   private String name;
 
+  @Builder.Default
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
@@ -48,18 +46,17 @@ public class Seminar extends UserDateAudit {
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  @Builder.Default
-  private List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
+  @Builder.Default
   @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",
-      targetEntity = SeminarSpeciality.class,
+      targetEntity = SeminarSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
       orphanRemoval = true
   )
-  @Builder.Default
-  private Set<SeminarSpeciality> seminarSpecialitySet = new HashSet<>();
+  private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
 }
