@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Seminar.css';
-import { Radio, Form, Input, Button, Icon, Select, Col, Table, notification, Row, DatePicker, Avatar } from 'antd';
+import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
 import { getSeminarById, deleteItem } from '../util/APIUtils';
@@ -39,6 +39,7 @@ class Seminar extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: this.props.match.params.id,
             columnsS : [
             {
                 title: "Specialties",
@@ -49,15 +50,56 @@ class Seminar extends Component {
                       <span>{spec.name}</span>
                   )
             }],
-            columnsT: [
-            {
-                title: "Trainees",
-                dataIndex: "key",
-                sorter: true,
-                key: "key",
-                render: (key, trainee) => (
-                      <span>{trainee.surname} {trainee.name}</span>
+            columnsT: [{
+              title: 'AMA',
+              dataIndex: 'ama',
+              sorter: true,
+              key: 'ama',
+              render: (name, trainee ) => (
+                  <Link to={"trainees/" + trainee.key}>{trainee.ama}</Link>
+              )
+            }, {
+              title: 'Full Name',
+              dataIndex: 'name',
+              sorter: true,
+              key: 'name',
+              render: (name, trainee ) => (
+                  <Link to={"trainees/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+              )
+            }, {
+              title: 'Fathers Name',
+              dataIndex: 'fathersName',
+              sorter: true,
+              key: 'fathersName',
+            }, {
+              title: 'Nationality',
+              dataIndex: 'nationality',
+              sorter: true,
+              key: 'nationality',
+            }, {
+              title: 'Cart Type',
+              dataIndex: 'cardType',
+              sorter: true,
+              key: 'cardType',
+            }, {
+              title: 'Cart Status',
+              dataIndex: 'cardStatus',
+              sorter: true,
+              key: 'cardStatus',
+            }, {
+              title: 'Document Code',
+              dataIndex: 'documentCode',
+              sorter: true,
+              key: 'documentCode',
+            }, {
+              key: 'remove',
+              render: (trainee) => {
+                  return (
+                      <Popconfirm title="Remove from seminar?" onConfirm={this.confirm.bind(this, trainee)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                        <Button type="danger" >Remove</Button>
+                      </Popconfirm>
                   )
+              }
             }],
             isLoading: false,
             seminar: {},
@@ -68,10 +110,30 @@ class Seminar extends Component {
         this.setColumns = this.setColumns.bind(this);
     }
 
+
+    confirm(trainee) {
+        this.remove.bind(this, trainee);
+        this.remove(trainee);
+        message.success('Removed');
+    }
+
+    cancel(e) {
+        message.error('Canceled remove');
+    }
+
+    remove(trainee){
+        let promise;
+
+        //promise = deleteItem(trainee);
+
+        const trainees = this.state.trainees.filter(i => i.key !== trainee.key)
+        this.setState({trainees})
+    }
+
     getSeminar(){
         let promise;
 
-        promise = getSeminarById("1");
+        promise = getSeminarById(this.state.id);
 
         if(!promise) {
             return;
@@ -84,8 +146,8 @@ class Seminar extends Component {
             .then(response => {
                 this.setState({
                     seminar: response,
-                    specialties: response._embedded.seminarSpecialties.map( x => x.specialty),
-                    trainees: response._embedded.seminarTrainees.map( x => x.trainee),
+                    specialties: response._embedded ? response._embedded.seminarSpecialties.map( x => x.specialty) : [],
+                    trainees: response._embedded ? response._embedded.seminarTrainees.map( x => x.trainee) : [],
                     isLoading: false
                 })
             }).catch(error => {
