@@ -40,9 +40,10 @@ class Seminar extends Component {
         super(props);
         this.state = {
             id: this.props.match.params.id,
+            pagination: false,
             columnsS : [
             {
-                title: "Specialties",
+                title: "Label",
                 dataIndex: "key",
                 sorter: true,
                 key: "key",
@@ -56,7 +57,7 @@ class Seminar extends Component {
               sorter: true,
               key: 'ama',
               render: (name, trainee ) => (
-                  <Link to={"trainees/" + trainee.key}>{trainee.ama}</Link>
+                  <Link to={"/trainees/" + trainee.key}>{trainee.ama}</Link>
               )
             }, {
               title: 'Full Name',
@@ -64,7 +65,7 @@ class Seminar extends Component {
               sorter: true,
               key: 'name',
               render: (name, trainee ) => (
-                  <Link to={"trainees/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+                  <Link to={"/trainees/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
               )
             }, {
               title: 'Fathers Name',
@@ -255,15 +256,29 @@ class Seminar extends Component {
                         </Row>
                     </div>
                     <div className="specialties-list">
-                        <Table
+                        <Table 
+                            {...this.state}
+                            title={() => {return "Specialties";} }
                             columns={this.state.columnsS} 
                             dataSource={this.state.specialties}
+                            footer={() => {return (
+                                <div className="table-footer">
+                                    <Button className="add-button" type="Submit" >Add Specialty</Button>
+                                </div>
+                            )}}
                         />
                     </div>
                     <div className="trainees-list">
                         <Table 
+                            {...this.state}
+                            title={() => {return "Trainees";} }
                             columns={this.state.columnsT} 
                             dataSource={this.state.trainees}
+                            footer={() => {return (
+                                <div className="table-footer">
+                                    <Button className="add-button" type="Submit" >Add Trainee</Button>
+                                </div>
+                            )}}
                         />
                     </div>
                 </div>

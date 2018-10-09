@@ -195,3 +195,11 @@
 .specialties-table{
     
 }
+
+.table-footer{
+    overflow: hidden;
+}
+
+.add-button{
+    float: right;
+}
