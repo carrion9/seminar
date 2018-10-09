@@ -1,5 +1,4 @@
-.seminars-container {
-    max-width: 600px;
+.seminar-container {
     margin: 80px auto 0;
 }
 
@@ -188,10 +187,11 @@
 .seminar-info{
 
 }
+
 .trainees-table{
     float:right;
 }
 
-.specialities-table{
+.specialties-table{
     float:left;
 }

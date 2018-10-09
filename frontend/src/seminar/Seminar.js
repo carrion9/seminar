@@ -39,15 +39,32 @@ class Seminar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns : [],
+            columnsS : [
+            {
+                title: "Specialties",
+                dataIndex: "key",
+                sorter: true,
+                key: "key",
+                render: (key, spec) => (
+                      <span>{spec.name}</span>
+                  )
+            }],
+            columnsT: [
+            {
+                title: "Trainees",
+                dataIndex: "key",
+                sorter: true,
+                key: "key",
+                render: (key, trainee) => (
+                      <span>{trainee.surname} {trainee.name}</span>
+                  )
+            }],
             isLoading: false,
             seminar: {},
-            specialities: [],
+            specialties: [],
             trainees: []
         };
         this.getSeminar = this.getSeminar.bind(this);
-        this.getSpecialities = this.getSpecialities.bind(this);
-        this.getTrainees = this.getTrainees.bind(this);
         this.setColumns = this.setColumns.bind(this);
     }
 
@@ -67,10 +84,10 @@ class Seminar extends Component {
             .then(response => {
                 this.setState({
                     seminar: response,
+                    specialties: response._embedded.seminarSpecialties.map( x => x.specialty),
+                    trainees: response._embedded.seminarTrainees.map( x => x.trainee),
                     isLoading: false
                 })
-
-        const x = response;
             }).catch(error => {
             this.setState({
                 isLoading: false
@@ -78,137 +95,39 @@ class Seminar extends Component {
         });
     }
 
-/*****************************************************
-//TODO fetch actuall data. Setted to some default dums
-*****************************************************/
-    getSpecialities(){
-        const specialities = ["special1","sp2","speciality long 3","speciality 4"];
-        this.setState({
-            specialities: specialities
-        });
-    }
-
-/*****************************************************
-//TODO fetch actuall data. Setted to some default dums
-*****************************************************/
-    getTrainees(){
-        const trainees = [{
-        "createdAt": "2018-09-28T09:42:31.461Z",
-        "updatedAt": "2018-09-28T09:42:31.461Z",
-        "createdBy": "John Tsompos",
-        "updatedBy": "John Tsompos",
-        "key": 1,
-        "cost": 60,
-        "actualCost": 60,
-        "_links": {
-          "self": {
-            "href": "http://localhost:5000/api/seminarTrainees/1"
-          },
-          "seminarTrainee": {
-            "href": "http://localhost:5000/api/seminarTrainees/1"
-          },
-          "seminar": {
-            "href": "http://localhost:5000/api/seminarTrainees/1/seminar"
-          },
-          "seminarTraineeSpecialitySet": {
-            "href": "http://localhost:5000/api/seminarTrainees/1/seminarTraineeSpecialitySet"
-          },
-          "contractor": {
-            "href": "http://localhost:5000/api/seminarTrainees/1/contractor"
-          },
-          "trainee": {
-            "href": "http://localhost:5000/api/seminarTrainees/1/trainee"
-          }
-        }
-      },
-      {
-        "createdAt": "2018-09-28T09:42:31.461Z",
-        "updatedAt": "2018-09-28T09:42:31.461Z",
-        "createdBy": "John Tsompos",
-        "updatedBy": "John Tsompos",
-        "key": 2,
-        "cost": 60,
-        "actualCost": 60,
-        "_links": {
-          "self": {
-            "href": "http://localhost:5000/api/seminarTrainees/2"
-          },
-          "seminarTrainee": {
-            "href": "http://localhost:5000/api/seminarTrainees/2"
-          },
-          "seminar": {
-            "href": "http://localhost:5000/api/seminarTrainees/2/seminar"
-          },
-          "seminarTraineeSpecialitySet": {
-            "href": "http://localhost:5000/api/seminarTrainees/2/seminarTraineeSpecialitySet"
-          },
-          "contractor": {
-            "href": "http://localhost:5000/api/seminarTrainees/2/contractor"
-          },
-          "trainee": {
-            "href": "http://localhost:5000/api/seminarTrainees/2/trainee"
-          }
-        }
-      },
-      {
-        "createdAt": "2018-09-28T09:42:31.461Z",
-        "updatedAt": "2018-09-28T09:42:31.461Z",
-        "createdBy": "John Tsompos",
-        "updatedBy": "John Tsompos",
-        "key": 3,
-        "cost": 60,
-        "actualCost": 60,
-        "_links": {
-          "self": {
-            "href": "http://localhost:5000/api/seminarTrainees/3"
-          },
-          "seminarTrainee": {
-            "href": "http://localhost:5000/api/seminarTrainees/3"
-          },
-          "seminar": {
-            "href": "http://localhost:5000/api/seminarTrainees/3/seminar"
-          },
-          "seminarTraineeSpecialitySet": {
-            "href": "http://localhost:5000/api/seminarTrainees/3/seminarTraineeSpecialitySet"
-          },
-          "contractor": {
-            "href": "http://localhost:5000/api/seminarTrainees/3/contractor"
-          },
-          "trainee": {
-            "href": "http://localhost:5000/api/seminarTrainees/3/trainee"
-          }
-        }
-      }];
-        this.setState({
-            trainees: trainees
-        });
-    }
 
     setColumns(){
-        const columns = this.state.specialities.map(x => x
-            /*{
-              title: x,
-              dataIndex: x,
-              sorter: true,
-              key: x
-            }*/);
-        this.setState({
-            columns: columns
-        });
+        const columns = [{
+            title: "Name/Type",
+            dataIndex: "key",
+            sorter: true,
+            key: "key",
+            render: (trainee) => (
+                  <span>{trainee.surname} {trainee.name}</span>
+              )
+        }]
+        return columns.push.apply(columns, this.state.specialties.map(spec => 
+                    ({
+                      title: spec.name,
+                      dataIndex: spec.name,
+                      sorter: true,
+                      key: spec.name
+                    })
+                ));
     }
 
     componentWillMount() {
         this.getSeminar();
-        this.getSpecialities();
-        this.getTrainees();
-        this.setColumns();
+        // this.getSpecialities();
+        // this.getTrainees();
+        // this.setColumns();
     }
 
 
     render() {
        
         return (
-            <div className="new-seminar-container">
+            <div className="seminar-container">
                 <h1 className="page-title">Seminar {this.state.seminar.name}</h1>
                 <div className="seminar-content">
                     <div className="seminar-info">
@@ -273,11 +192,17 @@ class Seminar extends Component {
                             </Col>
                         </Row>
                     </div>
-                    <div className="trainees-list">
-                        <Table/>
+                    <div className="specialties-list">
+                        <Table
+                            columns={this.state.columnsS} 
+                            dataSource={this.state.specialties}
+                        />
                     </div>
-                    <div className="specialities-list">
-                        <Table/>
+                    <div className="trainees-list">
+                        <Table 
+                            columns={this.state.columnsT} 
+                            dataSource={this.state.trainees}
+                        />
                     </div>
                 </div>
             </div>
