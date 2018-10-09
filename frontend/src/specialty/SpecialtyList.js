@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {getAllSpecialties, deleteItem} from '../util/APIUtils';
-import {Button, Table, Input, Icon, Popconfirm, message} from 'antd';
+import {Button, Table, Input, Icon, Popconfirm, message, Pagination} from 'antd';
 import {LIST_SIZE} from '../constants';
 import {withRouter} from 'react-router-dom';
 import {Link} from 'react-router-dom';
@@ -92,7 +92,11 @@ class SpecialtyList extends Component {
             }],
             specialties: [],
             isLoading: false,
-            pagination: {},
+            pagination: {
+                pageSize: LIST_SIZE,
+                showSizeChanger: true,
+                pageSizeOptions: ['5','10','20','30','40']
+            },
         };
         this.loadSpecialtyList = this.loadSpecialtyList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -165,12 +169,10 @@ class SpecialtyList extends Component {
     }
 
     handleLoadMore(pagination, filter, sorter) {
-        const pager = this.state.pagination;
-        pager.current = pagination.current;
         this.setState({
-            pagination: pager,
+            pagination: pagination,
         });
-        this.loadSpecialtyList(this.state.pagination.current, LIST_SIZE, sorter, filter);
+        this.loadSpecialtyList(pagination.current, pagination.pageSize, sorter);
     }
 
     handleSearch = (selectedKeys, confirm) => () => {
@@ -194,6 +196,7 @@ class SpecialtyList extends Component {
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
                         onChange={this.handleLoadMore}
+                        onShowSizeChange={this.loadSpecialtyList}
                     />
                 </div>
             </div>

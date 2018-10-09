@@ -62,7 +62,11 @@ class ContractorList extends Component {
             }],
             contractors: [],
             isLoading: false,
-            pagination: {},
+            pagination: {
+                pageSize: LIST_SIZE,
+                showSizeChanger: true,
+                pageSizeOptions: ['5','10','20','30','40']
+            },
         };
         this.loadContractorList = this.loadContractorList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -135,12 +139,10 @@ class ContractorList extends Component {
     }
 
     handleLoadMore(pagination, filter, sorter) {
-        const pager = this.state.pagination;
-        pager.current = pagination.current;
         this.setState({
-            pagination: pager,
+            pagination: pagination,
         });     
-        this.loadContractorList(this.state.pagination.current, LIST_SIZE, sorter);
+        this.loadContractorList(pagination.current, pagination.pageSize, sorter);
     }
 
     render() {
@@ -154,6 +156,7 @@ class ContractorList extends Component {
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
                         onChange={this.handleLoadMore}
+                        onShowSizeChange={this.loadContractorList}
                     />
                 </div>
             </div>

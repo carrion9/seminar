@@ -91,7 +91,11 @@ class TraineeList extends Component {
             }],
             trainees: [],
             isLoading: false,
-            pagination: {},
+            pagination: {
+                pageSize: LIST_SIZE,
+                showSizeChanger: true,
+                pageSizeOptions: ['5','10','20','30','40']
+            },
         };
         this.loadTraineeList = this.loadTraineeList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -164,12 +168,10 @@ class TraineeList extends Component {
     }
 
     handleLoadMore(pagination, filter, sorter) {
-        const pager = this.state.pagination;
-        pager.current = pagination.current;
         this.setState({
-            pagination: pager,
+            pagination: pagination,
         });     
-        this.loadTraineeList(this.state.pagination.current, LIST_SIZE, sorter);
+        this.loadTraineeList(pagination.current, pagination.pageSize, sorter);
     }
 
     render() {
@@ -182,6 +184,7 @@ class TraineeList extends Component {
                         dataSource={this.state.trainees} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
+                        onShowSizeChange={this.loadTraineeList}
                         onChange={this.handleLoadMore}
                     />
                 </div>

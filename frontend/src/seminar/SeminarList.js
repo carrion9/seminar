@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getAllSeminars, deleteItem } from '../util/APIUtils';
 import Seminar from './Seminar';
 import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Table, notification, Popconfirm, message } from 'antd';
+import { Button, Table, Pagination, Popconfirm, message } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -75,7 +75,11 @@ class SeminarList extends Component {
             }],
             seminars: [],
             isLoading: false,
-            pagination: {},
+            pagination: {
+                pageSize: LIST_SIZE,
+                showSizeChanger: true,
+                pageSizeOptions: ['5','10','20','30','40']
+            },
         };
         this.loadSeminarList = this.loadSeminarList.bind(this);
         this.handleLoadMore = this.handleLoadMore.bind(this);
@@ -117,7 +121,6 @@ class SeminarList extends Component {
             .then(response => {
                 const seminars = this.state.seminars.slice();
                 const pagination = this.state.pagination;
-                pagination.pageSize = response.page.size;
                 pagination.total = response.page.totalElements;
                 this.setState({
                     seminars: response._embedded.seminars,
@@ -148,12 +151,10 @@ class SeminarList extends Component {
     }
 
     handleLoadMore(pagination, filter, sorter) {
-        const pager = this.state.pagination;
-        pager.current = pagination.current;
         this.setState({
-            pagination: pager,
+            pagination: pagination,
         });     
-        this.loadSeminarList(this.state.pagination.current, LIST_SIZE, sorter);
+        this.loadSeminarList(pagination.current, pagination.pageSize, sorter);
     }
 
     render() {
@@ -167,6 +168,7 @@ class SeminarList extends Component {
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
                         onChange={this.handleLoadMore}
+                        onShowSizeChange={this.loadSeminarList}
                     />
                 </div>
             </div>
