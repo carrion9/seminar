@@ -69,3 +69,11 @@ frontend/.idea/workspace.xml
 /dist/
 /nbdist/
 /.nb-gradle/
+
+.gitignore
+api/gradle/wrapper/gradle-wrapper.jar
+api/gradle/wrapper/gradle-wrapper.properties
+api/gradlew
+api/gradlew.bat
+package-lock.json
+
