@@ -196,8 +196,13 @@
     
 }
 
-.table-footer{
+.table-header{
     overflow: hidden;
+}
+
+.table-title{
+    font-weight: 900;
+    font-size: 20px;
 }
 
 .add-button{

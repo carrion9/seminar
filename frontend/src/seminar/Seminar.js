@@ -32,9 +32,7 @@ class SeminarCreator extends Component{
             );
     }
 }
-/*****************************************************
-//TODO fetch actuall data. Setted to some default dums
-*****************************************************/
+
 class Seminar extends Component {
     constructor(props) {
         super(props);
@@ -43,53 +41,60 @@ class Seminar extends Component {
             pagination: false,
             columnsS : [
             {
-                title: "Label",
-                dataIndex: "key",
+                title: 'Label',
+                dataIndex: 'key',
                 sorter: true,
-                key: "key",
+                key: 'key',
                 render: (key, spec) => (
-                      <span>{spec.name}</span>
+                      <span>{spec.specialty.name}</span>
                   )
             }],
             columnsT: [{
               title: 'AMA',
-              dataIndex: 'ama',
+              dataIndex: 'trainee.ama',
               sorter: true,
               key: 'ama',
-              render: (name, trainee ) => (
-                  <Link to={"/trainees/" + trainee.key}>{trainee.ama}</Link>
+              render: (ama, record ) => (
+                  <Link to={"/trainees/" + record.key}>{ama}</Link>
               )
             }, {
               title: 'Full Name',
-              dataIndex: 'name',
               sorter: true,
               key: 'name',
-              render: (name, trainee ) => (
-                  <Link to={"/trainees/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+              render: (name, record ) => (
+                  <Link to={"/trainee/" + record.trainee.key}>{record.trainee.surname} {record.trainee.name}</Link>
               )
             }, {
+              title: 'Contractor',
+              dataIndex: 'contractor',
+              sorter: true,
+              key: 'contractor',
+              render: (contractor) => (
+                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
+                )
+            }, {
               title: 'Fathers Name',
-              dataIndex: 'fathersName',
+              dataIndex: 'trainee.fathersName',
               sorter: true,
               key: 'fathersName',
             }, {
               title: 'Nationality',
-              dataIndex: 'nationality',
+              dataIndex: 'trainee.nationality',
               sorter: true,
               key: 'nationality',
             }, {
               title: 'Cart Type',
-              dataIndex: 'cardType',
+              dataIndex: 'trainee.cardType',
               sorter: true,
               key: 'cardType',
             }, {
               title: 'Cart Status',
-              dataIndex: 'cardStatus',
+              dataIndex: 'trainee.cardStatus',
               sorter: true,
               key: 'cardStatus',
             }, {
               title: 'Document Code',
-              dataIndex: 'documentCode',
+              dataIndex: 'trainee.documentCode',
               sorter: true,
               key: 'documentCode',
             }, {
@@ -147,8 +152,8 @@ class Seminar extends Component {
             .then(response => {
                 this.setState({
                     seminar: response,
-                    specialties: response._embedded ? response._embedded.seminarSpecialties.map( x => x.specialty) : [],
-                    trainees: response._embedded ? response._embedded.seminarTrainees.map( x => x.trainee) : [],
+                    specialties: response._embedded ? response._embedded.seminarSpecialties: [],
+                    trainees: response._embedded ? response._embedded.seminarTrainees : [],
                     isLoading: false
                 })
             }).catch(error => {
@@ -258,27 +263,29 @@ class Seminar extends Component {
                     <div className="specialties-list">
                         <Table 
                             {...this.state}
-                            title={() => {return "Specialties";} }
+                            title={() => {return ( 
+                                <div className="table-header">
+                                    <span className="table-title"> Specialities </span>
+                                    <Button className="add-button" type="Submit" >Add Specialty</Button>
+                                </div> 
+                                )}}
                             columns={this.state.columnsS} 
                             dataSource={this.state.specialties}
-                            footer={() => {return (
-                                <div className="table-footer">
-                                    <Button className="add-button" type="Submit" >Add Specialty</Button>
-                                </div>
-                            )}}
                         />
                     </div>
+                    <br/>
+                    <br/>
                     <div className="trainees-list">
                         <Table 
                             {...this.state}
-                            title={() => {return "Trainees";} }
+                            title={() => {return ( 
+                                <div className="table-header">
+                                    <span className="table-title"> Trainees </span>
+                                    <Button className="add-button" type="Submit" >Add Trainee</Button>
+                                </div> 
+                                )}}
                             columns={this.state.columnsT} 
                             dataSource={this.state.trainees}
-                            footer={() => {return (
-                                <div className="table-footer">
-                                    <Button className="add-button" type="Submit" >Add Trainee</Button>
-                                </div>
-                            )}}
                         />
                     </div>
                 </div>
