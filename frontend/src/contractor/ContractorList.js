@@ -19,7 +19,7 @@ class ContractorList extends Component {
               sorter: true,
               key: 'afm',
               render: (name, contractor ) => (
-                  <Link to={"contractors/" + contractor.key}>{contractor.afm}</Link>
+                  <Link to={"contractor/" + contractor.key}>{contractor.afm}</Link>
               )
             }, {
               title: 'Name',
@@ -27,7 +27,7 @@ class ContractorList extends Component {
               sorter: true,
               key: 'name',
               render: (name, contractor ) => (
-                  <Link to={"contractors/" + contractor.key}>{contractor.name}</Link>
+                  <Link to={"contractor/" + contractor.key}>{contractor.name}</Link>
               )
             }, {
               title: 'Representative Name',

@@ -18,7 +18,7 @@ class TraineeList extends Component {
               sorter: true,
               key: 'ama',
               render: (name, trainee ) => (
-                  <Link to={"trainees/" + trainee.key}>{trainee.ama}</Link>
+                  <Link to={"trainee/" + trainee.key}>{trainee.ama}</Link>
               )
             }, {
               title: 'Full Name',
@@ -26,7 +26,7 @@ class TraineeList extends Component {
               sorter: true,
               key: 'name',
               render: (name, trainee ) => (
-                  <Link to={"trainees/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+                  <Link to={"trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
               )
             }, {
               title: 'Fathers Name',
