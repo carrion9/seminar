@@ -1,6 +1,6 @@
 Functions:
  * Views
-  + Seminar
+   + Seminar
  * Lists
  * Send link to contractors to download form
  * imports from excel (?)
