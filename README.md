@@ -7,8 +7,6 @@ Functions based on Αναλυτική περιγραφή:
    + Seminars
    + Trainees
    + Contractors
- * Send link to contractors to download form
-   + Βήμα 1
  * 2 types of new Seminar (excel imports only)
    + Βήμα 2
  * View Trainees-Specialties-Seminar (?)
