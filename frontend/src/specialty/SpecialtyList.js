@@ -3,7 +3,6 @@ import {getAllSpecialties, deleteItem} from '../util/APIUtils';
 import {Button, Table, Input, Icon, Popconfirm, message} from 'antd';
 import {LIST_SIZE} from '../constants';
 import {withRouter} from 'react-router-dom';
-import './SpecialtyList.css';
 import {Link} from 'react-router-dom';
 import {formatDate} from '../util/Helpers';
 
@@ -186,9 +185,9 @@ class SpecialtyList extends Component {
 
     render() {
         return (
-            <div className="specialtyList-container">
+            <div className="list-container">
                 <h1 className="page-title">Specialties</h1>
-                <div className="specialtyList-content">
+                <div className="list-content">
                     <Table
                         columns={this.state.columns}
                         dataSource={this.state.specialties}

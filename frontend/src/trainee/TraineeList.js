@@ -4,7 +4,6 @@ import LoadingIndicator  from '../common/LoadingIndicator';
 import { Button, Table, notification, Popconfirm, message } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
-import './TraineeList.css';
 import { Link } from 'react-router-dom';
 import {formatHumanDate, humanize, formatDate} from '../util/Helpers';
 
@@ -175,16 +174,11 @@ class TraineeList extends Component {
 
     render() {
         return (
-            <div className="traineeList-container">
-                <h1 className="page-title">Trainees</h1>
-                <div className="traineeList-content">
+            <div className="list-container">
+                <h1 className="page-title">Trainees<Button className="add-button" type="Submit" >Add Trainee</Button></h1>
+                <div className="list-content">
                     <Table 
                         columns={this.state.columns} 
-                        // onRow={(trainee) => {
-                        //         return {
-                        //           onClick: () => {window.location=trainee._links.self.href}
-                        //         };
-                        //       }}  
                         dataSource={this.state.trainees} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}

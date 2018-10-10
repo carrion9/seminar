@@ -5,7 +5,6 @@ import LoadingIndicator  from '../common/LoadingIndicator';
 import { Button, Table, notification, Popconfirm, message } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
-import './ContractorList.css';
 import { Link } from 'react-router-dom';
 import {formatHumanDate, humanize, formatDate} from '../util/Helpers';
 
@@ -146,16 +145,11 @@ class ContractorList extends Component {
 
     render() {
         return (
-            <div className="contractorList-container">
-                <h1 className="page-title">Contractors</h1>
-                <div className="contractorList-content">
+            <div className="list-container">
+                <h1 className="page-title">Contractors<Button className="add-button" type="Submit" >Add Contractors</Button></h1>
+                <div className="list-content">
                     <Table 
                         columns={this.state.columns} 
-                        // onRow={(contractor) => {
-                        //         return {
-                        //           onClick: () => {window.location=contractor._links.self.href}
-                        //         };
-                        //       }}  
                         dataSource={this.state.contractors} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}

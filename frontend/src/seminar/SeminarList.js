@@ -5,7 +5,6 @@ import LoadingIndicator  from '../common/LoadingIndicator';
 import { Button, Table, notification, Popconfirm, message } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
-import './SeminarList.css';
 import { Link } from 'react-router-dom';
 import {formatHumanDate, humanize, formatDate} from '../util/Helpers';
 
@@ -159,16 +158,11 @@ class SeminarList extends Component {
 
     render() {
         return (
-            <div className="seminarList-container">
-                <h1 className="page-title">Seminars</h1>
-                <div className="seminarList-content">
+            <div className="list-container">
+                <h1 className="page-title">Seminars<Button className="add-button" type="Submit" >Add Seminar</Button></h1>
+                <div className="list-content">
                     <Table 
                         columns={this.state.columns} 
-                        // onRow={(seminar) => {
-                        //         return {
-                        //           onClick: () => {window.location=seminar._links.self.href}
-                        //         };
-                        //       }}  
                         dataSource={this.state.seminars} 
                         loading={this.state.isLoading}
                         pagination={this.state.pagination}
