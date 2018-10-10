@@ -54,14 +54,14 @@ public class Specialty extends UserDateAudit {
   )
   private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
 
-  @JsonManagedReference
-  @EqualsAndHashCode.Exclude
-  @OneToMany(
-      mappedBy = "seminarTrainee",
-      targetEntity = SeminarTraineeSpecialty.class,
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true
-  )
-  private Set<SeminarTraineeSpecialty> seminarTraineeSpecialties = new HashSet<>();
+//  @JsonManagedReference
+//  @EqualsAndHashCode.Exclude
+//  @OneToMany(
+//      mappedBy = "seminarTrainee",
+//      targetEntity = SeminarTrainee.class,
+//      cascade = CascadeType.ALL,
+//      fetch = FetchType.EAGER,
+//      orphanRemoval = true
+//  )
+//  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 }

@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +31,11 @@ public class SeminarTrainee extends UserDateAudit {
 
   private Long actualCost;
 
+  @PositiveOrZero
+  private  Double grade = 0.0;
+
+  private boolean passed = false;
+
   @JsonBackReference
   @ManyToOne
   @JoinColumn(name="contractor_id")
@@ -45,13 +51,9 @@ public class SeminarTrainee extends UserDateAudit {
   @JoinColumn(name="trainee_id")
   private Trainee trainee;
 
-  @JsonManagedReference
-  @OneToMany(
-      mappedBy = "seminarTrainee",
-      targetEntity = SeminarTraineeSpecialty.class,
-      cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
-      orphanRemoval = true
-  )
-  private Set<SeminarTraineeSpecialty> seminarTraineeSpecialties = new HashSet<>();
+  @JsonBackReference
+  @ManyToOne
+//  @EqualsAndHashCode.Exclude
+  @JoinColumn(name="specialty_id")
+  private Specialty specialty;
 }

@@ -4,7 +4,7 @@ import org.springframework.data.rest.core.config.Projection;
 
 import java.util.Set;
 
-@Projection(name = "seminarTraineeProjection", types = {SeminarTrainee.class})
+@Projection(name = "SeminarTraineeProjection", types = {SeminarTrainee.class})
 public interface SeminarTraineeProjection {
   Long getId();
   Long getKey();
@@ -12,5 +12,7 @@ public interface SeminarTraineeProjection {
   Long getActualCost();
   Trainee getTrainee();
   Contractor getContractor();
-  Set<SeminarTraineeSpecialty> getSeminarTraineeSpecialties();
+  Double getGrade();
+  boolean isPassed();
+  Specialty getSpecialty();
 }
