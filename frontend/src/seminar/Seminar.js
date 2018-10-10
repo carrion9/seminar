@@ -266,7 +266,7 @@ class Seminar extends Component {
                             title={() => {return ( 
                                 <div className="table-header">
                                     <span className="table-title"> Specialities </span>
-                                    <Button className="add-button" type="Submit" >Add Specialty</Button>
+                                    <Button className="add-to-seminar-button" type="Submit" >Add Specialty</Button>
                                 </div> 
                                 )}}
                             columns={this.state.columnsS} 
@@ -281,7 +281,7 @@ class Seminar extends Component {
                             title={() => {return ( 
                                 <div className="table-header">
                                     <span className="table-title"> Trainees </span>
-                                    <Button className="add-button" type="Submit" >Add Trainee</Button>
+                                    <Button className="add-to-seminar-button" type="Submit" >Add Trainee</Button>
                                 </div> 
                                 )}}
                             columns={this.state.columnsT} 

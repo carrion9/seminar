@@ -205,6 +205,9 @@
     font-size: 20px;
 }
 
-.add-button{
+.add-to-seminar-button{
+    width: 13.5%;
+    text-align: center;
     float: right;
+    margin-right: 2%;
 }
