@@ -59,6 +59,44 @@ class Seminar extends Component {
               )
             }, {
               title: 'Full Name',
+              dataIndex: 'trainee',
+              sorter: true,
+              key: 'name',
+              render: (trainee) => (
+                  <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+              )
+            },{
+              title: 'Contractor',
+              dataIndex: 'contractor',
+              sorter: true,
+              key: 'contractor',
+              render: (contractor) => (
+                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
+                )
+            },{
+              title: 'Specialty',
+              dataIndex: 'specialty.name',
+              sorter: true,
+              key: 'specialty',
+            },{
+              title: 'Grade',
+              dataIndex: 'grade',
+              key: 'grade',
+            },{
+              title: 'Passed',
+              dataIndex: 'passed',
+              key: 'passed',
+            }], 
+            comulsD: [{
+              title: 'AMA',
+              dataIndex: 'trainee.ama',
+              sorter: true,
+              key: 'ama',
+              render: (ama, record ) => (
+                  <Link to={"/trainees/" + record.key}>{ama}</Link>
+              )
+            }, {
+              title: 'Full Name',
               sorter: true,
               key: 'name',
               render: (name, record ) => (
@@ -110,7 +148,7 @@ class Seminar extends Component {
             isLoading: false,
             seminar: {},
             specialties: [],
-            trainees: []
+            trainSpec: []
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.setColumns = this.setColumns.bind(this);
@@ -150,10 +188,11 @@ class Seminar extends Component {
         });
         promise
             .then(response => {
+
                 this.setState({
                     seminar: response,
                     specialties: response._embedded ? response._embedded.seminarSpecialties: [],
-                    trainees: response._embedded ? response._embedded.seminarTrainees : [],
+                    trainSpec: response._embedded ? response._embedded.seminarTrainees: [],
                     isLoading: false
                 })
             }).catch(error => {
@@ -285,7 +324,7 @@ class Seminar extends Component {
                                 </div> 
                                 )}}
                             columns={this.state.columnsT} 
-                            dataSource={this.state.trainees}
+                            dataSource={this.state.trainSpec}
                         />
                     </div>
                 </div>
