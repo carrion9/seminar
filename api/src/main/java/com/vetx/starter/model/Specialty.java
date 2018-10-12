@@ -2,10 +2,7 @@ package com.vetx.starter.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -19,13 +16,10 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Builder
 public class Specialty extends UserDateAudit {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @NaturalId
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 

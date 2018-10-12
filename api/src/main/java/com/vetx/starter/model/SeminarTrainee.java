@@ -21,10 +21,6 @@ public class SeminarTrainee extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @NaturalId
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
   private Long cost;
@@ -53,7 +49,6 @@ public class SeminarTrainee extends UserDateAudit {
 
   @JsonBackReference
   @ManyToOne
-//  @EqualsAndHashCode.Exclude
   @JoinColumn(name="specialty_id")
   private Specialty specialty;
 }

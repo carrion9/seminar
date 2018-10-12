@@ -20,15 +20,11 @@ public class Seminar extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
   @Enumerated(EnumType.STRING)
   private SeminarType seminarType;
 
-  @NotBlank
   private Instant date;
 
   @NotBlank
@@ -54,8 +50,8 @@ public class Seminar extends UserDateAudit {
   @OneToMany(
       mappedBy = "seminar",
       targetEntity = SeminarSpecialty.class,
-      cascade = CascadeType.ALL,
       fetch = FetchType.EAGER,
+      cascade = CascadeType.ALL,
       orphanRemoval = true
   )
   private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();

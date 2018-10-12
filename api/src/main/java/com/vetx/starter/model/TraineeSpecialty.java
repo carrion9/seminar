@@ -19,10 +19,6 @@ public class TraineeSpecialty {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @NaturalId
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
   @PositiveOrZero

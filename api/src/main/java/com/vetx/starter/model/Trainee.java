@@ -23,9 +23,6 @@ public class Trainee extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
   @NotBlank

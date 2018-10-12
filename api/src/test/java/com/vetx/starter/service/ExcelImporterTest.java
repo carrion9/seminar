@@ -60,7 +60,7 @@ public class ExcelImporterTest {
     //Validate trainee
     assertTrue(trainee.isPresent());
     assertNotNull(trainee.get());
-    assertNotNull(trainee.get().getId());
+    assertNotNull(trainee.get().getKey());
     assertEquals(newTrainee.getCardStatus(), trainee.get().getCardStatus());
 
     //Validate Contractor
@@ -70,7 +70,7 @@ public class ExcelImporterTest {
     //Validate seminarTrainee
     assertTrue(seminarTrainee.isPresent());
     assertNotNull(seminarTrainee.get());
-    assertNotNull(seminarTrainee.get().getId());
+    assertNotNull(seminarTrainee.get().getKey());
 
     //diko sou
     //assertEquals();

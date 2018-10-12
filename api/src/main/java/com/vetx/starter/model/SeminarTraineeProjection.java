@@ -6,7 +6,6 @@ import java.util.Set;
 
 @Projection(name = "SeminarTraineeProjection", types = {SeminarTrainee.class})
 public interface SeminarTraineeProjection {
-  Long getId();
   Long getKey();
   Long getCost();
   Long getActualCost();

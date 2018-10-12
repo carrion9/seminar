@@ -21,10 +21,6 @@ public class Contractor extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-
-  @NaturalId
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
   @NotBlank
@@ -39,8 +35,6 @@ public class Contractor extends UserDateAudit {
   @Size(max = 140)
   private String address;
 
-  @NotBlank
-  @Size(min = 8, max = 10)
   private Long phoneNumber;
 
   @Email
@@ -54,7 +48,6 @@ public class Contractor extends UserDateAudit {
   @Size(max = 140)
   private String DOY;
 
-  @NotBlank
   @NaturalId
   private Long afm;
 
