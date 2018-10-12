@@ -59,6 +59,10 @@ public class Trainee extends UserDateAudit {
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
+  private DocType docType;
+
+  @Enumerated(EnumType.STRING)
+  @Column(length = 60)
   private CardStatus cardStatus;
 
   @JsonManagedReference
