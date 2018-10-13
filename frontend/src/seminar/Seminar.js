@@ -7,31 +7,7 @@ import { getSeminarById, deleteItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
-const Option = Select.Option;
-const RadioGroup = Radio.Group;
-
-class SeminarCreator extends Component{
-    
-    render(){
-        return(
-            <Link className="creator-link" to={`/user/${this.state.seminar.createdBy.username}`}>
-                <Avatar className="seminar-creator-avatar"
-                        style={{ backgroundColor: getAvatarColor(this.state.seminar.createdBy.name)}} >
-                    {this.state.seminar.createdBy.name[0].toUpperCase()}
-                </Avatar>
-                <span className="seminar-creator-name">
-                    {this.state.seminar.createdBy.name}
-                </span>
-                <span className="seminar-creator-username">
-                    @{this.state.seminar.createdBy.username}
-                </span>
-                <span className="seminar-creation-date">
-                    {formatDateTime(this.state.seminar.date)}
-                </span>
-            </Link>
-            );
-    }
-}
+const FormItem = Form.Item;
 
 class Seminar extends Component {
     constructor(props) {
@@ -87,71 +63,15 @@ class Seminar extends Component {
               dataIndex: 'passed',
               key: 'passed',
             }], 
-            comulsD: [{
-              title: 'AMA',
-              dataIndex: 'trainee.ama',
-              sorter: true,
-              key: 'ama',
-              render: (ama, record ) => (
-                  <Link to={"/trainees/" + record.key}>{ama}</Link>
-              )
-            }, {
-              title: 'Full Name',
-              sorter: true,
-              key: 'name',
-              render: (name, record ) => (
-                  <Link to={"/trainee/" + record.trainee.key}>{record.trainee.surname} {record.trainee.name}</Link>
-              )
-            }, {
-              title: 'Contractor',
-              dataIndex: 'contractor',
-              sorter: true,
-              key: 'contractor',
-              render: (contractor) => (
-                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
-                )
-            }, {
-              title: 'Fathers Name',
-              dataIndex: 'trainee.fathersName',
-              sorter: true,
-              key: 'fathersName',
-            }, {
-              title: 'Nationality',
-              dataIndex: 'trainee.nationality',
-              sorter: true,
-              key: 'nationality',
-            }, {
-              title: 'Cart Type',
-              dataIndex: 'trainee.cardType',
-              sorter: true,
-              key: 'cardType',
-            }, {
-              title: 'Cart Status',
-              dataIndex: 'trainee.cardStatus',
-              sorter: true,
-              key: 'cardStatus',
-            }, {
-              title: 'Document Code',
-              dataIndex: 'trainee.documentCode',
-              sorter: true,
-              key: 'documentCode',
-            }, {
-              key: 'remove',
-              render: (trainee) => {
-                  return (
-                      <Popconfirm title="Remove from seminar?" onConfirm={this.confirm.bind(this, trainee)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
-                        <Button type="danger" >Remove</Button>
-                      </Popconfirm>
-                  )
-              }
-            }],
             isLoading: false,
             seminar: {},
             specialties: [],
-            trainSpec: []
+            trainSpec: [],
+            isEdit: false
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.setColumns = this.setColumns.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
     }
 
 
@@ -223,6 +143,12 @@ class Seminar extends Component {
                 ));
     }
 
+    handleEdit(){
+        this.setState({
+            isEdit: !this.state.isEdit
+        })
+    }
+
     componentWillMount() {
         this.getSeminar();
         // this.getSpecialities();
@@ -232,51 +158,49 @@ class Seminar extends Component {
 
 
     render() {
-       
-        return (
-            <div className="seminar-container">
-                <h1 className="page-title">Seminar {this.state.seminar.name}</h1>
-                <div className="seminar-content">
-                    <div className="seminar-info">
+        let content;
+        if (this.state.isEdit){
+            content =(
+                    <Form layout="inline" className="seminar-info">
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="nameTitle" class="seminar-tag">
+                                <span label="nameTitle" className="seminar-tag">
                                     Seminar's Name: 
                                 </span>
                             </Col>
                             <Col span={12}>
-                                <span label="name">
-                                    {this.state.seminar.name}
-                                </span>
+                                <FormItem>
+                                    <Input value={this.state.seminar.name}/>
+                                </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="dateTitle" class="seminar-tag">
+                                <span label="dateTitle" className="seminar-tag">
                                     Taking place at:
                                 </span>
                             </Col>
                             <Col span={12}>
-                                <span label="date">
-                                    {formatDate(this.state.seminar.date)}
-                                </span>
+                                <FormItem>
+                                    <Input value={this.state.seminar.date}/>
+                                </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="seminarTypeTitle" class="seminar-tag">
+                                <span label="seminarTypeTitle" className="seminar-tag">
                                     Seminar's Type:
                                 </span>
                             </Col>
                             <Col span={12}>
-                                <span label="seminarType">
-                                    {this.state.seminar.seminarType}
-                                </span>
+                                <FormItem>
+                                    <Input value={this.state.seminar.seminarType}/>
+                                </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="createdTitle" class="seminar-tag">
+                                <span label="createdTitle" className="seminar-tag">
                                     Created:
                                 </span>
                             </Col>
@@ -288,7 +212,7 @@ class Seminar extends Component {
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="updatedTitle" class="seminar-tag">
+                                <span label="updatedTitle" className="seminar-tag">
                                     Last edit:
                                 </span>
                             </Col>
@@ -298,7 +222,101 @@ class Seminar extends Component {
                                 </span>
                             </Col>
                         </Row>
+                        <Row gutter={16}>
+                            <Col span={12}/>
+                            <Col span={12}>
+                                <FormItem>
+                                     <Button type="Submit">
+                                        Save
+                                    </Button>
+                                </FormItem>
+                                <FormItem>
+                                     <Button type="Submit" onClick={this.handleEdit}>
+                                        Cancel
+                                    </Button>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Form>
+                )
+        }else{
+            content=(
+                <div className="seminar-info">
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="nameTitle" className="seminar-tag">
+                                Seminar's Name: 
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="name">
+                                {this.state.seminar.name}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="dateTitle" className="seminar-tag">
+                                Taking place at:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="date">
+                                {formatDate(this.state.seminar.date)}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="seminarTypeTitle" className="seminar-tag">
+                                Seminar's Type:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="seminarType">
+                                {this.state.seminar.seminarType}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="createdTitle" className="seminar-tag">
+                                Created:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="created" >
+                                {this.state.seminar.createdBy} at {formatDate(this.state.seminar.createdAt)}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="updatedTitle" className="seminar-tag">
+                                Last edit:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="updated" >
+                                {this.state.seminar.updatedBy} at {formatDate(this.state.seminar.updatedAt)}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}/>
+                        <Col span={12}>
+                            <Button className="edit-seminar-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
+                        </Col>
+                    </Row>
                     </div>
+                )
+        }
+        return (
+            <div className="seminar-container">
+                <h1 className="page-title">Seminar {this.state.seminar.name}</h1>
+                <div className="seminar-content">
+                        {content}
+                    
                     <div className="specialties-list">
                         <Table 
                             {...this.state}
@@ -311,7 +329,7 @@ class Seminar extends Component {
                             columns={this.state.columnsS} 
                             dataSource={this.state.specialties}
                         />
-                    </div>
+                    </div> 
                     <br/>
                     <br/>
                     <div className="trainees-list">
@@ -332,6 +350,5 @@ class Seminar extends Component {
         );
     }
 }
-
-
 export default withRouter(Seminar);
+
