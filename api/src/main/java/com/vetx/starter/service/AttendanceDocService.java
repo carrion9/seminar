@@ -9,9 +9,13 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.text.MessageFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +57,8 @@ public class AttendanceDocService {
 
     List<SeminarTrainee> seminarTraineeContractors = seminarTraineeRepository.findDistinctBySeminarAndSpecialty(seminar, specialty);
 
-    try (XWPFDocument doc = new XWPFDocument()) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
+    try (XWPFDocument doc = new XWPFDocument(new FileInputStream("attendanceTemplate.docx"))) {
       // -- OR --
       // open an existing empty document with styles already defined
       //XWPFDocument doc = new XWPFDocument(new FileInputStream("base_document.docx"));
@@ -61,12 +66,33 @@ public class AttendanceDocService {
       for (SeminarTrainee traineeContractor : seminarTraineeContractors) {
 
         List<SeminarTrainee> seminarTrainees = seminarTraineeRepository.findAllBySeminarAndContractorAndSpecialty(seminar, traineeContractor.getContractor(), specialty);
-//        seminarTrainees.stream().collect(Collectors.toMap(SeminarTrainee::getId, ))
 
         // Create a new table with 6 rows and 3 columns
         int nRows = seminarTrainees.size(); // number of trainees per contractor in current seminar
         int nCols = 6;
+
+        XWPFParagraph paragraph = doc.createParagraph();
+        paragraph.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun r1 = paragraph.createRun();
+        r1.setBold(true);
+        r1.setColor("17365d");
+        r1.setFontSize(16);
+        r1.setCapitalized(true);
+        r1.setItalic(true);
+        r1.setText(MessageFormat.format("ΔΕΛΤΙΟ ΠΑΡΟΥΣΙΑΣ ΚΑΤΑΡΤΙΖΟΜΕΝΩΝ {0} {1}",traineeContractor.getContractor().getName(), formatter.format(traineeContractor.getSeminar().getDate())));
+
+        XWPFParagraph paragraph2 = doc.createParagraph();
+        paragraph2.setAlignment(ParagraphAlignment.CENTER);
+        XWPFRun r2 = paragraph2.createRun();
+        r2.setBold(true);
+        r2.setColor("c00000");
+        r2.setFontSize(14);
+        r2.setItalic(true);
+        r2.setText(MessageFormat.format("Ενημερωτικό  Σεμινάριο «{0}» για τα {1} ",traineeContractor.getSpecialty().getName(), traineeContractor.getSeminar().getSeminarType().toString()));
+
         XWPFTable table = doc.createTable(nRows, nCols);
+        table.setWidth("96.30%");
+        paragraph.setPageBreak(true);
 
         // Set the table style. If the style is not defined, the table style
         // will become "Normal".
@@ -99,37 +125,60 @@ public class AttendanceDocService {
 
             // create cell color element
             CTShd ctshd = tcpr.addNewShd();
-            ctshd.setColor("auto");
+            ctshd.setColor("0070c0");
             ctshd.setVal(STShd.CLEAR);
             if (rowCt == 0) {
               // header row
-              ctshd.setFill("A7BFDE");
-            } else if (rowCt % 2 == 0) {
-              // even row
-              ctshd.setFill("D3DFEE");
-            } else {
-              // odd row
-              ctshd.setFill("EDF2F8");
+              ctshd.setFill("fde9d9");
             }
+//             else if (rowCt % 2 == 0) {
+//              // even row
+//              ctshd.setFill("D3DFEE");
+//            } else {
+//              // odd row
+//              ctshd.setFill("EDF2F8");
+//            }
 
             // get 1st paragraph in cell's paragraph list
             XWPFParagraph para = cell.getParagraphs().get(0);
             // create a run to contain the content
             XWPFRun rh = para.createRun();
             // style cell as desired
-            if (colCt == nCols - 1) {
-              // last column is 10pt Courier
-              rh.setFontSize(10);
-              rh.setFontFamily("Courier");
-            }
+            rh.setFontSize(12);
+            rh.setFontFamily("Calibri");
             if (rowCt == 0) {
               // header row
               rh.setText(header.get(colCt));
               rh.setBold(true);
+              rh.setColor("0070c0");
               para.setAlignment(ParagraphAlignment.CENTER);
             } else {
               // other rows
-              rh.setText("row " + rowCt + ", col " + colCt);
+              switch (colCt) {
+                case 0:
+                  cell.setWidth("05.00%");
+                  rh.setText(Integer.toString(rowCt));
+                  break;
+                case 1:
+                  cell.setWidth("23.00%");
+                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getSurname());
+                  break;
+                case 2:
+                  cell.setWidth("16.00%");
+                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getName());
+                  break;
+                case 3:
+                  cell.setWidth("16.00%");
+                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getFathersName());
+                  break;
+                case 4:
+                  cell.setWidth("16.00%");
+                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getDocumentCode());
+                  break;
+                default:
+                  cell.setWidth("24.00%");
+                  rh.setText("");
+              }
               para.setAlignment(ParagraphAlignment.LEFT);
             }
             colCt++;
