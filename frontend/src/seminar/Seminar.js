@@ -170,7 +170,7 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input value={this.state.seminar.name}/>
+                                    <Input defaultValue={this.state.seminar.name} editable/>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -182,7 +182,7 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input value={this.state.seminar.date}/>
+                                    <Input defaultValue={this.state.seminar.date}/>
                                 </FormItem>
                             </Col>
                         </Row>
@@ -194,7 +194,7 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input value={this.state.seminar.seminarType}/>
+                                    <Input defaultValue={this.state.seminar.seminarType}/>
                                 </FormItem>
                             </Col>
                         </Row>
