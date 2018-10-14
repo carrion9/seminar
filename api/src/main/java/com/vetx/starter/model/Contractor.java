@@ -35,9 +35,8 @@ public class Contractor extends UserDateAudit {
   @Size(max = 140)
   private String address;
 
-  private Long phoneNumber;
+  private String phoneNumber;
 
-  @Email
   private String email;
 
   @NotBlank
@@ -49,7 +48,7 @@ public class Contractor extends UserDateAudit {
   private String DOY;
 
   @NaturalId
-  private Long afm;
+  private String afm;
 
   @JsonManagedReference
   @EqualsAndHashCode.Exclude

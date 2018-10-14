@@ -1,5 +1,3 @@
-package com.vetx.starter.service;
-
 import com.vetx.starter.model.Seminar;
 import com.vetx.starter.model.SeminarTrainee;
 import com.vetx.starter.model.Specialty;
