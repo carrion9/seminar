@@ -53,7 +53,6 @@ public class ExcelImporterTest {
 
   @Test
   public void importExcel() throws IOException {
-    Trainee newTrainee = Trainee.builder().ama("123").cardStatus(CardStatus.DELIVERED).fathersName("mpampas").name("foo").nationality("bar").surname("pipis").documentCode("asd").build();
     ApiResponse response = excelImporter.importExcel(seminar, data);
 
     Optional<Trainee> trainee = traineeRepository.findByAma("123");
@@ -62,7 +61,6 @@ public class ExcelImporterTest {
     assertTrue(trainee.isPresent());
     assertNotNull(trainee.get());
     assertNotNull(trainee.get().getKey());
-    assertEquals(newTrainee.getCardStatus(), trainee.get().getCardStatus());
 
     //Validate Contractor
 

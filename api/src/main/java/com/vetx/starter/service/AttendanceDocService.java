@@ -1,3 +1,5 @@
+package com.vetx.starter.service;
+
 import com.vetx.starter.model.Seminar;
 import com.vetx.starter.model.SeminarTrainee;
 import com.vetx.starter.model.Specialty;
@@ -17,7 +19,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class AttendanceDocService {
@@ -29,19 +30,7 @@ public class AttendanceDocService {
     this.seminarTraineeRepository = seminarTraineeRepository;
   }
 
-  /**
-   * Create a table with some row and column styling. I "manually" add the
-   * style name to the table, but don't check to see if the style actually
-   * exists in the document. Since I'm creating it from scratch, it obviously
-   * won't exist. When opened in MS Word, the table style becomes "Normal".
-   * I manually set alternating row colors. This could be done using Themes,
-   * but that's left as an exercise for the reader. The cells in the last
-   * column of the table have 10pt. "Courier" font.
-   * I make no claims that this is the "right" way to do it, but it worked
-   * for me. Given the scarcity of XWPF examples, I thought this may prove
-   * instructive and give you ideas for your own solutions.
-   */
-  public void createStyledTable(Seminar seminar, Specialty specialty) throws Exception {
+  public void createDocument(Seminar seminar, Specialty specialty) throws Exception {
     // Create a new document from scratch
 
     Map<Integer, String> header = new HashMap<>();
@@ -57,6 +46,9 @@ public class AttendanceDocService {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
     try (XWPFDocument doc = new XWPFDocument(new FileInputStream("attendanceTemplate.docx"))) {
+      // hack to remove existing paragraph in template
+      doc.removeBodyElement(doc.getParagraphPos(0));
+
       // -- OR --
       // open an existing empty document with styles already defined
       //XWPFDocument doc = new XWPFDocument(new FileInputStream("base_document.docx"));
@@ -129,13 +121,6 @@ public class AttendanceDocService {
               // header row
               ctshd.setFill("fde9d9");
             }
-//             else if (rowCt % 2 == 0) {
-//              // even row
-//              ctshd.setFill("D3DFEE");
-//            } else {
-//              // odd row
-//              ctshd.setFill("EDF2F8");
-//            }
 
             // get 1st paragraph in cell's paragraph list
             XWPFParagraph para = cell.getParagraphs().get(0);
@@ -187,7 +172,7 @@ public class AttendanceDocService {
       }
 
       // write the file
-      try (OutputStream out = new FileOutputStream("styledTable.docx")) {
+      try (OutputStream out = new FileOutputStream("attendanceDocument.docx")) {
         doc.write(out);
       }
     }

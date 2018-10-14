@@ -12,12 +12,14 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.*;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class AttendanceDocServiceTest {
+public class WelcomeDocServiceTest {
 
   @Autowired
-  AttendanceDocService attendanceDocService;
+  WelcomeDocService welcomeDocService;
 
   @Autowired
   SeminarRepository seminarRepository;
@@ -35,7 +37,7 @@ public class AttendanceDocServiceTest {
   TraineeRepository traineeRepository;
 
   @Test
-  public void createStyledTable() throws Exception {
+  public void createDocument() throws Exception {
     Seminar seminar = Seminar.builder().seminarType(SeminarType.ELPE_BASIC).name("foo").date(Instant.now()).build();
 
     Specialty specialty1 = Specialty.builder().name("specialty1").build();
@@ -109,6 +111,6 @@ public class AttendanceDocServiceTest {
     seminar.setSeminarTrainees(seminarTrainees);
     seminar = seminarRepository.save(seminar);
 
-    attendanceDocService.createDocument(seminar, specialty1);
+    welcomeDocService.createDocument(seminar);
   }
 }
