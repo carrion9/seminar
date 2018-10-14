@@ -12,8 +12,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.junit.Assert.*;
-
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class AttendanceDocServiceTest {
@@ -61,8 +59,8 @@ public class AttendanceDocServiceTest {
 
     seminar.setSeminarSpecialties(seminarSpecialties);
 
-    Contractor contractor1 = Contractor.builder().afm(1L).activity("foo").address("bar").DOY("fooBar").email("bar@foo.bar").name("barFoo1").phoneNumber(2106520959L).representativeName("BarBar").build();
-    Contractor contractor2 = Contractor.builder().afm(2L).activity("foo").address("bar").DOY("fooBar").email("bar@foo.bar").name("barFoo2").phoneNumber(2106520959L).representativeName("BarBar").build();
+    Contractor contractor1 = Contractor.builder().afm("1").activity("foo").address("bar").DOY("fooBar").email("bar@foo.bar").name("barFoo1").phoneNumber("2106520959").representativeName("BarBar").build();
+    Contractor contractor2 = Contractor.builder().afm("2").activity("foo").address("bar").DOY("fooBar").email("bar@foo.bar").name("barFoo2").phoneNumber("2106520959").representativeName("BarBar").build();
 
     contractor1 = contractorRepository.save(contractor1);
     contractor2 = contractorRepository.save(contractor2);

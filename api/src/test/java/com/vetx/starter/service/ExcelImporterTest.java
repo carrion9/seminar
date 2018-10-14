@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class ExcelImporterTest {
 
   private ExcelImporter excelImporter;
 
-  private static final String FILE_NAME = "motorOil-template.xlsx";
+  private static final String FILE_NAME = "contractor-registration-elpe.xlsx";
 
   private byte[] data;
 
@@ -47,11 +48,11 @@ public class ExcelImporterTest {
   public void setUp() throws Exception {
     excelImporter = new ExcelImporter(traineeRepository, seminarTraineeRepository, contractorRepository);
     data = Files.readAllBytes(Paths.get(this.getClass().getClassLoader().getResource(FILE_NAME).toURI()));
-    seminar = seminarRepository.getOne(1L);
+    seminar = seminarRepository.findById(1L).get();
   }
 
   @Test
-  public void importExcel() {
+  public void importExcel() throws IOException {
     Trainee newTrainee = Trainee.builder().ama("123").cardStatus(CardStatus.DELIVERED).fathersName("mpampas").name("foo").nationality("bar").surname("pipis").documentCode("asd").build();
     ApiResponse response = excelImporter.importExcel(seminar, data);
 
