@@ -40,7 +40,7 @@ dependencies {
     compile('com.h2database:h2')
     compile('org.apache.poi:poi:4.0.0')
     compile('org.apache.poi:poi-ooxml:4.0.0')
-    runtime('mysql.mysql-connector-java:8.0.12')
+//    runtime('mysql.mysql-connector-java:8.0.12')
     runtime('org.springframework.boot:spring-boot-devtools')
     compileOnly('org.projectlombok:lombok')
     testCompile('org.springframework.boot:spring-boot-starter-test')
