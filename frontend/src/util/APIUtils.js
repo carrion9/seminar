@@ -54,6 +54,20 @@ export function getSeminarById(id) {
     });
 }
 
+export function getContractorById(id) {
+    return request({
+        url: API_BASE_URL + "/contractors/" + id,
+        method: 'GET'
+    });
+}
+
+export function getTraineeById(id) {
+    return request({
+        url: API_BASE_URL + "/trainees/" + id,
+        method: 'GET'
+    });
+}
+
 export function createSeminar(seminarData) {
     return request({
         url: API_BASE_URL + "/seminars",

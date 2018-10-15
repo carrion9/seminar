@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import './Seminar.css';
+import './Trainee.css';
 import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getSeminarById, deleteItem } from '../util/APIUtils';
+import { getTraineeById, deleteItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
 const FormItem = Form.Item;
 
-class Seminar extends Component {
+class Trainee extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -64,12 +64,12 @@ class Seminar extends Component {
               key: 'passed',
             }], 
             isLoading: false,
-            seminar: {},
+            trainee: {},
             specialties: [],
             trainSpec: [],
             isEdit: false
         };
-        this.getSeminar = this.getSeminar.bind(this);
+        this.getTrainee = this.getTrainee.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
     }
 
@@ -93,10 +93,10 @@ class Seminar extends Component {
         this.setState({trainees})
     }
 
-    getSeminar(){
+    getTrainee(){
         let promise;
 
-        promise = getSeminarById(this.state.id);
+        promise = getTraineeById(this.state.id);
 
         if(!promise) {
             return;
@@ -109,9 +109,9 @@ class Seminar extends Component {
             .then(response => {
 
                 this.setState({
-                    seminar: response,
-                    specialties: response._embedded ? response._embedded.seminarSpecialties: [],
-                    trainSpec: response._embedded ? response._embedded.seminarTrainees: [],
+                    trainee: response,
+                    specialties: response._embedded ? response._embedded.traineeSpecialties: [],
+                    trainSpec: response._embedded ? response._embedded.traineeTrainees: [],
                     isLoading: false
                 })
             }).catch(error => {
@@ -128,7 +128,7 @@ class Seminar extends Component {
     }
 
     componentWillMount() {
-        this.getSeminar();
+        this.getTrainee();
     }
 
 
@@ -136,64 +136,112 @@ class Seminar extends Component {
         let content;
         if (this.state.isEdit){
             content =(
-                    <Form layout="inline" className="seminar-info">
+                    <Form layout="inline" className="trainee-info">
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="nameTitle" className="seminar-tag">
-                                    Seminar's Name: 
+                                <span label="amaTitle" className="trainee-tag">
+                                    AMA: 
                                 </span>
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.seminar.name} editable/>
+                                    <Input defaultValue={this.state.trainee.ama} editable/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="dateTitle" className="seminar-tag">
-                                    Taking place at:
+                                <span label="surnameTitle" className="trainee-tag">
+                                    Surname: 
                                 </span>
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.seminar.date}/>
+                                    <Input defaultValue={this.state.trainee.surname} editable/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="seminarTypeTitle" className="seminar-tag">
-                                    Seminar's Type:
+                                <span label="nameTitle" className="trainee-tag">
+                                    Name: 
                                 </span>
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.seminar.seminarType}/>
+                                    <Input defaultValue={this.state.trainee.name} editable/>
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="createdTitle" className="seminar-tag">
+                                <span label="nationalityTitle" className="trainee-tag">
+                                    Nationality: 
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input defaultValue={this.state.trainee.nationality} editable/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="cardTypeTitle" className="trainee-tag">
+                                    Card Type:
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input defaultValue={this.state.trainee.cardType}/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="cardStatusTitle" className="trainee-tag">
+                                    Card Status:
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input defaultValue={this.state.trainee.cardStatus}/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="documentCodeTitle" className="trainee-tag">
+                                    Document Code:
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input defaultValue={this.state.trainee.documentCode}/>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="createdTitle" className="trainee-tag">
                                     Created:
                                 </span>
                             </Col>
                             <Col span={12}>
                                 <span label="created" >
-                                    {this.state.seminar.createdBy} at {formatDate(this.state.seminar.createdAt)}
+                                    {this.state.trainee.createdBy} at {formatDate(this.state.trainee.createdAt)}
                                 </span>
                             </Col>
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="updatedTitle" className="seminar-tag">
+                                <span label="updatedTitle" className="trainee-tag">
                                     Last edit:
                                 </span>
                             </Col>
                             <Col span={12}>
                                 <span label="updated" >
-                                    {this.state.seminar.updatedBy} at {formatDate(this.state.seminar.updatedAt)}
+                                    {this.state.trainee.updatedBy} at {formatDate(this.state.trainee.updatedAt)}
                                 </span>
                             </Col>
                         </Row>
@@ -216,80 +264,128 @@ class Seminar extends Component {
                 )
         }else{
             content=(
-                <div className="seminar-info">
+                <div className="trainee-info">
                     <Row gutter={16}>
                         <Col span={12}>
-                            <span label="nameTitle" className="seminar-tag">
-                                Seminar's Name: 
+                            <span label="amaTitle" className="trainee-tag">
+                                AMA: 
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="ama">
+                                {this.state.trainee.ama}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="surnameTitle" className="trainee-tag">
+                                Surname: 
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="surname">
+                                {this.state.trainee.surname}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="nameTitle" className="trainee-tag">
+                                Name: 
                             </span>
                         </Col>
                         <Col span={12}>
                             <span label="name">
-                                {this.state.seminar.name}
+                                {this.state.trainee.name}
                             </span>
                         </Col>
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <span label="dateTitle" className="seminar-tag">
-                                Taking place at:
+                            <span label="nationalityTitle" className="trainee-tag">
+                                Nationality: 
                             </span>
                         </Col>
                         <Col span={12}>
-                            <span label="date">
-                                {formatDate(this.state.seminar.date)}
-                            </span>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <span label="seminarTypeTitle" className="seminar-tag">
-                                Seminar's Type:
-                            </span>
-                        </Col>
-                        <Col span={12}>
-                            <span label="seminarType">
-                                {this.state.seminar.seminarType}
+                            <span label="nationality">
+                                {this.state.trainee.nationality}
                             </span>
                         </Col>
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <span label="createdTitle" className="seminar-tag">
+                            <span label="cardTypeTitle" className="trainee-tag">
+                                Card Type:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="cardType">
+                                {this.state.trainee.cardType}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="cardStatusTitle" className="trainee-tag">
+                                Card Status:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="cardStatus">
+                                {this.state.trainee.cardStatus}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="documentCodeTitle" className="trainee-tag">
+                                Document Code:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="documentCode">
+                                {this.state.trainee.documentCode}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="createdTitle" className="trainee-tag">
                                 Created:
                             </span>
                         </Col>
                         <Col span={12}>
                             <span label="created" >
-                                {this.state.seminar.createdBy} at {formatDate(this.state.seminar.createdAt)}
+                                {this.state.trainee.createdBy} at {formatDate(this.state.trainee.createdAt)}
                             </span>
                         </Col>
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <span label="updatedTitle" className="seminar-tag">
+                            <span label="updatedTitle" className="trainee-tag">
                                 Last edit:
                             </span>
                         </Col>
                         <Col span={12}>
                             <span label="updated" >
-                                {this.state.seminar.updatedBy} at {formatDate(this.state.seminar.updatedAt)}
+                                {this.state.trainee.updatedBy} at {formatDate(this.state.trainee.updatedAt)}
                             </span>
                         </Col>
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}/>
                         <Col span={12}>
-                            <Button className="edit-seminar-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
+                            <Button className="edit-trainee-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
                         </Col>
                     </Row>
                     </div>
                 )
         }
         return (
-            <div className="seminar-container">
-                <h1 className="page-title">Seminar {this.state.seminar.name}</h1>
-                <div className="seminar-content">
+            <div className="trainee-container">
+                <h1 className="page-title">Trainee {this.state.trainee.name}</h1>
+                <div className="trainee-content">
                         {content}
                     
                     <div className="specialties-list">
@@ -297,33 +393,17 @@ class Seminar extends Component {
                             {...this.state}
                             title={() => {return ( 
                                 <div className="table-header">
-                                    <span className="table-title"> Specialities </span>
-                                    <Button className="add-to-seminar-button" type="Submit" >Add Specialty</Button>
+                                    <span className="table-title"> Contractors (?) </span>
                                 </div> 
                                 )}}
                             columns={this.state.columnsS} 
                             dataSource={this.state.specialties}
                         />
                     </div> 
-                    <br/>
-                    <br/>
-                    <div className="trainees-list">
-                        <Table 
-                            {...this.state}
-                            title={() => {return ( 
-                                <div className="table-header">
-                                    <span className="table-title"> Trainees </span>
-                                    <Button className="add-to-seminar-button" type="Submit" >Add Trainee</Button>
-                                </div> 
-                                )}}
-                            columns={this.state.columnsT} 
-                            dataSource={this.state.trainSpec}
-                        />
-                    </div>
                 </div>
             </div>
         );
     }
 }
-export default withRouter(Seminar);
+export default withRouter(Trainee);
 

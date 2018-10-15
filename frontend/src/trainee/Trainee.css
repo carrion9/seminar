@@ -1,16 +1,16 @@
-.contractors-container {
+.trainees-container {
     max-width: 600px;
     margin: 80px auto 0;
 }
 
-.contractor-content {
+.trainee-content {
     margin-bottom: 30px;
     padding: 20px 15px 20px 15px;
     letter-spacing: .01em;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
 }
 
-.contractor-question {
+.trainee-question {
     font-weight: 500;
     font-size: 21px;
     color: rgba(0, 0, 0, 0.85);
@@ -18,21 +18,21 @@
 }
 
 @media (max-width: 768px) {
-    .contractor-question {
+    .trainee-question {
         font-size: 18px;
     }
 }
 
-.contractor-choices {
+.trainee-choices {
     margin-top: 5px;
     margin-bottom: 15px;
 }
 
-.contractor-choice-radio-group {
+.trainee-choice-radio-group {
     display: block;
 }
 
-.contractor-choice-radio {
+.trainee-choice-radio {
     display: block;
     line-height: 1.7;
     font-size: 15px;
@@ -70,12 +70,12 @@
     color: #8899A6;
 }
 
-.cv-contractor-choice {
+.cv-trainee-choice {
     position: relative;
     margin-bottom: 8px;
 }
 
-.cv-contractor-choice-details {
+.cv-trainee-choice-details {
     position: relative;
     z-index: 1;
     display: block;
@@ -125,25 +125,25 @@
     background-color: #77C7F7;
 }
 
-.contractor-creator-info {
+.trainee-creator-info {
     margin-left: 58px;
     margin-bottom: 10px;
     height: 58px;
 }
 
-.contractor-creator-info .creator-link {
+.trainee-creator-info .creator-link {
     display: block;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
-.contractor-creator-info .creator-link:hover .contractor-creator-name {
+.trainee-creator-info .creator-link:hover .trainee-creator-name {
     color: #1890ff;
     text-decoration: underline;
 }
 
-.contractor-creator-avatar {
+.trainee-creator-avatar {
     float: left;
     margin-top: 3px;
     margin-left: -58px;
@@ -154,12 +154,12 @@
     border-radius: 24px;
 }
 
-.contractor-creator-avatar > * {
+.trainee-creator-avatar > * {
     line-height: 48px;
     font-size: 18px;
 }
 
-.contractor-creator-name {
+.trainee-creator-name {
     font-size: 16px;
     font-weight: 500;
     color: rgba(0, 0, 0, 0.85);
@@ -168,25 +168,25 @@
     margin-right: 8px;
 }
 
-.contractor-creator-username {
+.trainee-creator-username {
     color: #657786;
     font-size: 15px;
     display: inline-block;
 }
 
-.contractor-creation-date {
+.trainee-creation-date {
     display: block;
     color: #657786;
     font-size: 13px;
     margin-top: 2px;
 }
 
-.contractor-tag{
+.trainee-tag{
     font-weight: 900;
 }
 
 
-.edit-contractor-button{
+.edit-trainee-button{
     width: 28%;
     text-align: center;
     float: right;
