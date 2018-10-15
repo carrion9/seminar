@@ -28,12 +28,10 @@ public class Seminar extends UserDateAudit {
   private Instant date;
 
   @NotBlank
-  @NaturalId
-  @Column(length = 140)
+  @Column(unique = true)
   private String name;
 
   @Builder.Default
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",
@@ -45,7 +43,6 @@ public class Seminar extends UserDateAudit {
   private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
   @Builder.Default
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",

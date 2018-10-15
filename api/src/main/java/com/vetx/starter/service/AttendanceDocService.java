@@ -9,9 +9,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.time.ZoneId;
@@ -30,7 +28,7 @@ public class AttendanceDocService {
     this.seminarTraineeRepository = seminarTraineeRepository;
   }
 
-  public void createDocument(Seminar seminar, Specialty specialty) throws Exception {
+  public byte[] createDocument(Seminar seminar, Specialty specialty) throws Exception {
     // Create a new document from scratch
 
     Map<Integer, String> header = new HashMap<>();
@@ -170,11 +168,10 @@ public class AttendanceDocService {
           rowCt++;
         } // for row
       }
-
-      // write the file
-      try (OutputStream out = new FileOutputStream("attendanceDocument.docx")) {
-        doc.write(out);
-      }
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      doc.write(bos);
+      byte[] barray = bos.toByteArray();
+      return barray;
     }
   }
 }

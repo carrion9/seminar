@@ -24,12 +24,10 @@ public class TraineeSpecialty {
   @PositiveOrZero
   private  Double grade;
 
-  @JsonBackReference
   @ManyToOne
   @JoinColumn(name="specialty_id")
   private Specialty specialty;
 
-  @JsonBackReference
   @ManyToOne
   @JoinColumn(name="trainee_id")
   private Trainee trainee;

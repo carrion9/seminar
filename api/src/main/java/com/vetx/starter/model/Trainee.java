@@ -47,7 +47,7 @@ public class Trainee extends UserDateAudit {
 
   @NotBlank
   @Size(max = 140)
-  @NaturalId
+  @Column(unique = true)
   private String ama;
 
   @Enumerated(EnumType.STRING)
@@ -62,7 +62,6 @@ public class Trainee extends UserDateAudit {
   @Column(length = 60)
   private CardStatus cardStatus;
 
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",
@@ -73,7 +72,6 @@ public class Trainee extends UserDateAudit {
   )
   private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",

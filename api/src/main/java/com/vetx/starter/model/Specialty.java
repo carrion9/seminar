@@ -23,10 +23,9 @@ public class Specialty extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
-  @NaturalId
+  @Column(unique = true)
   private String name;
 
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "specialty",
@@ -37,7 +36,6 @@ public class Specialty extends UserDateAudit {
   )
   private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
 
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "trainee",

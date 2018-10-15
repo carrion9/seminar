@@ -7,7 +7,6 @@ import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapt
 
 import javax.persistence.EntityManager;
 import javax.persistence.metamodel.Type;
-import java.util.stream.Collectors;
 
 @Configuration
 public class RestConfigurerAdapter extends RepositoryRestConfigurerAdapter {

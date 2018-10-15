@@ -47,10 +47,9 @@ public class Contractor extends UserDateAudit {
   @Size(max = 140)
   private String DOY;
 
-  @NaturalId
+  @Column(unique = true)
   private String afm;
 
-  @JsonManagedReference
   @EqualsAndHashCode.Exclude
   @OneToMany(
       mappedBy = "seminar",

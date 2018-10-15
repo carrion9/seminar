@@ -32,22 +32,18 @@ public class SeminarTrainee extends UserDateAudit {
 
   private boolean passed = false;
 
-  @JsonBackReference
   @ManyToOne
   @JoinColumn(name="contractor_id")
   private Contractor contractor;
 
-  @JsonBackReference
   @ManyToOne
   @JoinColumn(name="seminar_id")
   private Seminar seminar;
 
-  @JsonBackReference
   @ManyToOne
   @JoinColumn(name="trainee_id")
   private Trainee trainee;
 
-  @JsonBackReference
   @ManyToOne
   @JoinColumn(name="specialty_id")
   private Specialty specialty;
