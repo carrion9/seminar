@@ -29,7 +29,15 @@ export function deleteItem(item) {
     return request({
         url: item._links.self.href,
         method: 'DELETE'
-    })
+    });
+}
+
+export function updateItem(item) {
+    return request({
+        url: item._links.self.href,
+        method: 'PUT',
+        body: JSON.stringify(item)
+    });
 }
 
 export function getAllSeminars(page, size, sorter) {

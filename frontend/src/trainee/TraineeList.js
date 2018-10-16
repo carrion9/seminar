@@ -73,17 +73,10 @@ class TraineeList extends Component {
                   )
               }
             }, {
-              key: 'edit',
-              render: (trainee) => {
-                return (
-                    <Button>Edit</Button>
-                      )
-              }
-            }, {
               key: 'delete',
               render: (trainee) => {
                   return (
-                      <Popconfirm title="Are you sure delete this task?" onConfirm={this.confirm.bind(this, trainee)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                      <Popconfirm title="Are you sure delete this trainee?" onConfirm={this.confirm.bind(this, trainee)} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
                         <Button type="danger" >Delete</Button>
                       </Popconfirm>
                   )

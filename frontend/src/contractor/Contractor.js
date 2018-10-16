@@ -3,7 +3,7 @@ import './Contractor.css';
 import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getContractorById, deleteItem } from '../util/APIUtils';
+import { getContractorById, deleteItem, updateItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
@@ -83,6 +83,12 @@ class Contractor extends Component {
         this.setState({trainees})
     }
 
+    update(){
+        let promise;
+
+        promise = updateItem(this.state.contractor);
+    }
+
     getContractor(){
         let promise;
 
@@ -117,6 +123,18 @@ class Contractor extends Component {
         })
     }
 
+    handleInputChange(event, validationFun) {
+        const target = event.target;
+        const inputName = target.name;        
+        const inputValue = target.value;
+        const contractorEdit = this.state.contractor;
+        contractorEdit[inputName] = inputValue;
+
+        this.setState({
+            contractor: contractorEdit
+        });
+    }
+
     componentWillMount() {
         this.getContractor();
     }
@@ -126,7 +144,7 @@ class Contractor extends Component {
         let content;
         if (this.state.isEdit){
             content =(
-                    <Form layout="inline" className="contractor-info">
+                    <Form layout="inline" className="contractor-info" onSubmit={this.update.bind(this)}>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <span label="afmTitle" className="contractor-tag">
@@ -135,7 +153,11 @@ class Contractor extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.contractor.afm} editable/>
+                                    <Input 
+                                        defaultValue={this.state.contractor.afm} 
+                                        name="afm"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -147,7 +169,11 @@ class Contractor extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.contractor.name} editable/>
+                                    <Input 
+                                        defaultValue={this.state.contractor.name} 
+                                        name="name"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -159,7 +185,11 @@ class Contractor extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.contractor.representativeName}/>
+                                    <Input 
+                                        defaultValue={this.state.contractor.representativeName}
+                                        name="representativeName"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -171,7 +201,11 @@ class Contractor extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.contractor.phoneNumber}/>
+                                    <Input 
+                                        defaultValue={this.state.contractor.phoneNumber}
+                                        name="phoneNumber"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -183,7 +217,11 @@ class Contractor extends Component {
                             </Col>
                             <Col span={12}>
                                  <FormItem>
-                                    <Input defaultValue={this.state.contractor.email}/>
+                                    <Input 
+                                        defaultValue={this.state.contractor.email}
+                                        name="email"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -191,7 +229,7 @@ class Contractor extends Component {
                             <Col span={12}/>
                             <Col span={12}>
                                 <FormItem>
-                                     <Button type="Submit">
+                                     <Button htmlType="submit">
                                         Save
                                     </Button>
                                 </FormItem>

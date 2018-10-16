@@ -57,13 +57,6 @@ class SeminarList extends Component {
                   )
               }
             }, {
-              key: 'edit',
-              render: (seminar) => {
-                return (
-                    <Button>Edit</Button>
-                      )
-              }
-            }, {
               key: 'delete',
               render: (seminar) => {
                   return (

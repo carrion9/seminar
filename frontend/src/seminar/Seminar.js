@@ -3,7 +3,7 @@ import './Seminar.css';
 import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getSeminarById, deleteItem } from '../util/APIUtils';
+import { getSeminarById, deleteItem, updateItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
@@ -87,10 +87,16 @@ class Seminar extends Component {
     remove(trainee){
         let promise;
 
-        //promise = deleteItem(trainee);
+        promise = deleteItem(trainee);
 
         const trainees = this.state.trainees.filter(i => i.key !== trainee.key)
         this.setState({trainees})
+    }
+
+    update(){
+        let promise;
+
+        promise = updateItem(this.state.seminar);
     }
 
     getSeminar(){
@@ -127,6 +133,18 @@ class Seminar extends Component {
         })
     }
 
+    handleInputChange(event, validationFun) {
+        const target = event.target;
+        const inputName = target.name;        
+        const inputValue = target.value;
+        const seminarEdit = this.state.seminar;
+        seminarEdit[inputName] = inputValue;
+
+        this.setState({
+            seminar: seminarEdit
+        });
+    }
+
     componentWillMount() {
         this.getSeminar();
     }
@@ -136,7 +154,7 @@ class Seminar extends Component {
         let content;
         if (this.state.isEdit){
             content =(
-                    <Form layout="inline" className="seminar-info">
+                    <Form layout="inline" className="seminar-info"  onSubmit={this.update.bind(this)}>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <span label="nameTitle" className="seminar-tag">
@@ -145,7 +163,11 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.seminar.name} editable/>
+                                    <Input 
+                                        defaultValue={this.state.seminar.name}
+                                        name="name"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -201,7 +223,7 @@ class Seminar extends Component {
                             <Col span={12}/>
                             <Col span={12}>
                                 <FormItem>
-                                     <Button type="Submit">
+                                     <Button htmlType="submit">
                                         Save
                                     </Button>
                                 </FormItem>

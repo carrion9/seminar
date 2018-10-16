@@ -82,7 +82,7 @@ class SpecialtyList extends Component {
                 key: 'delete',
                 render: (specialty) => {
                     return (
-                        <Popconfirm title="Are you sure delete this task?"
+                        <Popconfirm title="Are you sure delete this specialty?"
                                     onConfirm={this.confirm.bind(this, specialty)} onCancel={this.cancel.bind(this)}
                                     okText="Yes" cancelText="No">
                             <Button type="danger">Delete</Button>

@@ -3,7 +3,7 @@ import './Trainee.css';
 import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getTraineeById, deleteItem } from '../util/APIUtils';
+import { getTraineeById, deleteItem, updateItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
@@ -93,6 +93,12 @@ class Trainee extends Component {
         this.setState({trainees})
     }
 
+    update(){
+        let promise;
+
+        promise = updateItem(this.state.trainee);
+    }
+
     getTrainee(){
         let promise;
 
@@ -127,6 +133,18 @@ class Trainee extends Component {
         })
     }
 
+    handleInputChange(event, validationFun) {
+        const target = event.target;
+        const inputName = target.name;        
+        const inputValue = target.value;
+        const traineeEdit = this.state.trainee;
+        traineeEdit[inputName] = inputValue;
+
+        this.setState({
+            trainee: traineeEdit
+        });
+    }
+
     componentWillMount() {
         this.getTrainee();
     }
@@ -136,7 +154,7 @@ class Trainee extends Component {
         let content;
         if (this.state.isEdit){
             content =(
-                    <Form layout="inline" className="trainee-info">
+                    <Form layout="inline" className="trainee-info" onSubmit={this.update.bind(this)}>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <span label="amaTitle" className="trainee-tag">
@@ -145,7 +163,10 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.ama} editable/>
+                                    <Input defaultValue={this.state.trainee.ama} 
+                                        name="ama"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -157,7 +178,10 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.surname} editable/>
+                                    <Input defaultValue={this.state.trainee.surname} 
+                                        name="surname"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -169,7 +193,11 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.name} editable/>
+                                    <Input 
+                                        defaultValue={this.state.trainee.name}  
+                                        name="name"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -181,7 +209,11 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.nationality} editable/>
+                                    <Input 
+                                        defaultValue={this.state.trainee.nationality}  
+                                        name="nationality"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -193,7 +225,11 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.cardType}/>
+                                    <Input 
+                                        defaultValue={this.state.trainee.cardType} 
+                                        name="cardType"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -205,7 +241,11 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.cardStatus}/>
+                                    <Input 
+                                        defaultValue={this.state.trainee.cardStatus} 
+                                        name="cardStatus"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -217,7 +257,11 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.trainee.documentCode}/>
+                                    <Input 
+                                        defaultValue={this.state.trainee.documentCode} 
+                                        name="documentCode"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -249,7 +293,7 @@ class Trainee extends Component {
                             <Col span={12}/>
                             <Col span={12}>
                                 <FormItem>
-                                     <Button type="Submit">
+                                     <Button htmlType="submit">
                                         Save
                                     </Button>
                                 </FormItem>
@@ -384,10 +428,9 @@ class Trainee extends Component {
         }
         return (
             <div className="trainee-container">
-                <h1 className="page-title">Trainee {this.state.trainee.name}</h1>
+                <h1 className="page-title">Trainee {this.state.trainee.name} {this.state.trainee.surName}</h1>
                 <div className="trainee-content">
                         {content}
-                    
                     <div className="specialties-list">
                         <Table 
                             {...this.state}

@@ -44,13 +44,6 @@ class ContractorList extends Component {
               sorter: true,
               key: 'email',
             }, {
-              key: 'edit',
-              render: (contractor) => {
-                return (
-                    <Button>Edit</Button>
-                      )
-              }
-            }, {
               key: 'delete',
               render: (contractor) => {
                   return (
