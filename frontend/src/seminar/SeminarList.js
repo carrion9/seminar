@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { getAllSeminars, deleteItem } from '../util/APIUtils';
 import Seminar from './Seminar';
 import LoadingIndicator  from '../common/LoadingIndicator';
-import { Button, Table, Pagination, Popconfirm, message } from 'antd';
+import { Button, Upload, Icon, Table, Pagination, Popconfirm, message } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { withRouter } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -153,7 +153,18 @@ class SeminarList extends Component {
     render() {
         return (
             <div className="list-container">
-                <h1 className="page-title">Seminars<Button className="add-button" type="Submit" >Add Seminar</Button></h1>
+                <h1 className="page-title">
+                    Seminars
+                    <Upload 
+                      className="add-button"
+                      name="seminar"
+                      action="#TODO/path/to/"
+                      showUploadList={false}>
+                        <Button>
+                          <Icon type="upload" /> Upload Seminar
+                        </Button>
+                    </Upload>     
+                </h1>
                 <div className="list-content">
                     <Table 
                         columns={this.state.columns} 

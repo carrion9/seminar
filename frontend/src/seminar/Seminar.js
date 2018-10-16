@@ -24,6 +24,15 @@ class Seminar extends Component {
                 render: (key, spec) => (
                       <span>{spec.specialty.name}</span>
                   )
+            }, {
+              key: 'attendances',
+              render: (seminar) => {
+                  return (
+                        <Button>
+                            <Link className=".atendances"  to={"#TODO/path/to/"+this.state.id}>Attendances</Link>
+                        </Button>
+                  )
+              }
             }],
             columnsT: [{
               title: 'AMA',
