@@ -60,7 +60,7 @@ public class FileController {
     return new ResponseEntity(apiResponse,HttpStatus.OK);
   }
 
-  @GetMapping(value = "/seminars/{seminarId}/attendance-document/{seminarSpecialtyId}")
+  @GetMapping(value = "/seminars/{seminarId}/attendance-document/{seminarSpecialtyId}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
   public ResponseEntity<Resource> getAttendanceDocument(@PathVariable("seminarId") Long seminarId, @PathVariable("seminarSpecialtyId") Long seminarSpecialtyId) throws Exception {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
@@ -83,8 +83,8 @@ public class FileController {
 
     return ResponseEntity
         .ok()
+        .header("Content-Disposition", "attachment; filename="+ "Attendance-Document-" +seminar.get().getName() + "" + ".docx")
         .contentLength(resource.contentLength())
-        .contentType(MediaType.APPLICATION_OCTET_STREAM)
         .body(resource);
 
   }
