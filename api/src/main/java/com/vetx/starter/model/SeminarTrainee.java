@@ -28,8 +28,10 @@ public class SeminarTrainee extends UserDateAudit {
   private Long actualCost;
 
   @PositiveOrZero
+  @Builder.Default
   private  Double grade = 0.0;
 
+  @Builder.Default
   private boolean passed = false;
 
   @ManyToOne
