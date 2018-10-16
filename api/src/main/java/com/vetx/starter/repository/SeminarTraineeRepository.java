@@ -14,7 +14,7 @@ import java.util.Optional;
 //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public interface SeminarTraineeRepository extends JpaRepository<SeminarTrainee, Long> {
 
-  Optional<SeminarTrainee> findByTraineeAndSeminar(Trainee trainee, Seminar seminar);
+  List<SeminarTrainee> findByTraineeAndSeminar(Trainee trainee, Seminar seminar);
 
   List<SeminarTrainee> findAllBySeminarAndContractorAndSpecialty(Seminar seminar, Contractor contractor, Specialty specialty);
 
