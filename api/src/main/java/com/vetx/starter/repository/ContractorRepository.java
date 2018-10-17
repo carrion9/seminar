@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 @CrossOrigin
-//@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public interface ContractorRepository extends JpaRepository<Contractor, Long> {
   Optional<Contractor> findByAfm(@Param("afm") String afm);
 }

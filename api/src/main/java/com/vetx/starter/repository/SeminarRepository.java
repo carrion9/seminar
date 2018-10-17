@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RepositoryRestResource(excerptProjection = SeminarProjection.class)
 @CrossOrigin
-//@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public interface SeminarRepository extends JpaRepository<Seminar, Long> {
 }

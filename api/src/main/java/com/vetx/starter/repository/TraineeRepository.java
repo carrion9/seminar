@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 @CrossOrigin
-//@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public interface TraineeRepository extends JpaRepository<Trainee, Long> {
 
   Optional<Trainee> findByAma(@Param("ama") String ama);
