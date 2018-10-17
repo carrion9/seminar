@@ -115,21 +115,34 @@ class App extends Component {
                 <Content className="app-content">
                     <div className="container">
                         <Switch>
-                            <Route
-                                exact path="/" render={(props) => <SeminarList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
-                            </Route>
-                            <Route
-                                exact path="/contractors" render={(props) => <ContractorList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
-                            </Route>
-                            <Route
-                                exact path="/trainees" render={(props) => <TraineeList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>
-                            </Route>
+                            {/*<Route*/}
+                                {/*exact path="/" render={(props) => <SeminarList isAuthenticated={this.state.isAuthenticated} currentUser={this.state.currentUser} handleLogout={this.handleLogout} {...props}/>}>*/}
+                            {/*</Route>*/}
+
                             <Route
                                 path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}>
                             </Route>
                             <Route
                                 path="/signup" component={Signup}>
                             </Route>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated}
+                                exact path="/"
+                                component={SeminarList}
+                                handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated}
+                                exact path="/contractors"
+                                component={ContractorList}
+                                handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated}
+                                exact path="/trainees"
+                                component={TraineeList}
+                                handleLogout={this.handleLogout}>
+                            </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/seminar/new" component={NewSeminar} handleLogout={this.handleLogout}>
                             </PrivateRoute>
