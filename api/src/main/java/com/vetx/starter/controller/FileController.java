@@ -4,6 +4,8 @@ import com.vetx.starter.model.Seminar;
 import com.vetx.starter.model.SeminarSpecialty;
 import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.repository.SeminarRepository;
+import com.vetx.starter.security.CurrentUser;
+import com.vetx.starter.security.UserPrincipal;
 import com.vetx.starter.service.AttendanceDocService;
 import com.vetx.starter.service.ExcelImporter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -48,7 +51,8 @@ public class FileController {
   }
 
   @RequestMapping(value="/upload", method=RequestMethod.POST)
-  public ResponseEntity  handleFileUpload(@RequestParam("seminarId") Long seminarId,  @RequestParam("file") MultipartFile file) throws IOException {
+//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity  handleFileUpload(@CurrentUser UserPrincipal currentUser, @RequestParam("seminarId") Long seminarId, @RequestParam("file") MultipartFile file) throws IOException {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
       return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),
@@ -61,7 +65,8 @@ public class FileController {
   }
 
   @GetMapping(value = "/seminars/{seminarId}/attendance-document/{seminarSpecialtyId}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-  public ResponseEntity<Resource> getAttendanceDocument(@PathVariable("seminarId") Long seminarId, @PathVariable("seminarSpecialtyId") Long seminarSpecialtyId) throws Exception {
+//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity<Resource> getAttendanceDocument(@CurrentUser UserPrincipal currentUser, @PathVariable("seminarId") Long seminarId, @PathVariable("seminarSpecialtyId") Long seminarSpecialtyId) throws Exception {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
       return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),

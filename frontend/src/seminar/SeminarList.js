@@ -155,15 +155,6 @@ class SeminarList extends Component {
             <div className="list-container">
                 <h1 className="page-title">
                     Seminars
-                    <Upload 
-                      className="add-button"
-                      name="seminar"
-                      action="#TODO/path/to/"
-                      showUploadList={false}>
-                        <Button>
-                          <Icon type="upload" /> Upload Seminar
-                        </Button>
-                    </Upload>     
                 </h1>
                 <div className="list-content">
                     <Table 

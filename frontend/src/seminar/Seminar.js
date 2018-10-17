@@ -1,6 +1,22 @@
 import React, { Component } from 'react';
 import './Seminar.css';
-import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
+import {
+    Radio,
+    Form,
+    Input,
+    Button,
+    Icon,
+    Select,
+    Col,
+    Table,
+    Popconfirm,
+    message,
+    notification,
+    Row,
+    DatePicker,
+    Avatar,
+    Upload
+} from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
 import { getSeminarById, deleteItem, updateItem } from '../util/APIUtils';
@@ -28,8 +44,8 @@ class Seminar extends Component {
               key: 'attendances',
               render: (seminar) => {
                   return (
-                        <Button>
-                            <Link className=".atendances"  to={"#TODO/path/to/"+this.state.id}>Attendances</Link>
+                        <Button onClick={this.handle}>
+                            Attendances
                         </Button>
                   )
               }
@@ -40,7 +56,7 @@ class Seminar extends Component {
               sorter: true,
               key: 'ama',
               render: (ama, record ) => (
-                  <Link to={"/trainees/" + record.key}>{ama}</Link>
+                  <Link to={"/trainee/" + record.key}>{ama}</Link>
               )
             }, {
               title: 'Full Name',
@@ -80,6 +96,7 @@ class Seminar extends Component {
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleUpload = this.handleUpload.bind(this);
     }
 
 
@@ -152,6 +169,10 @@ class Seminar extends Component {
         this.setState({
             seminar: seminarEdit
         });
+    }
+
+    handleUpload(seminar) {
+
     }
 
     componentWillMount() {
@@ -310,7 +331,19 @@ class Seminar extends Component {
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}/>
-                        <Col span={12}>
+                        <Col span={6}>
+
+                            <Upload
+                                className="add-button"
+                                name="seminar"
+                                action={this.handleUpload}
+                                showUploadList={false}>
+                                <Button>
+                                    <Icon type="upload" /> Upload Seminar
+                                </Button>
+                            </Upload>
+                        </Col>
+                        <Col span={6}>
                             <Button className="edit-seminar-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
                         </Col>
                     </Row>
