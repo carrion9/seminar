@@ -55,6 +55,13 @@ export function getAllSeminars(page, size, sorter) {
     });
 }
 
+export function getAttendance(seminarId, specialtyId) {
+    return request({
+        url: API_BASE_URL + "/seminars/" + seminarId + "/attendance-document/" + specialtyId,
+        method: 'GET'
+    });
+}
+
 export function getSeminarById(id) {
     return request({
         url: API_BASE_URL + "/seminars/" + id,

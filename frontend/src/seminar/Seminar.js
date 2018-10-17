@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getSeminarById, deleteItem, updateItem } from '../util/APIUtils';
+import { getSeminarById, deleteItem, updateItem, getAttendance } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
@@ -44,7 +44,7 @@ class Seminar extends Component {
               key: 'attendances',
               render: (seminar) => {
                   return (
-                        <Button onClick={this.handle}>
+                        <Button onClick={this.handleAttendance.bind(this)}>
                             Attendances
                         </Button>
                   )
@@ -169,6 +169,10 @@ class Seminar extends Component {
         this.setState({
             seminar: seminarEdit
         });
+    }
+
+    handleAttendance(seminar) {
+        getAttendance(this.state.seminar.key, 1);
     }
 
     handleUpload(seminar) {
