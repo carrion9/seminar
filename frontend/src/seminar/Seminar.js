@@ -34,17 +34,15 @@ class Seminar extends Component {
             columnsS : [
             {
                 title: 'Label',
-                dataIndex: 'key',
+                dataIndex: 'specialty.name',
                 sorter: true,
-                key: 'key',
-                render: (key, spec) => (
-                      <span>{spec.specialty.name}</span>
-                  )
+                key: 'name'
             }, {
-              key: 'attendances',
-              render: (seminar) => {
+                dataIndex: 'key',
+                key: 'key',
+                render: (key) => {
                   return (
-                        <Button onClick={this.handleAttendance.bind(this)}>
+                        <Button onClick={this.handleAttendance.bind(this, key)} >
                             Attendances
                         </Button>
                   )
@@ -171,8 +169,8 @@ class Seminar extends Component {
         });
     }
 
-    handleAttendance(seminar) {
-        getAttendance(this.state.seminar.key, 1);
+    handleAttendance(specKey) {
+        getAttendance(this.state.seminar.key, specKey);
     }
 
     handleUpload(seminar) {
@@ -334,9 +332,7 @@ class Seminar extends Component {
                         </Col>
                     </Row>
                     <Row gutter={16}>
-                        <Col span={12}/>
-                        <Col span={6}>
-
+                        <Col span={12}>
                             <Upload
                                 className="add-button"
                                 name="seminar"
@@ -347,7 +343,7 @@ class Seminar extends Component {
                                 </Button>
                             </Upload>
                         </Col>
-                        <Col span={6}>
+                        <Col span={12}>
                             <Button className="edit-seminar-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
                         </Col>
                     </Row>

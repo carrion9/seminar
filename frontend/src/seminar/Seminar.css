@@ -195,8 +195,15 @@
     width: 28%;
     text-align: center;
     float: right;
-    margin-top: 3%;
+    margin-top: 1.5%;
     margin-right: 2%;
+}
+
+.add-button{
+    width: 28%;
+    text-align: center;
+    float: left;
+    margin-left: 0%;
 }
 
 .trainees-table{
