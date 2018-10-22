@@ -80,49 +80,49 @@ public class ExcelImporter {
             case 1:
               if (cell.getColumnIndex() == 2)     //Contractor's name
               {
-                contractorName = cell.getStringCellValue();
+                contractorName = cell.getStringCellValue().trim();
               }
               break;
             case 2:
               if (cell.getColumnIndex() == 0)          //Activity
               {
-                contractorActivity = cell.getStringCellValue();
+                contractorActivity = cell.getStringCellValue().trim();
                 contractorActivity = contractorActivity.split(":")[1].trim();
               } else if (cell.getColumnIndex() == 6)     //ΑΦΜ
               {
-                contractorAfm = cell.getStringCellValue();
+                contractorAfm = cell.getStringCellValue().trim();
               }
               break;
             case 3:
               if (cell.getColumnIndex() == 2)           //Address
               {
-                contractorAddress = cell.getStringCellValue();
+                contractorAddress = cell.getStringCellValue().trim();
 
               } else if (cell.getColumnIndex() == 6)       //DOY
               {
-                contractorDOY = cell.getStringCellValue();
+                contractorDOY = cell.getStringCellValue().trim();
               }
               if (cell.getColumnIndex() >= 11) {
-                Optional<Specialty> specialtyOptional = specialtyRepository.findByName(cell.getStringCellValue());
-                if(!specialtyOptional.isPresent()) {
-                  specialtyRepository.save(Specialty.builder().name(cell.getStringCellValue()).build());
+                Optional<Specialty> specialtyOptional = specialtyRepository.findByName(cell.getStringCellValue().trim());
+                if (!specialtyOptional.isPresent()) {
+                  specialtyRepository.save(Specialty.builder().name(cell.getStringCellValue().trim()).build());
                 }
-                specialtyList.put(cell.getColumnIndex(), specialtyRepository.findByName(cell.getStringCellValue()).get());
+                specialtyList.put(cell.getColumnIndex(), specialtyRepository.findByName(cell.getStringCellValue().trim()).get());
               }
               break;
             case 4:
               if (cell.getColumnIndex() == 2)           //Email
               {
-                contractorEmail = cell.getStringCellValue();
+                contractorEmail = cell.getStringCellValue().trim();
               } else if (cell.getColumnIndex() == 6)       //Phone Number
               {
-                contractorPhoneNumber = cell.getStringCellValue();
+                contractorPhoneNumber = cell.getStringCellValue().trim();
               }
               break;
             case 5:
               if (cell.getColumnIndex() == 2)           //Representative
               {
-                contractorRepresentativeName = cell.getStringCellValue();
+                contractorRepresentativeName = cell.getStringCellValue().trim();
               }
               break;
             case 6:
@@ -138,19 +138,19 @@ public class ExcelImporter {
                 case 0:
                   break;
                 case 1:
-                  traineeSurname = cell.getStringCellValue();
+                  traineeSurname = cell.getStringCellValue().trim();
                   break;
                 case 2:
-                  traineeName = cell.getStringCellValue();
+                  traineeName = cell.getStringCellValue().trim();
                   break;
                 case 3:
-                  traineeFathersName = cell.getStringCellValue();
+                  traineeFathersName = cell.getStringCellValue().trim();
                   break;
                 case 4:
-                  traineeNationality = cell.getStringCellValue();
+                  traineeNationality = cell.getStringCellValue().trim();
                   break;
                 case 5:
-                  traineeDocumentCode = cell.getStringCellValue();
+                  traineeDocumentCode = cell.getStringCellValue().trim();
                   break;
                 case 6:
                 case 7:
@@ -176,7 +176,7 @@ public class ExcelImporter {
                   try {
                     traineeAma = Double.toString(cell.getNumericCellValue()).split("\\.")[0];
                   } catch (IllegalStateException e) {
-                    traineeAma = cell.getStringCellValue();
+                    traineeAma = cell.getStringCellValue().trim();
                   }
                   break;
                 case 10:
@@ -200,7 +200,7 @@ public class ExcelImporter {
           contractor = Contractor.builder().activity(contractorActivity).address(contractorAddress).afm(contractorAfm).DOY(contractorDOY).name(contractorName)
               .email(contractorEmail).representativeName(contractorRepresentativeName).phoneNumber(contractorPhoneNumber).build();
           //Save Contractor and Trainee to database (Update/override if already exists)
-          saveContractorAndTrainee(contractor, trainee,seminarTraineeList, seminar);
+          saveContractorAndTrainee(contractor, trainee, seminarTraineeList, seminar);
         }
       }
     } catch (IOException e) {
@@ -210,14 +210,20 @@ public class ExcelImporter {
     return new ApiResponse(true, "File uploaded succesfully");
   }
 
-  public void saveContractorAndTrainee(Contractor contractor, Trainee trainee, List<SeminarTrainee> seminarTraineeList, Seminar seminar) {
+  private void saveContractorAndTrainee(Contractor contractor, Trainee trainee, List<SeminarTrainee> seminarTraineeList, Seminar seminar) {
     // Save Contractor to repo
     Optional<Contractor> contractorOptional = contractorRepository.findByAfm(contractor.getAfm());
     if (!contractorOptional.isPresent()) {
       contractor = contractorRepository.save(contractor);
     } else {
-      contractor.setKey(contractorOptional.get().getKey());
-      contractor = contractorRepository.save(contractor);
+      contractorOptional.get().setActivity(contractor.getActivity());
+      contractorOptional.get().setAddress(contractor.getAddress());
+      contractorOptional.get().setDOY(contractor.getDOY());
+      contractorOptional.get().setEmail(contractor.getEmail());
+      contractorOptional.get().setName(contractor.getName());
+      contractorOptional.get().setPhoneNumber(contractor.getPhoneNumber());
+      contractorOptional.get().setRepresentativeName(contractor.getRepresentativeName());
+      contractor = contractorRepository.save(contractorOptional.get());
     }
 
     //Save Trainee to repo
@@ -225,17 +231,26 @@ public class ExcelImporter {
     if (!traineeOptional.isPresent()) {
       trainee = traineeRepository.save(trainee);
     } else {
-      trainee.setKey(traineeOptional.get().getKey());
-      trainee = traineeRepository.save(trainee);
+      traineeOptional.get().setDocType(trainee.getDocType());
+      traineeOptional.get().setDocumentCode(trainee.getDocumentCode());
+      traineeOptional.get().setFathersName(trainee.getFathersName());
+      traineeOptional.get().setName(trainee.getName());
+      traineeOptional.get().setNationality(trainee.getNationality());
+      traineeOptional.get().setSurname(trainee.getSurname());
+      trainee = traineeRepository.save(traineeOptional.get());
     }
 
     Contractor finalContractor = contractor;
     Trainee finalTrainee = trainee;
+
     seminarTraineeList.forEach(seminarTrainee -> {
-      seminarTrainee.setContractor(finalContractor);
-      seminarTrainee.setTrainee(finalTrainee);
-      seminarTrainee.setSeminar(seminar);
-      seminarTraineeRepository.save(seminarTrainee);
+      Optional<SeminarTrainee> seminarTraineeOptional = seminarTraineeRepository.findBySeminarAndContractorAndTraineeAndSpecialty(seminar, finalContractor, finalTrainee, seminarTrainee.getSpecialty());
+      if (!seminarTraineeOptional.isPresent()) {
+        seminarTrainee.setContractor(finalContractor);
+        seminarTrainee.setTrainee(finalTrainee);
+        seminarTrainee.setSeminar(seminar);
+        seminarTraineeRepository.save(seminarTrainee);
+      }
     });
   }
 }

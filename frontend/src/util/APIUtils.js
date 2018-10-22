@@ -25,6 +25,61 @@ const request = (options) => {
     );
 };
 
+const uploadFile = (options) => {
+    const headers = new Headers();
+
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+
+    return fetch(options.url, options)
+        .then(response => {
+                if(!response.ok) {
+                    return Promise.reject(response);
+                }
+                if (response.status === 204) {
+                    return Promise.resolve(response);
+                }
+                return response;
+            }
+        );
+};
+
+const downloadFile = (options) => {
+    const headers = new Headers({
+        'Content-Type': 'application/json',
+    });
+
+    if(localStorage.getItem(ACCESS_TOKEN)) {
+        headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
+    }
+
+    const defaults = {headers: headers};
+    options = Object.assign({}, defaults, options);
+
+    return fetch(options.url, options)
+        .then(response => {
+            if(!response.ok) {
+                return Promise.reject(response.json());
+            }
+            if (response.status === 204) {
+                return Promise.resolve(response);
+            }
+            const filename =  options.name;
+            response.blob().then(blob => {
+                let url = window.URL.createObjectURL(blob);
+                let a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+            });
+            }
+        );
+};
+
 export function deleteItem(item) {
     return request({
         url: item._links.self.href,
@@ -55,10 +110,19 @@ export function getAllSeminars(page, size, sorter) {
     });
 }
 
-export function getAttendance(seminarId, specialtyId) {
-    return request({
+export function getAttendance(seminarId, specialtyId, name) {
+    return downloadFile({
         url: API_BASE_URL + "/seminars/" + seminarId + "/attendance-document/" + specialtyId,
-        method: 'GET'
+        method: 'GET',
+        name: name
+    });
+}
+
+export function upload(uploadRequest) {
+    return uploadFile({
+        url: API_BASE_URL + "/upload",
+        method: 'POST',
+        body: uploadRequest
     });
 }
 

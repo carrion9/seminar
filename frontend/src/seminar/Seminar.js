@@ -19,7 +19,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getSeminarById, deleteItem, updateItem, getAttendance } from '../util/APIUtils';
+import { getSeminarById, deleteItem, updateItem, getAttendance, upload } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 
@@ -50,11 +50,11 @@ class Seminar extends Component {
             }],
             columnsT: [{
               title: 'AMA',
-              dataIndex: 'trainee.ama',
+              dataIndex: 'trainee',
               sorter: true,
               key: 'ama',
-              render: (ama, record ) => (
-                  <Link to={"/trainee/" + record.key}>{ama}</Link>
+              render: (trainee ) => (
+                  <Link to={"/trainee/" + trainee.key}>{trainee.ama}</Link>
               )
             }, {
               title: 'Full Name',
@@ -90,11 +90,14 @@ class Seminar extends Component {
             seminar: {},
             specialties: [],
             trainSpec: [],
-            isEdit: false
+            isEdit: false,
+            file: '',
+            error: '',
+            msg: ''
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
-        this.handleUpload = this.handleUpload.bind(this);
+        // this.uploadFile = this.uploadFile().bind(this);
     }
 
 
@@ -169,13 +172,32 @@ class Seminar extends Component {
         });
     }
 
-    handleAttendance(specKey) {
-        getAttendance(this.state.seminar.key, specKey);
-    }
+    handleAttendance = (specialtyKey) => {
+        let me;
+        me = getAttendance(this.state.seminar.key, specialtyKey, "attendance-document-" + this.state.seminar.name.replace(/\s+/g, '-').toLowerCase() + ".docx");
+        if(!me) {
+            return;
+        }
+    };
 
-    handleUpload(seminar) {
+    uploadFile = (file) => {
+        this.setState({error: '', msg: ''});
+        if(!file) {
+            this.setState({error: 'Please upload a file.'})
+            return;
+        }
 
-    }
+        let data = new FormData();
+        data.append('file', file);
+        data.append('seminarId', this.state.seminar.key);
+        let me = upload(data);
+        if(!me) {
+            return;
+        }
+        me.then(response => {
+            this.setState({error: '', msg: 'Sucessfully uploaded file'});
+        })
+    };
 
     componentWillMount() {
         this.getSeminar();
@@ -336,10 +358,10 @@ class Seminar extends Component {
                             <Upload
                                 className="add-button"
                                 name="seminar"
-                                action={this.handleUpload}
+                                action={this.uploadFile}
                                 showUploadList={false}>
                                 <Button>
-                                    <Icon type="upload" /> Upload Seminar
+                                    <Icon type="upload" /> Upload Contractor
                                 </Button>
                             </Upload>
                         </Col>

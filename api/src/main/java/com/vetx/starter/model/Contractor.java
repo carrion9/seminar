@@ -55,7 +55,7 @@ public class Contractor extends UserDateAudit {
       mappedBy = "seminar",
       targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       orphanRemoval = true
   )
   @Builder.Default

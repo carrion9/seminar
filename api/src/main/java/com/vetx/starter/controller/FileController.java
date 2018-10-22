@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.Date;
 import java.util.Optional;
 
 @Controller
@@ -45,14 +50,14 @@ public class FileController {
   @Autowired
 
 
-  @RequestMapping(value="/upload", method=RequestMethod.GET)
+  @GetMapping(value="/upload")
   public @ResponseBody  String provideUploadInfo() {
     return "You can upload a file by posting to this same URL.";
   }
 
-  @RequestMapping(value="/upload", method=RequestMethod.POST)
+  @PostMapping(value="/upload")
 //  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-  public ResponseEntity  handleFileUpload(@CurrentUser UserPrincipal currentUser, @RequestParam("seminarId") Long seminarId, @RequestParam("file") MultipartFile file) throws IOException {
+  public ResponseEntity  handleFileUpload(@RequestParam("seminarId") Long seminarId, @RequestParam("file") MultipartFile file) throws IOException {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
       return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),
@@ -84,14 +89,15 @@ public class FileController {
           HttpStatus.BAD_REQUEST);
     }
 
-    ByteArrayResource resource = new ByteArrayResource(attendanceDocService.createDocument(seminar.get(), seminarSpecialtyOptional.get().getSpecialty()));
+    Resource resource = new ByteArrayResource(attendanceDocService.createDocument(seminar.get(), seminarSpecialtyOptional.get().getSpecialty()).toByteArray());
+    Date seminarDate = Date.from(seminar.get().getDate());
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
     return ResponseEntity
         .ok()
-        .header("Content-Disposition", "attachment; filename="+ "Attendance-Document-" +seminar.get().getName() + "" + ".docx")
-        .contentLength(resource.contentLength())
+        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "attendance-document-" + formatter.format(seminarDate) +".docx")
         .body(resource);
-
   }
 
 }

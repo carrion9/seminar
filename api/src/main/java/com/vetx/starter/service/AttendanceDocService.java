@@ -1,5 +1,6 @@
 package com.vetx.starter.service;
 
+import com.vetx.starter.model.Contractor;
 import com.vetx.starter.model.Seminar;
 import com.vetx.starter.model.SeminarTrainee;
 import com.vetx.starter.model.Specialty;
@@ -28,7 +29,7 @@ public class AttendanceDocService {
     this.seminarTraineeRepository = seminarTraineeRepository;
   }
 
-  public byte[] createDocument(Seminar seminar, Specialty specialty) throws Exception {
+  public ByteArrayOutputStream createDocument(Seminar seminar, Specialty specialty) throws Exception {
     // Create a new document from scratch
 
     Map<Integer, String> header = new HashMap<>();
@@ -40,7 +41,7 @@ public class AttendanceDocService {
     header.put(5, "ΥΠΟΓΡΑΦΗ");
 
 
-    List<SeminarTrainee> seminarTraineeContractors = seminarTraineeRepository.findDistinctBySeminarAndSpecialty(seminar, specialty);
+    List<Contractor> contractors = seminarTraineeRepository.findDistinctContractorBySeminarAndSpecialty(seminar, specialty);
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
     try (XWPFDocument doc = new XWPFDocument(new FileInputStream("attendanceTemplate.docx"))) {
@@ -51,12 +52,12 @@ public class AttendanceDocService {
       // open an existing empty document with styles already defined
       //XWPFDocument doc = new XWPFDocument(new FileInputStream("base_document.docx"));
 
-      for (SeminarTrainee traineeContractor : seminarTraineeContractors) {
+      for (Contractor contractor : contractors) {
 
-        List<SeminarTrainee> seminarTrainees = seminarTraineeRepository.findAllBySeminarAndContractorAndSpecialty(seminar, traineeContractor.getContractor(), specialty);
+        List<SeminarTrainee> seminarTrainees = seminarTraineeRepository.findAllBySeminarAndContractorAndSpecialty(seminar, contractor, specialty);
 
         // Create a new table with 6 rows and 3 columns
-        int nRows = seminarTrainees.size(); // number of trainees per contractor in current seminar
+        int nRows = seminarTrainees.size() + 1; // number of trainees per contractor in current seminar
         int nCols = 6;
 
         XWPFParagraph paragraph = doc.createParagraph();
@@ -67,7 +68,7 @@ public class AttendanceDocService {
         r1.setFontSize(16);
         r1.setCapitalized(true);
         r1.setItalic(true);
-        r1.setText(MessageFormat.format("ΔΕΛΤΙΟ ΠΑΡΟΥΣΙΑΣ ΚΑΤΑΡΤΙΖΟΜΕΝΩΝ {0} {1}",traineeContractor.getContractor().getName(), formatter.format(traineeContractor.getSeminar().getDate())));
+        r1.setText(MessageFormat.format("ΔΕΛΤΙΟ ΠΑΡΟΥΣΙΑΣ ΚΑΤΑΡΤΙΖΟΜΕΝΩΝ {0} {1}",contractor.getName(), formatter.format(seminar.getDate())));
 
         XWPFParagraph paragraph2 = doc.createParagraph();
         paragraph2.setAlignment(ParagraphAlignment.CENTER);
@@ -76,7 +77,7 @@ public class AttendanceDocService {
         r2.setColor("c00000");
         r2.setFontSize(14);
         r2.setItalic(true);
-        r2.setText(MessageFormat.format("Ενημερωτικό  Σεμινάριο «{0}» για τα {1} ",traineeContractor.getSpecialty().getName(), traineeContractor.getSeminar().getSeminarType().toString()));
+        r2.setText(MessageFormat.format("Ενημερωτικό  Σεμινάριο «{0}» για τα {1} ",specialty.getName(), seminar.getSeminarType().toString()));
 
         XWPFTable table = doc.createTable(nRows, nCols);
         table.setWidth("96.30%");
@@ -138,23 +139,23 @@ public class AttendanceDocService {
               switch (colCt) {
                 case 0:
                   cell.setWidth("05.00%");
-                  rh.setText(Integer.toString(rowCt));
+                  rh.setText(Integer.toString(rowCt-1));
                   break;
                 case 1:
                   cell.setWidth("23.00%");
-                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getSurname());
+                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getSurname());
                   break;
                 case 2:
                   cell.setWidth("16.00%");
-                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getName());
+                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getName());
                   break;
                 case 3:
                   cell.setWidth("16.00%");
-                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getFathersName());
+                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getFathersName());
                   break;
                 case 4:
                   cell.setWidth("16.00%");
-                  rh.setText(seminarTrainees.get(rowCt).getTrainee().getDocumentCode());
+                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getDocumentCode());
                   break;
                 default:
                   cell.setWidth("24.00%");
@@ -170,8 +171,7 @@ public class AttendanceDocService {
       }
       ByteArrayOutputStream bos = new ByteArrayOutputStream();
       doc.write(bos);
-      byte[] barray = bos.toByteArray();
-      return barray;
+      return bos;
     }
   }
 }

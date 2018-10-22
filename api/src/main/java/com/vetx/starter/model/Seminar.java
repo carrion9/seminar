@@ -37,7 +37,7 @@ public class Seminar extends UserDateAudit {
       mappedBy = "seminar",
       targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       orphanRemoval = true
   )
   private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
@@ -47,7 +47,7 @@ public class Seminar extends UserDateAudit {
   @OneToMany(
       mappedBy = "seminar",
       targetEntity = SeminarSpecialty.class,
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       cascade = CascadeType.ALL,
       orphanRemoval = true
   )

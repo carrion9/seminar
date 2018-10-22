@@ -63,21 +63,23 @@ public class Trainee extends UserDateAudit {
   private CardStatus cardStatus;
 
   @EqualsAndHashCode.Exclude
+  @Builder.Default
   @OneToMany(
       mappedBy = "trainee",
       targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       orphanRemoval = true
   )
   private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
 
   @EqualsAndHashCode.Exclude
+  @Builder.Default
   @OneToMany(
       mappedBy = "trainee",
       targetEntity = TraineeSpecialty.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.EAGER,
+      fetch = FetchType.LAZY,
       orphanRemoval = true
   )
   private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
