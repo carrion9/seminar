@@ -431,14 +431,20 @@ class Seminar extends Component {
             <Form layout="inline" onSubmit={this.handleAddTrainee}>
                 <FormItem>
                     <Input 
-                        placeholder="AMA" 
-                        style={{ width: 600 }}
+                        placeholder="Trainee's AMA" 
+                        style={{ width: 400 }}
+                    />
+                </FormItem>
+                <FormItem>
+                    <Input 
+                        placeholder="Contractor's AFM" 
+                        style={{ width: 400 }}
                     />
                 </FormItem>
                 <FormItem>
                     <Select
                       defaultValue="Specialties"
-                      style={{ width: 600 }}
+                      style={{ width: 500 }}
                     >
                       {this.state.specialties.map(spec => <Option key={spec.key}>{spec.specialty.name}</Option>)}
                     </Select>
