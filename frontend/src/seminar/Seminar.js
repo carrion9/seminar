@@ -14,6 +14,7 @@ import {
     notification,
     Row,
     DatePicker,
+    Popover,
     Avatar,
     Upload
 } from 'antd';
@@ -22,8 +23,10 @@ import { getAvatarColor } from '../util/Colors';
 import { getSeminarById, deleteItem, updateItem, getAttendance, upload } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
+import moment from 'moment';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class Seminar extends Component {
     constructor(props) {
@@ -97,6 +100,9 @@ class Seminar extends Component {
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleAddSpecialty = this.handleAddSpecialty.bind(this);
+        this.handleAddTrainee = this.handleAddTrainee.bind(this);
+
         // this.uploadFile = this.uploadFile().bind(this);
     }
 
@@ -155,6 +161,9 @@ class Seminar extends Component {
     }
 
     handleEdit(){
+        if (this.state.isEdit){
+            this.getSeminar();
+        }
         this.setState({
             isEdit: !this.state.isEdit
         })
@@ -170,6 +179,26 @@ class Seminar extends Component {
         this.setState({
             seminar: seminarEdit
         });
+    }
+
+    handleDateChange(event, validationFun) {
+        if (event == null){
+            return
+        }
+        const seminarEdit = this.state.seminar;
+        seminarEdit.date = event._i;
+
+        this.setState({
+            seminar: seminarEdit
+        });
+    }
+
+    handleAddSpecialty(){
+
+    }
+
+    handleAddTrainee(){
+
     }
 
     handleAttendance = (specialtyKey) => {
@@ -221,7 +250,7 @@ class Seminar extends Component {
                                         defaultValue={this.state.seminar.name}
                                         name="name"
                                         onChange={(event) => this.handleInputChange(event)}
-                                        />
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -233,7 +262,12 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.seminar.date}/>
+                                    <DatePicker 
+                                        defaultValue={moment(formatDate(this.state.seminar.date), 'DD/MM/YYYY')}
+                                        format='DD/MM/YYYY'
+                                        name="date"
+                                        onChange={(event) => this.handleDateChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -245,7 +279,11 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input defaultValue={this.state.seminar.seminarType}/>
+                                    <Input 
+                                        defaultValue={this.state.seminar.seminarType}
+                                        name="seminarType"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -372,6 +410,47 @@ class Seminar extends Component {
                     </div>
                 )
         }
+
+        let addSpecContent=(
+            <Form layout="inline" onSubmit={this.handleAddSpecialty}>
+                <FormItem>
+                    <Input 
+                        placeholder="Title" 
+                        style={{ width: 600 }}
+                    />
+                </FormItem>
+                <FormItem>
+                  <Button>
+                    Add
+                  </Button>
+                </FormItem>
+            </Form>
+        )
+
+        let addTraineeContent=(
+            <Form layout="inline" onSubmit={this.handleAddTrainee}>
+                <FormItem>
+                    <Input 
+                        placeholder="AMA" 
+                        style={{ width: 600 }}
+                    />
+                </FormItem>
+                <FormItem>
+                    <Select
+                      defaultValue="Specialties"
+                      style={{ width: 600 }}
+                    >
+                      {this.state.specialties.map(spec => <Option key={spec.key}>{spec.specialty.name}</Option>)}
+                    </Select>
+                </FormItem>
+                <FormItem>
+                  <Button>
+                    Add
+                  </Button>
+                </FormItem>
+            </Form>
+        )
+
         return (
             <div className="seminar-container">
                 <h1 className="page-title">Seminar {this.state.seminar.name}</h1>
@@ -384,7 +463,9 @@ class Seminar extends Component {
                             title={() => {return ( 
                                 <div className="table-header">
                                     <span className="table-title"> Specialities </span>
-                                    <Button className="add-to-seminar-button" type="Submit" >Add Specialty</Button>
+                                    <Popover content={addSpecContent} title="Add Specialty" trigger="click">
+                                        <Button className="add-to-seminar-button" type="Submit" >Add Specialty</Button>
+                                    </Popover>
                                 </div> 
                                 )}}
                             columns={this.state.columnsS} 
@@ -399,7 +480,9 @@ class Seminar extends Component {
                             title={() => {return ( 
                                 <div className="table-header">
                                     <span className="table-title"> Trainees </span>
-                                    <Button className="add-to-seminar-button" type="Submit" >Add Trainee</Button>
+                                    <Popover content={addTraineeContent} title="Add Trainee" trigger="click">
+                                        <Button className="add-to-seminar-button" type="Submit" >Add Trainee</Button>
+                                    </Popover>
                                 </div> 
                                 )}}
                             columns={this.state.columnsT} 
