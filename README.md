@@ -38,7 +38,8 @@ Functions based on Αναλυτική περιγραφή:
    + Επεξήγηση χρωμάτων για αποκωδικοποίηση των αρχείων EXCEL
    
 *Nginx config:*
-   
+
+```
 upstream seminar-webpack {
         server 127.0.0.1:3000;
          keepalive 64;
@@ -66,4 +67,5 @@ server {
                 proxy_pass http://seminar-api;
         }
 }
+```
 
