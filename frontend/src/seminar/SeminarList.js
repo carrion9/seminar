@@ -153,11 +153,14 @@ class SeminarList extends Component {
     render() {
         return (
             <div className="list-container">
-                <h1 className="page-title">
-                    Seminars
-                </h1>
                 <div className="list-content">
                     <Table 
+                        title ={() =>{ return (
+                            <div className="table-header">
+                              <span className="table-title">Seminars</span>
+                              <Button className="add-main-button" type="primary" href="/seminar/new">Add Seminar</Button>
+                            </div>
+                          )}}
                         columns={this.state.columns} 
                         dataSource={this.state.seminars} 
                         loading={this.state.isLoading}

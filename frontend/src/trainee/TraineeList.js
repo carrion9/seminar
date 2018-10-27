@@ -170,9 +170,14 @@ class TraineeList extends Component {
     render() {
         return (
             <div className="list-container">
-                <h1 className="page-title">Trainees<Button className="add-button" type="Submit" >Add Trainee</Button></h1>
                 <div className="list-content">
-                    <Table 
+                    <Table  
+                        title ={() =>{ return (
+                            <div className="table-header">
+                              <span className="table-title">Trainees</span>
+                              <Button className="add-main-button" type="primary" href="/trainee/new">Add Trainee</Button>
+                            </div>
+                          )}}
                         columns={this.state.columns} 
                         dataSource={this.state.trainees} 
                         loading={this.state.isLoading}

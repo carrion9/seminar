@@ -60,3 +60,18 @@ body {
   margin-top: 12px;
   margin-right: 4%;
 }
+.add-main-button{
+    width: 20%;
+    text-align: center;
+    float: right;
+    margin-right: 2%;
+}
+
+.table-header{
+    overflow: hidden;
+}
+
+.table-title{
+    font-weight: 900;
+    font-size: 20px;
+}
