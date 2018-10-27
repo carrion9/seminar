@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.awt.Image;
 
 @Data
 @Entity
@@ -61,6 +62,9 @@ public class Trainee extends UserDateAudit {
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
   private CardStatus cardStatus;
+
+  @Lob
+  private byte[] image;
 
   @EqualsAndHashCode.Exclude
   @Builder.Default
