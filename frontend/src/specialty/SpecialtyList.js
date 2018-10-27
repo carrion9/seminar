@@ -188,7 +188,7 @@ class SpecialtyList extends Component {
     render() {
         return (
             <div className="list-container">
-                <h1 className="page-title">Specialties<Button className="add-button" type="Submit" >Add Specialty</Button></h1>
+                <h1 className="page-title">Specialties</h1>
                 <div className="list-content">
                     <Table
                         columns={this.state.columns}

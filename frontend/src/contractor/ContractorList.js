@@ -141,9 +141,14 @@ class ContractorList extends Component {
     render() {
         return (
             <div className="list-container">
-                <h1 className="page-title">Contractors<Button className="add-button" type="Submit" >Add Contractors</Button></h1>
                 <div className="list-content">
                     <Table 
+                        title ={() =>{ return (
+                            <div className="table-header">
+                              <span className="table-title">Contractors</span>
+                              <Button className="add-main-button" type="primary" href="/contractor/new">Add Contractor</Button>
+                            </div>
+                          )}}
                         columns={this.state.columns} 
                         dataSource={this.state.contractors} 
                         loading={this.state.isLoading}
