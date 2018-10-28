@@ -6,6 +6,7 @@ import { getAvatarColor } from '../util/Colors';
 import { getTraineeById, deleteItem, updateItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
+import { API_BASE_URL } from '../constants';
 
 const FormItem = Form.Item;
 
@@ -428,7 +429,12 @@ class Trainee extends Component {
         }
         return (
             <div className="trainee-container">
-                <h1 className="page-title">Trainee {this.state.trainee.name} {this.state.trainee.surName}</h1>
+                <div>
+                    <h1 className="page-title">Trainee {this.state.trainee.name} {this.state.trainee.surName}</h1>
+                    <div>
+                        <Avatar size={128} src={API_BASE_URL + '/' + this.state.trainee.imageLocation}/>
+                    </div>
+                </div>
                 <div className="trainee-content">
                         {content}
                     <div className="specialties-list">

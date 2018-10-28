@@ -30,6 +30,9 @@ class NewTrainee extends Component {
             email: {
                 value: ''
             },
+            imageLocation: {
+                value: ''
+            },
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);

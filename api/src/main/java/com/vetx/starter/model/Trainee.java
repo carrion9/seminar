@@ -63,8 +63,7 @@ public class Trainee extends UserDateAudit {
   @Column(length = 60)
   private CardStatus cardStatus;
 
-  @Lob
-  private byte[] image;
+  private String imageLocation;
 
   @EqualsAndHashCode.Exclude
   @Builder.Default
