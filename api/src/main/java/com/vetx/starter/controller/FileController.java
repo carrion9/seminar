@@ -90,13 +90,12 @@ public class FileController {
     }
 
     Resource resource = new ByteArrayResource(attendanceDocService.createDocument(seminar.get(), seminarSpecialtyOptional.get().getSpecialty()).toByteArray());
-    Date seminarDate = Date.from(seminar.get().getDate());
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "attendance-document-" + formatter.format(seminarDate) +".docx")
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "attendance-document-" + formatter.format(seminar.get().getDate()) +".docx")
         .body(resource);
   }
 

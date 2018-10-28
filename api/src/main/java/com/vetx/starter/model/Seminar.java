@@ -1,13 +1,13 @@
 package com.vetx.starter.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.*;
 
 @Data
@@ -22,10 +22,12 @@ public class Seminar extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
+  @NotNull
   @Enumerated(EnumType.STRING)
   private SeminarType seminarType;
 
-  private Instant date;
+  @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd",timezone = "UTC")
+  private LocalDate date;
 
   @NotBlank
   @Column(unique = true)
