@@ -35,7 +35,7 @@ public class TraineeImageController {
     private TraineeRepository traineeRepository;
     private ImageUploader imageUploader;
 
-    public TraineeImageController(TraineeRepository traineeRepository) {
+    public TraineeImageController(TraineeRepository traineeRepository, ImageUploader imageUploader) {
         this.traineeRepository = traineeRepository;
         this.imageUploader = imageUploader;
     }
