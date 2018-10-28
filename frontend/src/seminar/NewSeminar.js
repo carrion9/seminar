@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Form, Input, Button, DatePicker, Select, notification } from 'antd';
 import moment from 'moment';
 import { formatDate, formatDateTime } from '../util/Helpers';
+import { insertItem } from '../util/APIUtils';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,7 +17,7 @@ class NewSeminar extends Component {
                 value: ''
             },
             date: {
-                value: ''
+                value: moment()
             },
             type: {
                 value: ''
@@ -24,52 +25,69 @@ class NewSeminar extends Component {
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDateChange = this.handleDateChange.bind(this);
         this.validateDate = this.validateDate.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
     }
 
-    handleInputChange(event, validationFun) {
+    handleInputChange(event) {
         const target = event.target;
         const inputName = target.name;        
         const inputValue = target.value;
-
         this.setState({
             [inputName] : {
-                value: inputValue,
-                ...validationFun(inputValue)
+                value: inputValue
+            }
+        });
+
+    }
+
+    handleDateChange(date) {
+        this.setState({
+            date: {
+                value: date,
+                ...this.validateDate(date)
             }
         });
     }
 
     handleSubmit(event) {
-        event.preventDefault();
-    
-        const signupRequest = {
+        const newRequest = {
             name: this.state.name.value,
-            date: this.state.date.value,
-            type: this.state.type.value
+            date: this.state.date.value.format('YYYY-MM-DD'),
+            seminarType: this.state.type.value
         };
-        // signup(signupRequest)
-        // .then(response => {
-        //     notification.success({
-        //         message: 'Seminar App',
-        //         description: "Thank you! You're successfully registered. Please Login to continue!",
-        //     });          
-        //     this.props.history.push("/login");
-        // }).catch(error => {
-        //     notification.error({
-        //         message: 'Seminar App',
-        //         description: error.message || 'Sorry! Something went wrong. Please try again!'
-        //     });
-        // });
+        insertItem(newRequest, 'seminars')
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "New Seminar successfully created!",
+            });          
+            this.props.history.push("/login");
+        }).catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+        });
     }
 
     isFormInvalid() {
-        return false;
+        return !(this.state.date.validateStatus === 'success');
     }
 
-    validateDate = (username) => {
-        
+    validateDate(date){
+        if(moment().isAfter(date)){
+            return {
+                validationStatus: 'error',
+                errorMsg: `Invalid date!`
+            }
+        } else {
+            return {
+                validateStatus: 'success',
+                errorMsg: null,
+              };            
+        }
     }
 
     render() {
@@ -78,16 +96,17 @@ class NewSeminar extends Component {
                 <h1 className="page-title">New Seminar</h1>
                 <div className="signup-content">
                     <Form onSubmit={this.handleSubmit} className="signup-form">
-                        <FormItem label="Name" required={true}>
-                            <Input 
-                                size="large"
-                                name="name"
-                                autoComplete="off"
-                                placeholder="Seminar's full name"
-                                value={this.state.name.value} 
-                                onChange={(event) => this.handleInputChange(event)} />    
+                        <FormItem 
+                            label="Name" 
+                            required={true}>
+                                <Input 
+                                    size="large"
+                                    name="name"
+                                    autoComplete="off"
+                                    placeholder="Seminar's full name"
+                                    value={this.state.name.value} 
+                                    onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
-
                         <FormItem 
                             label="Taking place at:" 
                             hasFeedback 
@@ -99,21 +118,22 @@ class NewSeminar extends Component {
                                     autoComplete="off"
                                     placeholder="Seminar's date"
                                     value={this.state.date.value} 
-                                    onBlur={this.validateDate}
-                                    onChange={(event) => this.handleDateChange(event, this.validateDate)}
+                                    onChange={this.handleDateChange}
                                     defaultValue={moment()}
                                     format='DD/MM/YYYY'/>
                         </FormItem>
                         <FormItem 
                             label="Type"
-                            hasFeedback
-                            validateStatus={this.state.type.validateStatus}
-                            help={this.state.type.errorMsg}> 
-                            <Select 
-                                size="large">
-                                    <Option key="1">Basic</Option>
-                                    <Option key="2">Advanced</Option>
-                            </Select>  
+                            required={true}>
+                                <Select 
+                                    size="large"
+                                    name="seminarType">  
+                                        <Option key="MOTOROIL_BASIC">Motoroil Basic</Option>
+                                        <Option key="ELPE_BASIC">ELPE Basic</Option>
+                                        <Option key="ELPE_SECOND">ELPE Second</Option>
+                                        <Option key="ELPE_FIRST_RETRY">ELPE First Retry</Option>
+                                        <Option key="ELPE_SECOND_RETRY">ELPE Second Retry</Option>
+                                </Select>  
                         </FormItem>   
                         <FormItem>
                             <Button 

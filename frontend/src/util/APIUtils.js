@@ -95,6 +95,14 @@ export function updateItem(item) {
     });
 }
 
+export function insertItem(item, type) {
+    return request({
+        url: API_BASE_URL + '/' + type,
+        method: 'POST',
+        body: JSON.stringify(item)
+    });
+}
+
 export function getAllSeminars(page, size, sorter) {
     page = page || 0;
     size = size || LIST_SIZE;
@@ -144,14 +152,6 @@ export function getTraineeById(id) {
     return request({
         url: API_BASE_URL + "/trainees/" + id,
         method: 'GET'
-    });
-}
-
-export function createSeminar(seminarData) {
-    return request({
-        url: API_BASE_URL + "/seminars",
-        method: 'POST',
-        body: JSON.stringify(seminarData)
     });
 }
 
