@@ -19,13 +19,14 @@ class NewSeminar extends Component {
             date: {
                 value: moment()
             },
-            type: {
+            seminarType: {
                 value: ''
             },
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.validateDate = this.validateDate.bind(this);
         this.isFormInvalid = this.isFormInvalid.bind(this);
     }
@@ -37,6 +38,15 @@ class NewSeminar extends Component {
         this.setState({
             [inputName] : {
                 value: inputValue
+            }
+        });
+
+    }
+
+    handleSelectChange(value) {
+        this.setState({
+            seminarType : {
+                value: value
             }
         });
 
@@ -55,7 +65,7 @@ class NewSeminar extends Component {
         const newRequest = {
             name: this.state.name.value,
             date: this.state.date.value.format('YYYY-MM-DD'),
-            seminarType: this.state.type.value
+            seminarType: this.state.seminarType.value
         };
         insertItem(newRequest, 'seminars')
         .then(response => {
@@ -127,7 +137,11 @@ class NewSeminar extends Component {
                             required={true}>
                                 <Select 
                                     size="large"
-                                    name="seminarType">  
+                                    name="seminarType"
+                                    autoComplete="off"
+                                    placeholder="Seminar's type"
+                                    value={this.state.seminarType.value}
+                                    onChange={(value) => this.handleSelectChange(value)} >  
                                         <Option key="MOTOROIL_BASIC">Motoroil Basic</Option>
                                         <Option key="ELPE_BASIC">ELPE Basic</Option>
                                         <Option key="ELPE_SECOND">ELPE Second</Option>
