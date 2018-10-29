@@ -2,10 +2,7 @@ package com.vetx.starter.service;
 
 import com.vetx.starter.model.*;
 import com.vetx.starter.payload.ApiResponse;
-import com.vetx.starter.repository.ContractorRepository;
-import com.vetx.starter.repository.SeminarTraineeRepository;
-import com.vetx.starter.repository.SpecialtyRepository;
-import com.vetx.starter.repository.TraineeRepository;
+import com.vetx.starter.repository.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -28,13 +25,15 @@ public class ExcelImporter {
   private SeminarTraineeRepository seminarTraineeRepository;
   private ContractorRepository contractorRepository;
   private SpecialtyRepository specialtyRepository;
+  private SeminarSpecialtyRepository seminarSpecialtyRepository;
 
   @Autowired
-  public ExcelImporter(TraineeRepository traineeRepository, SeminarTraineeRepository seminarTraineeRepository, ContractorRepository contractorRepository, SpecialtyRepository specialtyRepository) {
+  public ExcelImporter(TraineeRepository traineeRepository, SeminarTraineeRepository seminarTraineeRepository, ContractorRepository contractorRepository, SpecialtyRepository specialtyRepository, SeminarSpecialtyRepository seminarSpecialtyRepository) {
     this.traineeRepository = traineeRepository;
     this.seminarTraineeRepository = seminarTraineeRepository;
     this.contractorRepository = contractorRepository;
     this.specialtyRepository = specialtyRepository;
+    this.seminarSpecialtyRepository = seminarSpecialtyRepository;
   }
 
   public ApiResponse importExcel(Seminar seminar, byte[] uploadedExcelFile) throws IOException {
@@ -103,11 +102,18 @@ public class ExcelImporter {
                 contractorDOY = cell.getStringCellValue().trim();
               }
               if (cell.getColumnIndex() >= 11) {
-                Optional<Specialty> specialtyOptional = specialtyRepository.findByName(cell.getStringCellValue().trim());
-                if (!specialtyOptional.isPresent()) {
-                  specialtyRepository.save(Specialty.builder().name(cell.getStringCellValue().trim()).build());
+                if (cell.getStringCellValue().trim().length() > 0) {
+                  Optional<Specialty> specialtyOptional = specialtyRepository.findByName(cell.getStringCellValue().trim());
+                  if (!specialtyOptional.isPresent()) {
+                    specialtyRepository.save(Specialty.builder().name(cell.getStringCellValue().trim()).build());
+                  }
+                  Specialty specialty = specialtyRepository.findByName(cell.getStringCellValue().trim()).get();
+                  specialtyList.put(cell.getColumnIndex(), specialty);
+                  if(!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialty)) {
+                    SeminarSpecialty seminarSpecialty = SeminarSpecialty.builder().seminar(seminar).specialty(specialty).build();
+                    seminarSpecialtyRepository.save(seminarSpecialty);
+                  }
                 }
-                specialtyList.put(cell.getColumnIndex(), specialtyRepository.findByName(cell.getStringCellValue().trim()).get());
               }
               break;
             case 4:
@@ -197,7 +203,7 @@ public class ExcelImporter {
           trainee = Trainee.builder().docType(docType).ama(traineeAma).documentCode(traineeDocumentCode)
               .name(traineeName).surname(traineeSurname).fathersName(traineeFathersName).nationality(traineeNationality).build();
           //Build Contractor from excel
-          contractor = Contractor.builder().activity(contractorActivity).address(contractorAddress).afm(contractorAfm).DOY(contractorDOY).name(contractorName)
+          contractor = Contractor.builder().activity(contractorActivity).address(contractorAddress).afm(contractorAfm).doy(contractorDOY).name(contractorName)
               .email(contractorEmail).representativeName(contractorRepresentativeName).phoneNumber(contractorPhoneNumber).build();
           //Save Contractor and Trainee to database (Update/override if already exists)
           saveContractorAndTrainee(contractor, trainee, seminarTraineeList, seminar);
@@ -218,7 +224,7 @@ public class ExcelImporter {
     } else {
       contractorOptional.get().setActivity(contractor.getActivity());
       contractorOptional.get().setAddress(contractor.getAddress());
-      contractorOptional.get().setDOY(contractor.getDOY());
+      contractorOptional.get().setDoy(contractor.getDoy());
       contractorOptional.get().setEmail(contractor.getEmail());
       contractorOptional.get().setName(contractor.getName());
       contractorOptional.get().setPhoneNumber(contractor.getPhoneNumber());

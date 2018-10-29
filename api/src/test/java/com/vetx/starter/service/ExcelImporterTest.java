@@ -37,6 +37,9 @@ public class ExcelImporterTest {
   @Autowired
   private SpecialtyRepository specialtyRepository;
 
+  @Autowired
+  private  SeminarSpecialtyRepository seminarSpecialtyRepository;
+
   private ExcelImporter excelImporter;
 
   private static final String FILE_NAME = "contractor-registration-elpe.xlsx";
@@ -47,7 +50,7 @@ public class ExcelImporterTest {
 
   @Before
   public void setUp() throws Exception {
-    excelImporter = new ExcelImporter(traineeRepository, seminarTraineeRepository, contractorRepository, specialtyRepository);
+    excelImporter = new ExcelImporter(traineeRepository, seminarTraineeRepository, contractorRepository, specialtyRepository, seminarSpecialtyRepository);
     data = Files.readAllBytes(Paths.get(this.getClass().getClassLoader().getResource(FILE_NAME).toURI()));
     seminar = seminarRepository.findById(1L).get();
   }
@@ -131,7 +134,7 @@ public class ExcelImporterTest {
     assertEquals("ATOM DYNAMIC SA", contractor.getName());
     assertEquals("ΤΕΧΝΙΚΗ ΕΤΑΙΡΕΙΑ", contractor.getActivity());
     assertEquals("ΚΕΝΤΡΙΚΑ: ΧΡΥΣΟΣΤΟΜΟΥ ΣΜΥΡΝΗΣ 184 ΠΕΤΡΟΥΠΟΛΗ, ΥΠ/ΜΑ: ΘΕΣΗ ΠΑΤΗΜΑ, ΜΑΝΔΡΑ, 19600", contractor.getAddress());
-    assertEquals("ΦΑΕ ΑΘΗΝΩΝ", contractor.getDOY());
+    assertEquals("ΦΑΕ ΑΘΗΝΩΝ", contractor.getDoy());
     assertEquals("info@atomdynamic.gr, mp@atomdynamic.gr", contractor.getEmail());
     assertEquals("2105596649, 2105552968", contractor.getPhoneNumber());
     assertEquals("ΠΑΠΑΚΩΝΣΤΑΝΤΙΝΟΥ ΜΑΡΙΑ", contractor.getRepresentativeName());

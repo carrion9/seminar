@@ -45,7 +45,7 @@ public class Contractor extends UserDateAudit {
 
   @NotBlank
   @Size(max = 140)
-  private String DOY;
+  private String doy;
 
   @Column(unique = true)
   private String afm;
