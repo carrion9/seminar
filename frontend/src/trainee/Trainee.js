@@ -141,6 +141,7 @@ class Trainee extends Component {
         });
 
     }
+    
     handleEdit(){
         this.setState({
             isEdit: !this.state.isEdit

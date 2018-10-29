@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Form, Input, Button, DatePicker, Select, notification } from 'antd';
 import moment from 'moment';
 import { formatDate, formatDateTime } from '../util/Helpers';
+import LoadingIndicator from '../common/LoadingIndicator';
+import { insertItem } from '../util/APIUtils';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -27,7 +29,16 @@ class NewTrainee extends Component {
             nationality: {
                 value: ''
             },
-            email: {
+            cardType: {
+                value: ''
+            },
+            cardStatus: {
+                value: ''
+            },
+            documentCode: {
+                value: ''
+            },
+            docType: {
                 value: ''
             },
             imageLocation: {
@@ -47,7 +58,7 @@ class NewTrainee extends Component {
         this.setState({
             [inputName] : {
                 value: inputValue,
-                ...validationFun(inputValue)
+              //  ...validationFun(inputValue)
             }
         });
     }
@@ -55,26 +66,42 @@ class NewTrainee extends Component {
     handleSubmit(event) {
         event.preventDefault();
     
-        const signupRequest = {
-            afm: this.state.afm.value,
+        const newRequest = {
+            ama: this.state.ama.value,
             name: this.state.name.value,
-            representativeName: this.state.representativeName.value,
-            phoneNumber: this.state.phoneNumber.value,
-            email: this.state.email.value
+            surname: this.state.surname.value,
+            fathersName: this.state.fathersName.value,
+            nationality: this.state.nationality.value,
+            cardType: this.state.cardType.value,
+            cardStatus: this.state.cardStatus.value,
+            documentCode: this.state.documentCode.value,
+            docType: this.state.docType.value,
         };
-        // signup(signupRequest)
-        // .then(response => {
-        //     notification.success({
-        //         message: 'Trainee App',
-        //         description: "Thank you! You're successfully registered. Please Login to continue!",
-        //     });          
-        //     this.props.history.push("/login");
-        // }).catch(error => {
-        //     notification.error({
-        //         message: 'Trainee App',
-        //         description: error.message || 'Sorry! Something went wrong. Please try again!'
-        //     });
-        // });
+        insertItem(newRequest, 'trainees')
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Trainee created!",
+            });
+            this.setState({
+                isLoading: false
+            });
+            this.props.history.push("/trainee/"+response.key);
+        }).catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+        });
+    }
+
+    handleSelectChange(value, field) {
+        this.setState({
+            [field]:{
+                value: value
+            }
+        });
+
     }
 
     isFormInvalid() {
@@ -82,6 +109,9 @@ class NewTrainee extends Component {
     }
 
     render() {
+        if(this.state.isLoading) {
+            return <LoadingIndicator />
+        }
         return (
             <div className="signup-container">
                 <h1 className="page-title">New Trainee</h1>
@@ -93,7 +123,6 @@ class NewTrainee extends Component {
                                 name="ama"
                                 autoComplete="off"
                                 placeholder="Trainee's AMA"
-                                value={this.state.ama.value} 
                                 onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
                         <FormItem label="Surame" required={true}>
@@ -102,7 +131,6 @@ class NewTrainee extends Component {
                                 name="surname"
                                 autoComplete="off"
                                 placeholder="Trainee's surname"
-                                value={this.state.surname.value} 
                                 onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
                         <FormItem label="Name" required={true}>
@@ -111,7 +139,6 @@ class NewTrainee extends Component {
                                 name="name"
                                 autoComplete="off"
                                 placeholder="Trainee's full name"
-                                value={this.state.name.value} 
                                 onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
                         <FormItem label="Father's ame" required={true}>
@@ -120,7 +147,6 @@ class NewTrainee extends Component {
                                 name="fathersName"
                                 autoComplete="off"
                                 placeholder="Trainee's father's name"
-                                value={this.state.fathersName.value} 
                                 onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
                         <FormItem label="Nationality" required={true}>
@@ -129,9 +155,54 @@ class NewTrainee extends Component {
                                 name="nationality"
                                 autoComplete="off"
                                 placeholder="Trainee's nationality"
-                                value={this.state.nationality.value} 
                                 onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
+                        <FormItem label="Card Type" required={true}>
+                            <Select 
+                                size="large"
+                                name="cardType"
+                                autoComplete="off"
+                                onChange={(value) => this.handleSelectChange(value, 'cardType')} >  
+                                    <Option key="RED">RED</Option>
+                                    <Option key="GREEN">GREEN</Option>
+                                    <Option key="YELLOW">YELLOW</Option>
+                            </Select>     
+                        </FormItem>
+
+                        <FormItem label="Card Status" required={true}>
+                            <Select 
+                                size="large"
+                                name="cardStatus"
+                                autoComplete="off"
+                                onChange={(value) => this.handleSelectChange(value, 'cardStatus')} >  
+                                    <Option key="DELIVERED">DELIVERED</Option>
+                                    <Option key="PENDING">PENDING</Option>
+                                    <Option key="PRINTED">PRINTED</Option>
+                            </Select>    
+                        </FormItem>
+                        <FormItem label="Document Code" required={true}>
+                            <Input 
+                                size="large"
+                                name="documentCode"
+                                autoComplete="off"
+                                placeholder="Trainee's Document Code"
+                                onChange={(event) => this.handleInputChange(event)} />    
+                        </FormItem>
+                        <FormItem label="Document Type" required={true}>
+                            <Select 
+                                size="large"
+                                name="docType"
+                                autoComplete="off"
+                                onChange={(value) => this.handleSelectChange(value, 'docType')} >  
+                                    <Option key="NONE">NONE</Option>
+                                    <Option key="DRIVING_LICENSE">DRIVING LICENSE</Option>
+                                    <Option key="PASSPORT">PASSPORT</Option>
+                                    <Option key="IDENTITY">IDENTITY</Option>
+                            </Select>  
+                        </FormItem>
+
+
+
                         <FormItem>
                             <Button 
                                 type="primary" 
