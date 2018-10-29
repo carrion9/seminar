@@ -3,6 +3,12 @@
     margin: 80px auto 0;
 }
 
+.trainee-container {
+    max-width: 600px;
+    margin: 80px auto 0;
+}
+
+
 .trainee-content {
     margin-bottom: 30px;
     padding: 20px 15px 20px 15px;

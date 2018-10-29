@@ -7,6 +7,7 @@ import { getTraineeById, deleteItem, updateItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import { API_BASE_URL } from '../constants';
+import LoadingIndicator from "../common/LoadingIndicator";
 
 const FormItem = Form.Item;
 
@@ -101,6 +102,9 @@ class Trainee extends Component {
     }
 
     getTrainee(){
+        this.setState({
+            isLoading: true
+        });
         let promise;
 
         promise = getTraineeById(this.state.id);
@@ -152,6 +156,9 @@ class Trainee extends Component {
 
 
     render() {
+        if(this.state.isLoading) {
+            return <LoadingIndicator />
+        }
         let content;
         if (this.state.isEdit){
             content =(
