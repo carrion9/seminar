@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Trainee.css';
-import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar } from 'antd';
+import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar, Upload } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
 import { getTraineeById, deleteItem, updateItem } from '../util/APIUtils';
@@ -156,6 +156,17 @@ class Trainee extends Component {
         if (this.state.isEdit){
             content =(
                     <Form layout="inline" className="trainee-info" onSubmit={this.update.bind(this)}>
+                    <Avatar size={128} src={API_BASE_URL + '/' + this.state.trainee.imageLocation}>
+                        <Upload
+                                className="add-button"
+                                name="seminar"
+                                action={this.uploadFile}
+                                showUploadList={false}>
+                                <Button style={{ width:'100%'}}>
+                                    <Icon type="upload" />
+                                </Button>
+                            </Upload>
+                    </Avatar>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <span label="amaTitle" className="trainee-tag">
@@ -310,6 +321,7 @@ class Trainee extends Component {
         }else{
             content=(
                 <div className="trainee-info">
+                    <Avatar size={128} src={API_BASE_URL + '/' + this.state.trainee.imageLocation}/>
                     <Row gutter={16}>
                         <Col span={12}>
                             <span label="amaTitle" className="trainee-tag">
@@ -429,26 +441,9 @@ class Trainee extends Component {
         }
         return (
             <div className="trainee-container">
-                <div>
-                    <h1 className="page-title">Trainee {this.state.trainee.name} {this.state.trainee.surName}</h1>
-                    <div>
-                        <Avatar size={128} src={API_BASE_URL + '/' + this.state.trainee.imageLocation}/>
-                    </div>
-                </div>
+                <h1 className="page-title">Trainee {this.state.trainee.name} {this.state.trainee.surName}</h1>
                 <div className="trainee-content">
                         {content}
-                    <div className="specialties-list">
-                        <Table 
-                            {...this.state}
-                            title={() => {return ( 
-                                <div className="table-header">
-                                    <span className="table-title"> Contractors (?) </span>
-                                </div> 
-                                )}}
-                            columns={this.state.columnsS} 
-                            dataSource={this.state.specialties}
-                        />
-                    </div> 
                 </div>
             </div>
         );
