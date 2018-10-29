@@ -23,6 +23,7 @@ import { getAvatarColor } from '../util/Colors';
 import { getSeminarById, deleteItem, updateItem, getAttendance, upload } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
+import LoadingIndicator from '../common/LoadingIndicator';
 import moment from 'moment';
 
 const FormItem = Form.Item;
@@ -102,7 +103,7 @@ class Seminar extends Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.handleAddSpecialty = this.handleAddSpecialty.bind(this);
         this.handleAddTrainee = this.handleAddTrainee.bind(this);
-        
+
         // this.uploadFile = this.uploadFile().bind(this);
     }
 
@@ -234,6 +235,9 @@ class Seminar extends Component {
 
 
     render() {
+        if(this.state.isLoading) {
+            return <LoadingIndicator />
+        }
         let content;
         if (this.state.isEdit){
             content =(

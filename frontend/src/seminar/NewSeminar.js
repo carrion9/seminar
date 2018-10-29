@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './NewSeminar.css';
-import { withRouter } from 'react-router';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect, withRouter } from 'react-router-dom';
 import { Form, Input, Button, DatePicker, Select, notification } from 'antd';
 import moment from 'moment';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { insertItem } from '../util/APIUtils';
+import LoadingIndicator from '../common/LoadingIndicator';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -23,6 +23,7 @@ class NewSeminar extends Component {
             seminarType: {
                 value: ''
             },
+            isLoading: false,
         }
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -68,9 +69,15 @@ class NewSeminar extends Component {
             date: this.state.date.value.format('YYYY-MM-DD'),
             seminarType: this.state.seminarType.value
         };
+        this.setState({
+            isLoading: true
+        });
         insertItem(newRequest, 'seminars')
         .then(response => {
-            this.props.history.push("/seminar/" + response.key);
+            this.setState({
+                isLoading: false
+            });
+            this.props.history.push("/seminar/"+response.key);
         }).catch(error => {
             notification.error({
                 message: 'Seminar App',
@@ -100,7 +107,11 @@ class NewSeminar extends Component {
     }
 
     render() {
+        if(this.state.isLoading) {
+            return <LoadingIndicator />
+        }
         return (
+
             <div className="signup-container">
                 <h1 className="page-title">New Seminar</h1>
                 <div className="signup-content">
