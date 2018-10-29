@@ -102,7 +102,7 @@ class Seminar extends Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.handleAddSpecialty = this.handleAddSpecialty.bind(this);
         this.handleAddTrainee = this.handleAddTrainee.bind(this);
-
+        
         // this.uploadFile = this.uploadFile().bind(this);
     }
 

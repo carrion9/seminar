@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './NewSeminar.css';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { Link, Redirect } from 'react-router-dom';
 import { Form, Input, Button, DatePicker, Select, notification } from 'antd';
 import moment from 'moment';
 import { formatDate, formatDateTime } from '../util/Helpers';
@@ -69,11 +70,7 @@ class NewSeminar extends Component {
         };
         insertItem(newRequest, 'seminars')
         .then(response => {
-            notification.success({
-                message: 'Seminar App',
-                description: "New Seminar successfully created!",
-            });          
-            this.props.history.push("/login");
+            this.props.history.push("/seminar/" + response.key);
         }).catch(error => {
             notification.error({
                 message: 'Seminar App',
@@ -83,7 +80,9 @@ class NewSeminar extends Component {
     }
 
     isFormInvalid() {
-        return !(this.state.date.validateStatus === 'success');
+        return !(this.state.date.validateStatus === 'success' &&
+                 this.state.name.value !== '' &&
+                 this.state.seminarType.value !== '');
     }
 
     validateDate(date){
@@ -165,6 +164,7 @@ class NewSeminar extends Component {
 
 }
 
-export default NewSeminar;
+
+export default withRouter(NewSeminar);
                 
 
