@@ -4,12 +4,13 @@ import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, messa
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
 import { getTraineeById, deleteItem, updateItem } from '../util/APIUtils';
-import { formatDate, formatDateTime } from '../util/Helpers';
+import { formatDate, formatDateTime, humanize } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import { API_BASE_URL } from '../constants';
-import LoadingIndicator from "../common/LoadingIndicator";
+import LoadingIndicator from '../common/LoadingIndicator';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class Trainee extends Component {
     constructor(props) {
@@ -132,6 +133,14 @@ class Trainee extends Component {
         });
     }
 
+    handleSelectChange(value, field) {
+        const trainee = this.state.trainee;
+        trainee[field] = value;
+        this.setState({
+            trainee: trainee
+        });
+
+    }
     handleEdit(){
         this.setState({
             isEdit: !this.state.isEdit
@@ -222,6 +231,22 @@ class Trainee extends Component {
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
+                                <span label="fathersNameTitle" className="trainee-tag">
+                                    Father's Name: 
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input 
+                                        defaultValue={this.state.trainee.fathersName}  
+                                        name="fathersName"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
                                 <span label="nationalityTitle" className="trainee-tag">
                                     Nationality: 
                                 </span>
@@ -244,11 +269,16 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input 
-                                        defaultValue={this.state.trainee.cardType} 
+                                    <Select 
+                                        size="large"
                                         name="cardType"
-                                        onChange={(event) => this.handleInputChange(event)}
-                                    />
+                                        autoComplete="off"
+                                        value={this.state.trainee.cardType}
+                                        onChange={(value) => this.handleSelectChange(value, 'cardType')} >  
+                                            <Option key="RED">RED</Option>
+                                            <Option key="GREEN">GREEN</Option>
+                                            <Option key="YELLOW">YELLOW</Option>
+                                        </Select> 
                                 </FormItem>
                             </Col>
                         </Row>
@@ -260,11 +290,16 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input 
-                                        defaultValue={this.state.trainee.cardStatus} 
+                                    <Select 
+                                        size="large"
                                         name="cardStatus"
-                                        onChange={(event) => this.handleInputChange(event)}
-                                    />
+                                        autoComplete="off"
+                                        value={this.state.trainee.cardStatus}
+                                        onChange={(value) => this.handleSelectChange(value, 'cardStatus')} >  
+                                            <Option key="DELIVERED">DELIVERED</Option>
+                                            <Option key="PENDING">PENDING</Option>
+                                            <Option key="PRINTED">PRINTED</Option>
+                                        </Select> 
                                 </FormItem>
                             </Col>
                         </Row>
@@ -281,6 +316,28 @@ class Trainee extends Component {
                                         name="documentCode"
                                         onChange={(event) => this.handleInputChange(event)}
                                     />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="docTypeTitle" className="trainee-tag">
+                                    Document Type:
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                     <Select 
+                                        size="large"
+                                        name="docType"
+                                        autoComplete="off"
+                                        value={this.state.trainee.docType}
+                                        onChange={(value) => this.handleSelectChange(value, 'docType')} >  
+                                            <Option key="NONE">NONE</Option>
+                                            <Option key="DRIVING_LICENSE">DRIVING LICENSE</Option>
+                                            <Option key="PASSPORT">PASSPORT</Option>
+                                            <Option key="IDENTITY">IDENTITY</Option>
+                                        </Select> 
                                 </FormItem>
                             </Col>
                         </Row>
@@ -367,6 +424,18 @@ class Trainee extends Component {
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
+                            <span label="fathersNameTitle" className="trainee-tag">
+                                Father's Name: 
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="fathersName">
+                                {this.state.trainee.fathersName}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
                             <span label="nationalityTitle" className="trainee-tag">
                                 Nationality: 
                             </span>
@@ -385,7 +454,7 @@ class Trainee extends Component {
                         </Col>
                         <Col span={12}>
                             <span label="cardType">
-                                {this.state.trainee.cardType}
+                                {humanize(this.state.trainee.cardType)}
                             </span>
                         </Col>
                     </Row>
@@ -410,6 +479,18 @@ class Trainee extends Component {
                         <Col span={12}>
                             <span label="documentCode">
                                 {this.state.trainee.documentCode}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="docTypeTitle" className="trainee-tag">
+                                Document Type:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="docType">
+                                {this.state.trainee.docType}
                             </span>
                         </Col>
                     </Row>
@@ -448,7 +529,7 @@ class Trainee extends Component {
         }
         return (
             <div className="trainee-container">
-                <h1 className="page-title">Trainee {this.state.trainee.name} {this.state.trainee.surName}</h1>
+                <h1 className="page-title">Trainee {this.state.trainee.surname+" "+this.state.trainee.name} </h1>
                 <div className="trainee-content">
                         {content}
                 </div>

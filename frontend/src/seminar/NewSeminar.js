@@ -74,6 +74,10 @@ class NewSeminar extends Component {
         });
         insertItem(newRequest, 'seminars')
         .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Seminar created!",
+            });
             this.setState({
                 isLoading: false
             });

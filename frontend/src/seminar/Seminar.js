@@ -96,8 +96,6 @@ class Seminar extends Component {
             trainSpec: [],
             isEdit: false,
             file: '',
-            error: '',
-            msg: ''
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
@@ -211,9 +209,14 @@ class Seminar extends Component {
     };
 
     uploadFile = (file) => {
-        this.setState({error: '', msg: ''});
+        this.setState({
+            isLoading: true,
+        });
         if(!file) {
-            this.setState({error: 'Please upload a file.'})
+            notification.error({
+                message: 'Seminar App',
+                description: 'Please upload a file.'
+            });
             return;
         }
 
@@ -224,9 +227,20 @@ class Seminar extends Component {
         if(!me) {
             return;
         }
-        me.then(response => {
-            this.setState({error: '', msg: 'Sucessfully uploaded file'});
+        me
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully uploaded file!",
+            }); 
+            this.getSeminar();
         })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+        });
     };
 
     componentWillMount() {

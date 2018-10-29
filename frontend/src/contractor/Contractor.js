@@ -15,48 +15,8 @@ class Contractor extends Component {
         this.state = {
             id: this.props.match.params.id,
             pagination: false,
-            columnsT: [{
-              title: 'AMA',
-              dataIndex: 'trainee.ama',
-              sorter: true,
-              key: 'ama',
-              render: (ama, record ) => (
-                  <Link to={"/trainees/" + record.key}>{ama}</Link>
-              )
-            }, {
-              title: 'Full Name',
-              dataIndex: 'trainee',
-              sorter: true,
-              key: 'name',
-              render: (trainee) => (
-                  <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
-              )
-            },{
-              title: 'Contractor',
-              dataIndex: 'contractor',
-              sorter: true,
-              key: 'contractor',
-              render: (contractor) => (
-                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
-                )
-            },{
-              title: 'Specialty',
-              dataIndex: 'specialty.name',
-              sorter: true,
-              key: 'specialty',
-            },{
-              title: 'Grade',
-              dataIndex: 'grade',
-              key: 'grade',
-            },{
-              title: 'Passed',
-              dataIndex: 'passed',
-              key: 'passed',
-            }], 
             isLoading: false,
             contractor: {},
-            specialties: [],
-            trainSpec: [],
             isEdit: false
         };
         this.getContractor = this.getContractor.bind(this);
@@ -147,6 +107,22 @@ class Contractor extends Component {
                     <Form layout="inline" className="contractor-info" onSubmit={this.update.bind(this)}>
                         <Row gutter={16}>
                             <Col span={12}>
+                                <span label="nameTitle" className="contractor-tag">
+                                    Name: 
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input 
+                                        defaultValue={this.state.contractor.name} 
+                                        name="name"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                    />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
                                 <span label="afmTitle" className="contractor-tag">
                                     AFM: 
                                 </span>
@@ -163,17 +139,49 @@ class Contractor extends Component {
                         </Row>
                         <Row gutter={16}>
                             <Col span={12}>
-                                <span label="nameTitle" className="contractor-tag">
-                                    Name: 
+                                <span label="doyTitle" className="contractor-tag">
+                                    DOY: 
                                 </span>
                             </Col>
                             <Col span={12}>
                                 <FormItem>
                                     <Input 
-                                        defaultValue={this.state.contractor.name} 
-                                        name="name"
+                                        defaultValue={this.state.contractor.doy} 
+                                        name="doy"
                                         onChange={(event) => this.handleInputChange(event)}
-                                    />
+                                        />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="activityTitle" className="contractor-tag">
+                                    activity: 
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input 
+                                        defaultValue={this.state.contractor.activity} 
+                                        name="activity"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="addressTitle" className="contractor-tag">
+                                    Address: 
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem>
+                                    <Input 
+                                        defaultValue={this.state.contractor.address} 
+                                        name="address"
+                                        onChange={(event) => this.handleInputChange(event)}
+                                        />
                                 </FormItem>
                             </Col>
                         </Row>
@@ -247,6 +255,18 @@ class Contractor extends Component {
                 <div className="contractor-info">
                     <Row gutter={16}>
                         <Col span={12}>
+                            <span label="nameTitle" className="contractor-tag">
+                                Name: 
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="name">
+                                {this.state.contractor.name}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
                             <span label="afmTitle" className="contractor-tag">
                                 AFM: 
                             </span>
@@ -259,13 +279,37 @@ class Contractor extends Component {
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <span label="nameTitle" className="contractor-tag">
-                                Name: 
+                            <span label="doyTitle" className="contractor-tag">
+                                DOY: 
                             </span>
                         </Col>
                         <Col span={12}>
-                            <span label="name">
-                                {this.state.contractor.name}
+                            <span label="doy">
+                                {this.state.contractor.doy}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="activityTitle" className="contractor-tag">
+                                Activity:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="activity">
+                                {this.state.contractor.activity}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="addressTitle" className="contractor-tag">
+                                Address:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="address">
+                                {this.state.contractor.address}
                             </span>
                         </Col>
                     </Row>
@@ -319,20 +363,6 @@ class Contractor extends Component {
                 <h1 className="page-title">Contractor {this.state.contractor.name}</h1>
                 <div className="contractor-content">
                         {content} 
-                    <br/>
-                    <br/>
-                    <div className="trainees-list">
-                        <Table 
-                            {...this.state}
-                            title={() => {return ( 
-                                <div className="table-header">
-                                    <span className="table-title"> Trainees (?)</span>
-                                </div> 
-                                )}}
-                            columns={this.state.columnsT} 
-                            dataSource={this.state.trainSpec}
-                        />
-                    </div>
                 </div>
             </div>
         );
