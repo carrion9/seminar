@@ -319,10 +319,10 @@ class Trainee extends Component {
                                         name="cardType"
                                         autoComplete="off"
                                         value={this.state.trainee.cardType}
-                                        onChange={(value) => this.handleSelectChange(value, 'cardType')} >  
-                                            <Option key="RED">RED</Option>
-                                            <Option key="GREEN">GREEN</Option>
-                                            <Option key="YELLOW">YELLOW</Option>
+                                        onChange={(value) => this.handleSelectChange(value, 'cardType')} > 
+                                            <Option key="GREEN">Green</Option>
+                                            <Option key="YELLOW">Yellow</Option> 
+                                            <Option key="RED">Red</Option>
                                         </Select> 
                                 </FormItem>
                             </Col>
@@ -341,9 +341,9 @@ class Trainee extends Component {
                                         autoComplete="off"
                                         value={this.state.trainee.cardStatus}
                                         onChange={(value) => this.handleSelectChange(value, 'cardStatus')} >  
-                                            <Option key="DELIVERED">DELIVERED</Option>
-                                            <Option key="PENDING">PENDING</Option>
-                                            <Option key="PRINTED">PRINTED</Option>
+                                            <Option key="PENDING">Pending</Option>
+                                            <Option key="PRINTED">Printed</Option>
+                                            <Option key="DELIVERED">Delivered</Option>
                                         </Select> 
                                 </FormItem>
                             </Col>
@@ -378,10 +378,10 @@ class Trainee extends Component {
                                         autoComplete="off"
                                         value={this.state.trainee.docType}
                                         onChange={(value) => this.handleSelectChange(value, 'docType')} >  
-                                            <Option key="NONE">NONE</Option>
-                                            <Option key="DRIVING_LICENSE">DRIVING LICENSE</Option>
-                                            <Option key="PASSPORT">PASSPORT</Option>
-                                            <Option key="IDENTITY">IDENTITY</Option>
+                                            <Option key="NONE">None</Option>
+                                            <Option key="IDENTITY">Identity</Option>
+                                            <Option key="DRIVING_LICENSE">Driving License</Option>
+                                            <Option key="PASSPORT">Passport</Option>
                                         </Select> 
                                 </FormItem>
                             </Col>
@@ -511,7 +511,7 @@ class Trainee extends Component {
                         </Col>
                         <Col span={12}>
                             <span label="cardStatus">
-                                {this.state.trainee.cardStatus}
+                                {humanize(this.state.trainee.cardStatus)}
                             </span>
                         </Col>
                     </Row>
@@ -535,7 +535,7 @@ class Trainee extends Component {
                         </Col>
                         <Col span={12}>
                             <span label="docType">
-                                {this.state.trainee.docType}
+                                {humanize(this.state.trainee.docType)}
                             </span>
                         </Col>
                     </Row>
