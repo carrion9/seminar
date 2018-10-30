@@ -134,6 +134,14 @@ export function upload(uploadRequest) {
     });
 }
 
+export function uploadImage(uploadRequest) {
+    return uploadFile({
+        url: API_BASE_URL + "/traineeImageUpload",
+        method: 'POST',
+        body: uploadRequest
+    });
+}
+
 export function getSeminarById(id) {
     return request({
         url: API_BASE_URL + "/seminars/" + id,

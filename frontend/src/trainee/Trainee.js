@@ -3,7 +3,7 @@ import './Trainee.css';
 import { Radio, Form, Input, Button, Icon, Select, Col, Table, Popconfirm, message, notification, Row, DatePicker, Avatar, Upload } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getTraineeById, deleteItem, updateItem } from '../util/APIUtils';
+import { getTraineeById, deleteItem, updateItem, uploadImage } from '../util/APIUtils';
 import { formatDate, formatDateTime, humanize } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import { API_BASE_URL } from '../constants';
@@ -70,7 +70,7 @@ class Trainee extends Component {
             trainee: {},
             specialties: [],
             trainSpec: [],
-            isEdit: false
+            isEdit: true
         };
         this.getTrainee = this.getTrainee.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
@@ -133,6 +133,41 @@ class Trainee extends Component {
         });
     }
 
+    uploadFile = (file) => {
+        this.setState({
+            isLoading: true,
+        });
+        if(!file) {
+            notification.error({
+                message: 'Seminar App',
+                description: 'Please upload a file.'
+            });
+            return;
+        }
+
+        let data = new FormData();
+        data.append('image', file);
+        data.append('traineeId', this.state.id);
+        let me = uploadImage(data);
+        if(!me) {
+            return;
+        }
+        me
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully uploaded avatar!",
+            }); 
+            this.getTrainee();
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+        });
+    };
+
     handleSelectChange(value, field) {
         const trainee = this.state.trainee;
         trainee[field] = value;
@@ -141,7 +176,7 @@ class Trainee extends Component {
         });
 
     }
-    
+
     handleEdit(){
         this.setState({
             isEdit: !this.state.isEdit
@@ -173,17 +208,22 @@ class Trainee extends Component {
         if (this.state.isEdit){
             content =(
                     <Form layout="inline" className="trainee-info" onSubmit={this.update.bind(this)}>
-                    <Avatar size={128} src={API_BASE_URL + '/' + this.state.trainee.imageLocation}>
-                        <Upload
-                                className="add-button"
-                                name="seminar"
-                                action={this.uploadFile}
-                                showUploadList={false}>
-                                <Button style={{ width:'100%'}}>
-                                    <Icon type="upload" />
-                                </Button>
-                            </Upload>
-                    </Avatar>
+                        <Row gutter={16}>
+                            <Col span={12}>   
+                                <Avatar size={128} src={API_BASE_URL + '/' + this.state.trainee.imageLocation}/>
+                            </Col>
+                            <Col span={12}>
+                                <Upload
+                                    className="add-button"
+                                    name="seminar"
+                                    action={this.uploadFile}
+                                    showUploadList={false}>
+                                    <Button style={{ width:'100%'}}>
+                                        <Icon type="upload" />
+                                    </Button>
+                                </Upload>
+                            </Col>
+                        </Row>
                         <Row gutter={16}>
                             <Col span={12}>
                                 <span label="amaTitle" className="trainee-tag">
