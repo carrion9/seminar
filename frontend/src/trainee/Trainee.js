@@ -70,7 +70,7 @@ class Trainee extends Component {
             trainee: {},
             specialties: [],
             trainSpec: [],
-            isEdit: true
+            isEdit: false
         };
         this.getTrainee = this.getTrainee.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
