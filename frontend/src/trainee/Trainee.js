@@ -214,13 +214,17 @@ class Trainee extends Component {
                             </Col>
                             <Col span={12}>
                                 <Upload
-                                    className="add-button"
-                                    name="seminar"
+                                    className="avatar-uploader"
+                                    name="image"
+                                    listType="picture-card"
                                     action={this.uploadFile}
                                     showUploadList={false}>
-                                    <Button style={{ width:'100%'}}>
-                                        <Icon type="upload" />
-                                    </Button>
+                                    <div>
+                                        <Icon type='plus'/>
+                                        <div className="ant-upload-text">
+                                            Upload new image
+                                        </div>
+                                    </div>
                                 </Upload>
                             </Col>
                         </Row>

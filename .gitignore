@@ -75,7 +75,10 @@ api/gradle/wrapper/gradle-wrapper.jar
 api/gradle/wrapper/gradle-wrapper.properties
 api/gradlew
 api/gradlew.bat
+frontend/src/constants/index.js
+frontend/src/features/
+frontend/start_rekit_studio.js
+frontend/tools/
 package-lock.json
-
 
 api/upload-dir/*
