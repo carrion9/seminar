@@ -6,6 +6,7 @@ import { getAvatarColor } from '../util/Colors';
 import { getContractorById, deleteItem, updateItem } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
+import LoadingIndicator from '../common/LoadingIndicator';
 
 const FormItem = Form.Item;
 
@@ -44,12 +45,37 @@ class Contractor extends Component {
     }
 
     update(){
+        this.setState({
+            isLoading: true
+        });
         let promise;
 
         promise = updateItem(this.state.contractor);
+        promise
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully saved cahnges!",
+            }); 
+            this.setState({
+                isLoading: false
+            });
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.setState({
+                isLoading: false
+            });
+        });
     }
 
     getContractor(){
+        this.setState({
+            isLoading: true
+        });
         let promise;
 
         promise = getContractorById(this.state.id);
@@ -58,9 +84,6 @@ class Contractor extends Component {
             return;
         }
 
-        this.setState({
-            isLoading: true
-        });
         promise
             .then(response => {
 
@@ -101,6 +124,9 @@ class Contractor extends Component {
 
 
     render() {
+        if(this.state.isLoading) {
+            return <LoadingIndicator />
+        }
         let content;
         if (this.state.isEdit){
             content =(

@@ -97,9 +97,31 @@ class Trainee extends Component {
     }
 
     update(){
+        this.setState({
+            isLoading: true
+        });
         let promise;
 
         promise = updateItem(this.state.trainee);
+        promise
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully saved cahnges!",
+            }); 
+            this.setState({
+                isLoading: false
+            });
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.setState({
+                isLoading: false
+            });
+        });
     }
 
     getTrainee(){
@@ -113,10 +135,6 @@ class Trainee extends Component {
         if(!promise) {
             return;
         }
-
-        this.setState({
-            isLoading: true
-        });
         promise
             .then(response => {
 

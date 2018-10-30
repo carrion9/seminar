@@ -126,12 +126,37 @@ class Seminar extends Component {
     }
 
     update(){
+        this.setState({
+            isLoading: true
+        });
         let promise;
 
         promise = updateItem(this.state.seminar);
+        promise
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully saved cahnges!",
+            }); 
+            this.setState({
+                isLoading: false
+            });
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.setState({
+                isLoading: false
+            });
+        });
     }
 
     getSeminar(){
+        this.setState({
+            isLoading: true
+        });
         let promise;
 
         promise = getSeminarById(this.state.id);
@@ -140,9 +165,6 @@ class Seminar extends Component {
             return;
         }
 
-        this.setState({
-            isLoading: true
-        });
         promise
             .then(response => {
 
