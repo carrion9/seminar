@@ -163,6 +163,36 @@ export function getTraineeById(id) {
     });
 }
 
+
+export function getContractorByAFM(afm) {
+    return request({
+        url: API_BASE_URL + "/contractors/",
+        method: 'POST',
+        body: '{\"afm\":\"'+afm+'\"}'
+    });
+}
+
+export function getTraineeByAMA(ama) {
+    return request({
+        url: API_BASE_URL + "/trainees/",
+        method: 'POST',
+        body: '{\"ama\":\"'+ama+'\"}'
+    });
+}
+
+export function insertSeminarTraineeContractorSpecialty(seminarId, traineeId, contractorid, specialtyId) {
+    return request({
+        url: API_BASE_URL + "/seminarTrainees/",
+        method: 'POST',
+        body: '{'+
+                '\"seminar\":\"'+API_BASE_URL+'/seminars/'+seminarId+'\"'+
+                '\"trainee\":\"'+API_BASE_URL+'/trainees/'+traineeId+'\"'+
+                '\"contractor\":\"'+API_BASE_URL+'/contractors/'+contractorid+'\"'+
+                '\"specialty\":\"'+API_BASE_URL+'/specialties/'+specialtyId+'\"'+
+               '}'
+    });
+}
+
 export function getAllContractors(page, size, sorter) {
     page = page || 0;
     size = size || LIST_SIZE;

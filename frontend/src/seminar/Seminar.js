@@ -20,7 +20,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getSeminarById, deleteItem, updateItem, getAttendance, upload } from '../util/APIUtils';
+import { getSeminarById, deleteItem, updateItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import LoadingIndicator from '../common/LoadingIndicator';
@@ -96,6 +96,9 @@ class Seminar extends Component {
             trainSpec: [],
             isEdit: false,
             file: '',
+            ama: '',
+            afm: '',
+            spec: ''
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
@@ -190,6 +193,16 @@ class Seminar extends Component {
         })
     }
 
+    handleInputChangeGeneric(event, validationFun) {
+        const target = event.target;
+        const inputName = target.name;        
+        const inputValue = target.value;
+
+        this.setState({
+            [inputName]: inputValue
+        });
+    }
+
     handleInputChange(event, validationFun) {
         const target = event.target;
         const inputName = target.name;        
@@ -201,6 +214,14 @@ class Seminar extends Component {
             seminar: seminarEdit
         });
     }
+
+    handleSelectChange(inputValue) {
+        
+        this.setState({
+                spec: inputValue
+        });
+    }
+
 
     handleDateChange(event, validationFun) {
         if (event == null){
@@ -215,11 +236,70 @@ class Seminar extends Component {
     }
 
     handleAddSpecialty(){
-
+        
     }
 
     handleAddTrainee(){
+        this.setState({
+            isLoading: true
+        });
 
+        let traineePromise;
+        traineePromise = getTraineeByAMA(this.state.ama);
+
+        traineePromise
+            .then(response => {
+
+                let contractorPromise;
+                const traineeKey = response.key;
+                contractorPromise = getContractorByAFM(this.state.afm);
+                contractorPromise
+                    .then(response => {
+
+                            let addAllPromise;
+                            addAllPromise = insertSeminarTraineeContractorSpecialty(this.state.seminar.key, traineeKey, response.key, this.state.spec)
+                            addAllPromise
+                                .then(response => {
+
+                                    notification.success({
+                                            message: 'Seminar App',
+                                            description: "Sucessfull!",
+                                        }); 
+
+                                    this.setState({
+                                        isLoading: false
+                                    });
+                                    this.getSeminar();
+
+                                }).catch(error => {
+                                    notification.error({
+                                        message: 'Seminar App',
+                                        description: error.message || 'Sorry! Something went wrong. Please try again!'
+                                    });
+                                    this.setState({
+                                        isLoading: false
+                                    });
+                                });
+
+                    }).catch(error => {
+
+                        notification.error({
+                            message: 'Seminar App',
+                            description: error.message || 'Sorry! Something went wrong. Please try again!'
+                        });
+                        this.setState({
+                            isLoading: false
+                        });
+                    });
+            }).catch(error => {
+                notification.error({
+                    message: 'Seminar App',
+                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                });
+                this.setState({
+                    isLoading: false
+                });
+            });
     }
 
     handleAttendance = (specialtyKey) => {
@@ -471,26 +551,32 @@ class Seminar extends Component {
             <Form layout="inline" onSubmit={this.handleAddTrainee}>
                 <FormItem>
                     <Input 
+                        name="ama"
                         placeholder="Trainee's AMA" 
                         style={{ width: 400 }}
+                        onChange={(event) => this.handleInputChangeGeneric(event)} 
                     />
                 </FormItem>
                 <FormItem>
                     <Input 
+                        name="afm"
                         placeholder="Contractor's AFM" 
                         style={{ width: 400 }}
+                        onChange={(event) => this.handleInputChangeGeneric(event)}
                     />
                 </FormItem>
                 <FormItem>
                     <Select
-                      defaultValue="Specialties"
-                      style={{ width: 500 }}
+                        name="spec"
+                        defaultValue="Specialties"
+                        style={{ width: 500 }}
+                        onChange={(event) => this.handleSelectChange(event)}                      
                     >
                       {this.state.specialties.map(spec => <Option key={spec.key}>{spec.specialty.name}</Option>)}
                     </Select>
                 </FormItem>
                 <FormItem>
-                  <Button>
+                  <Button htmlType="submit">
                     Add
                   </Button>
                 </FormItem>
