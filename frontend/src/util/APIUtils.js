@@ -15,7 +15,7 @@ const request = (options) => {
     return fetch(options.url, options)
     .then(response => {
             if(!response.ok) {
-                return Promise.reject(response.json());
+                return Promise.reject(response);
             }
             if (response.status === 204) {
                 return Promise.resolve(response);
@@ -103,6 +103,34 @@ export function insertItem(item, type) {
     });
 }
 
+export function insertSeminarTraineeContractorSpecialty(seminarId, traineeId, contractorid, specialtyId) {
+    return request({
+        url: API_BASE_URL + "/seminarTrainees/",
+        method: 'POST',
+        body: '{'+
+                '\"cost\": 60,' +
+                '\"actualCost\": 60,' +
+                '\"passed\": false,' +
+                '\"grade\": 0.0,' + 
+                '\"seminar\":\"'+API_BASE_URL+'/seminars/'+seminarId+'\",'+
+                '\"trainee\":\"'+API_BASE_URL+'/trainees/'+traineeId+'\",'+
+                '\"contractor\":\"'+API_BASE_URL+'/contractors/'+contractorid+'\",'+
+                '\"specialty\":\"'+API_BASE_URL+'/specialties/'+specialtyId+'\"'+
+               '}'
+    });
+}
+
+export function insertSeminarSpecialty(seminarId, specialtyId) {
+    return request({
+        url: API_BASE_URL + '/seminarSpecialties',
+        method: 'POST',
+        body: '{'+
+                '\"seminar\":\"'+API_BASE_URL+'/seminars/'+seminarId+'\",'+
+                '\"specialty\":\"'+API_BASE_URL+'/specialties/'+specialtyId+'\"'+
+               '}'
+    });
+}
+
 export function getAllSeminars(page, size, sorter) {
     page = page || 0;
     size = size || LIST_SIZE;
@@ -166,30 +194,22 @@ export function getTraineeById(id) {
 
 export function getContractorByAFM(afm) {
     return request({
-        url: API_BASE_URL + "/contractors/",
-        method: 'POST',
-        body: '{\"afm\":\"'+afm+'\"}'
+        url: API_BASE_URL + "/contractors/search/findByAfm?afm=" + afm,
+        method: 'GET',
     });
 }
 
 export function getTraineeByAMA(ama) {
     return request({
-        url: API_BASE_URL + "/trainees/",
-        method: 'POST',
-        body: '{\"ama\":\"'+ama+'\"}'
+        url: API_BASE_URL + "/trainees/search/findByAma?ama=" + ama,
+        method: 'GET',
     });
 }
 
-export function insertSeminarTraineeContractorSpecialty(seminarId, traineeId, contractorid, specialtyId) {
+export function getSpecialtyByName(name){
     return request({
-        url: API_BASE_URL + "/seminarTrainees/",
-        method: 'POST',
-        body: '{'+
-                '\"seminar\":\"'+API_BASE_URL+'/seminars/'+seminarId+'\"'+
-                '\"trainee\":\"'+API_BASE_URL+'/trainees/'+traineeId+'\"'+
-                '\"contractor\":\"'+API_BASE_URL+'/contractors/'+contractorid+'\"'+
-                '\"specialty\":\"'+API_BASE_URL+'/specialties/'+specialtyId+'\"'+
-               '}'
+        url: API_BASE_URL + '/specialties/search/findByName?name=' + name,
+        method: 'GET',
     });
 }
 

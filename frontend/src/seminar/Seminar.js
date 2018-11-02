@@ -20,7 +20,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { getAvatarColor } from '../util/Colors';
-import { getSeminarById, deleteItem, updateItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty } from '../util/APIUtils';
+import { getSeminarById, deleteItem, updateItem, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
 import { formatDate, formatDateTime } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import LoadingIndicator from '../common/LoadingIndicator';
@@ -236,7 +236,80 @@ class Seminar extends Component {
     }
 
     handleAddSpecialty(){
-        
+        this.setState({
+            isLoading: true
+        });
+
+        let searchPromise;
+        searchPromise = getSpecialtyByName(this.state.spec);
+
+        searchPromise
+            .then(response => {
+
+                let addPromise;
+                addPromise = insertSeminarSpecialty(this.state.seminar.key, response.key)
+                addPromise
+                    .then(response => {
+
+                        notification.success({
+                                message: 'Seminar App',
+                                description: "Sucessfully added",
+                            }); 
+
+                        this.setState({
+                            isLoading: false
+                        });
+                        this.getSeminar();
+
+                    }).catch(error => {
+                        notification.error({
+                            message: 'Seminar App',
+                            description: error.message || 'Sorry! Something went wrong. Please try again!'
+                        });
+                        this.setState({
+                            isLoading: false
+                        });
+                    });
+
+            }).catch(error => {
+                let addSpec = insertItem('{\"name\":\"'+this.state.spec + '\"}', 'specialties');
+                addSpec 
+                    .then(response => {
+                        let addPromise;
+                        addPromise = insertSeminarSpecialty(this.state.seminar.key, response.key)
+                        addPromise
+                            .then(response => {
+
+                                notification.success({
+                                        message: 'Seminar App',
+                                        description: "Sucessfully added",
+                                    }); 
+
+                                this.setState({
+                                    isLoading: false
+                                });
+                                this.getSeminar();
+
+                            }).catch(error => {
+                                notification.error({
+                                    message: 'Seminar App',
+                                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                                });
+                                this.setState({
+                                    isLoading: false
+                                });
+                            });
+
+                    }).catch(error => {
+                        notification.error({
+                            message: 'Seminar App',
+                            description: error.message || 'Sorry! Something went wrong. Please try again!'
+                        });
+                        this.setState({
+                            isLoading: false
+                        });
+                    });
+            });
     }
 
     handleAddTrainee(){
@@ -263,7 +336,7 @@ class Seminar extends Component {
 
                                     notification.success({
                                             message: 'Seminar App',
-                                            description: "Sucessfull!",
+                                            description: "Sucessfully added",
                                         }); 
 
                                     this.setState({
@@ -285,7 +358,7 @@ class Seminar extends Component {
 
                         notification.error({
                             message: 'Seminar App',
-                            description: error.message || 'Sorry! Something went wrong. Please try again!'
+                            description: error.message || 'Sorry! Contractor not found...'
                         });
                         this.setState({
                             isLoading: false
@@ -294,7 +367,7 @@ class Seminar extends Component {
             }).catch(error => {
                 notification.error({
                     message: 'Seminar App',
-                    description: error.message || 'Sorry! Something went wrong. Please try again!'
+                    description: error.message || 'Sorry! Trainee not found...'
                 });
                 this.setState({
                     isLoading: false
@@ -535,12 +608,14 @@ class Seminar extends Component {
             <Form layout="inline" onSubmit={this.handleAddSpecialty}>
                 <FormItem>
                     <Input 
+                        name="spec"
                         placeholder="Title" 
                         style={{ width: 600 }}
+                        onChange={(event) => this.handleInputChangeGeneric(event)}
                     />
                 </FormItem>
                 <FormItem>
-                  <Button>
+                  <Button htmlType="Submit">
                     Add
                   </Button>
                 </FormItem>
