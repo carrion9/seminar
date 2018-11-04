@@ -17,6 +17,8 @@ import java.util.Set;
 @Data
 @Builder
 @EqualsAndHashCode(callSuper = false)
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames =
+    {"contractor_id", "seminar_id", "trainee_id", "specialty_id"})})
 public class SeminarTrainee extends UserDateAudit {
 
   @Id

@@ -11,6 +11,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Builder
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames =
+    {"specialty_id", "seminar_id"})})
 public class SeminarSpecialty {
 
   @Id
@@ -18,11 +20,11 @@ public class SeminarSpecialty {
   private Long key;
 
   @ManyToOne
-  @JoinColumn(name="specialty_id")
+  @JoinColumn(name = "specialty_id")
   private Specialty specialty;
 
   @ManyToOne
-  @JoinColumn(name="seminar_id")
+  @JoinColumn(name = "seminar_id")
   private Seminar seminar;
 
 }

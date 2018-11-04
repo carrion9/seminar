@@ -105,18 +105,18 @@ export function insertItem(item, type) {
 
 export function insertSeminarTraineeContractorSpecialty(seminarId, traineeId, contractorid, specialtyId) {
     return request({
-        url: API_BASE_URL + "/seminarTrainees/",
+        url: API_BASE_URL + "/seminarTrainees",
         method: 'POST',
-        body: '{'+
-                '\"cost\": 60,' +
-                '\"actualCost\": 60,' +
-                '\"passed\": false,' +
-                '\"grade\": 0.0,' + 
-                '\"seminar\":\"'+API_BASE_URL+'/seminars/'+seminarId+'\",'+
-                '\"trainee\":\"'+API_BASE_URL+'/trainees/'+traineeId+'\",'+
-                '\"contractor\":\"'+API_BASE_URL+'/contractors/'+contractorid+'\",'+
-                '\"specialty\":\"'+API_BASE_URL+'/specialties/'+specialtyId+'\"'+
-               '}'
+        body: `{
+            "cost": 60,
+            "actualCost": 60,
+            "passed": false,
+            "grade": 0.0,
+            "seminar":"${API_BASE_URL}/seminars/${seminarId}",
+            "trainee":"${API_BASE_URL}/trainees/${traineeId}",
+            "contractor":"${API_BASE_URL}/contractors/${contractorid}",
+            "specialty":"${API_BASE_URL}/specialties/${specialtyId}"
+        }`
     });
 }
 
@@ -124,10 +124,10 @@ export function insertSeminarSpecialty(seminarId, specialtyId) {
     return request({
         url: API_BASE_URL + '/seminarSpecialties',
         method: 'POST',
-        body: '{'+
-                '\"seminar\":\"'+API_BASE_URL+'/seminars/'+seminarId+'\",'+
-                '\"specialty\":\"'+API_BASE_URL+'/specialties/'+specialtyId+'\"'+
-               '}'
+        body: `{
+            "seminar":"${API_BASE_URL}/seminars/${seminarId}",
+            "specialty":"${API_BASE_URL}/specialties/${specialtyId}"
+        }`
     });
 }
 

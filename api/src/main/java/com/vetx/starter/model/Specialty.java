@@ -1,14 +1,11 @@
 package com.vetx.starter.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +21,7 @@ public class Specialty extends UserDateAudit {
   private Long key;
 
   @Column(unique = true)
+  @NotNull
   private String name;
 
   @EqualsAndHashCode.Exclude

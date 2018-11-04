@@ -110,7 +110,8 @@ class Trainee extends Component {
                 description: "Sucessfully saved cahnges!",
             }); 
             this.setState({
-                isLoading: false
+                isLoading: false,
+                isEdit: false
             });
         })
         .catch(error => {

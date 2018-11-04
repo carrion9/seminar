@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Seminar.css';
 import {
-    Radio,
     Form,
     Input,
     Button,
@@ -9,19 +8,16 @@ import {
     Select,
     Col,
     Table,
-    Popconfirm,
     message,
     notification,
     Row,
     DatePicker,
     Popover,
-    Avatar,
     Upload
 } from 'antd';
 import { Link } from 'react-router-dom';
-import { getAvatarColor } from '../util/Colors';
 import { getSeminarById, deleteItem, updateItem, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
-import { formatDate, formatDateTime } from '../util/Helpers';
+import { formatDate } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import LoadingIndicator from '../common/LoadingIndicator';
 import moment from 'moment';
@@ -218,7 +214,7 @@ class Seminar extends Component {
     handleSelectChange(inputValue) {
         
         this.setState({
-                spec: inputValue
+                spec: Number(inputValue)
         });
     }
 
@@ -272,7 +268,7 @@ class Seminar extends Component {
                     });
 
             }).catch(error => {
-                let addSpec = insertItem('{\"name\":\"'+this.state.spec + '\"}', 'specialties');
+                let addSpec = insertItem({name:this.state.spec}, 'specialties');
                 addSpec 
                     .then(response => {
                         let addPromise;
@@ -647,7 +643,7 @@ class Seminar extends Component {
                         style={{ width: 500 }}
                         onChange={(event) => this.handleSelectChange(event)}                      
                     >
-                      {this.state.specialties.map(spec => <Option key={spec.key}>{spec.specialty.name}</Option>)}
+                      {this.state.specialties.map(spec => <Option key={spec.specialty.key}>{spec.specialty.name}</Option>)}
                     </Select>
                 </FormItem>
                 <FormItem>
