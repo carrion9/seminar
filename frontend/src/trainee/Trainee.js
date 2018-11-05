@@ -66,6 +66,44 @@ class Trainee extends Component {
               dataIndex: 'passed',
               key: 'passed',
             }], 
+            columnsT: [{
+              title: 'AMA',
+              dataIndex: 'trainee',
+              sorter: true,
+              key: 'ama',
+              render: (trainee ) => (
+                  <Link to={"/trainee/" + trainee.key}>{trainee.ama}</Link>
+              )
+            }, {
+              title: 'Full Name',
+              dataIndex: 'trainee',
+              sorter: true,
+              key: 'name',
+              render: (trainee) => (
+                  <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+              )
+            },{
+              title: 'Contractor',
+              dataIndex: 'contractor',
+              sorter: true,
+              key: 'contractor',
+              render: (contractor) => (
+                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
+                )
+            },{
+              title: 'Specialty',
+              dataIndex: 'specialty.name',
+              sorter: true,
+              key: 'specialty',
+            },{
+              title: 'Grade',
+              dataIndex: 'grade',
+              key: 'grade',
+            },{
+              title: 'Passed',
+              dataIndex: 'passed',
+              key: 'passed',
+            }],
             isLoading: false,
             trainee: {},
             specialties: [],
@@ -434,12 +472,12 @@ class Trainee extends Component {
                             <Col span={12}/>
                             <Col span={12}>
                                 <FormItem>
-                                     <Button htmlType="submit">
+                                     <Button htmlType="submit" type="primary">
                                         Save
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                     <Button type="Submit" onClick={this.handleEdit}>
+                                     <Button type="Submit" type="danger" onClick={this.handleEdit}>
                                         Cancel
                                     </Button>
                                 </FormItem>
@@ -586,7 +624,7 @@ class Trainee extends Component {
                     <Row gutter={16}>
                         <Col span={12}/>
                         <Col span={12}>
-                            <Button className="edit-trainee-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
+                            <Button className="edit-trainee-button" type="primary" onClick={this.handleEdit}>Edit</Button>
                         </Col>
                     </Row>
                     </div>
@@ -597,6 +635,19 @@ class Trainee extends Component {
                 <h1 className="page-title">Trainee {this.state.trainee.surname+" "+this.state.trainee.name} </h1>
                 <div className="trainee-content">
                         {content}
+
+                    <div className="trainees-list">
+                        <Table 
+                            {...this.state}
+                            title={() => {return ( 
+                                <div className="table-header">
+                                    <span className="table-title"> Specialties </span>
+                                </div> 
+                                )}}
+                            columns={this.state.columnsT} 
+                            dataSource={this.state.trainee._embedded.seminarTrainees}
+                        />
+                    </div>
                 </div>
             </div>
         );

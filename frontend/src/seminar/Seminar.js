@@ -16,7 +16,7 @@ import {
     Upload
 } from 'antd';
 import { Link } from 'react-router-dom';
-import { getSeminarById, deleteItem, updateItem, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
+import { getSeminarById, deleteItem, updateItem, updateCost, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
 import { formatDate } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import LoadingIndicator from '../common/LoadingIndicator';
@@ -87,25 +87,10 @@ class Seminar extends Component {
               key: 'passed',
             },{
               title: 'Total Cost',
-              dataIndex: 'trainee',
               key: 'cost',
-              render: (trainee) => {
-                return (
-                    ((this.state.costEdit.trainee && this.state.costEdit.specialty) && (this.state.costEdit.trainee == trainee.key && this.state.costEdit.specialty == trainee.specialty.key))?
-                    (<span>{trainee.cost}</span>):
-                    (<Input defaultValue={trainee.cost}/>)
-                );
-              }
-
-            },{
-              render: (trainee) => {
-                return (
-                    ((this.state.costEdit.trainee && this.state.costEdit.specialty) && (this.state.costEdit.trainee == trainee.key && this.state.costEdit.specialty == trainee.specialty.key))?
-                    (<Button>Edit</Button>):
-                    (<Button>Save</Button>,<Button>Cancel</Button>)
-                );
-              }
-
+              render: (record) => (
+                    <Input name={record.key} defaultValue={record.cost} onPressEnter={this.updateCost.bind(this)} onChange={(event) => this.handleCostChange(event)}/>
+                )
             }], 
             isLoading: false,
             seminar: {},
@@ -120,9 +105,10 @@ class Seminar extends Component {
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
+        this.handleCostChange = this.handleCostChange.bind(this);
         this.handleAddSpecialty = this.handleAddSpecialty.bind(this);
         this.handleAddTrainee = this.handleAddTrainee.bind(this);
-
+        this.updateCost = this.updateCost.bind(this);
         // this.uploadFile = this.uploadFile().bind(this);
     }
 
@@ -163,6 +149,37 @@ class Seminar extends Component {
             this.setState({
                 isLoading: false
             });
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
+
+    updateCost(){
+        if (!this.state.costEdit)
+            return
+        this.setState({
+            isLoading: true,
+        });
+        let promise;
+
+        promise = updateCost(this.state.costEdit.key, this.state.costEdit.cost);
+        promise
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully changed cost!",
+            }); 
+            this.setState({
+                isLoading: false
+            });
+            this.getSeminar();
         })
         .catch(error => {
             notification.error({
@@ -234,10 +251,25 @@ class Seminar extends Component {
         });
     }
 
+    handleCostChange(event) {
+        if (!event)
+            return
+        const target = event.target;
+        const inputKey = target.name;        
+        const inputValue = target.value;
+
+        this.setState({
+            costEdit: {
+                cost: inputValue,
+                key: inputKey
+            }
+        });
+    }
+
     handleSelectChange(inputValue) {
         
         this.setState({
-                spec: Number(inputValue)
+                spec: inputValue
         });
     }
 
@@ -255,6 +287,8 @@ class Seminar extends Component {
     }
 
     handleAddSpecialty(){
+        if (!this.state.spec)
+            return
         this.setState({
             isLoading: true
         });
@@ -634,7 +668,7 @@ class Seminar extends Component {
                     />
                 </FormItem>
                 <FormItem>
-                  <Button htmlType="Submit" type='primary'>
+                  <Button htmlType="submit" type='primary'>
                     Add
                   </Button>
                 </FormItem>

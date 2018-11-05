@@ -18,7 +18,45 @@ class Contractor extends Component {
             pagination: false,
             isLoading: false,
             contractor: {},
-            isEdit: false
+            isEdit: false,
+            columnsT: [{
+              title: 'AMA',
+              dataIndex: 'trainee',
+              sorter: true,
+              key: 'ama',
+              render: (trainee ) => (
+                  <Link to={"/trainee/" + trainee.key}>{trainee.ama}</Link>
+              )
+            }, {
+              title: 'Full Name',
+              dataIndex: 'trainee',
+              sorter: true,
+              key: 'name',
+              render: (trainee) => (
+                  <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+              )
+            },{
+              title: 'Contractor',
+              dataIndex: 'contractor',
+              sorter: true,
+              key: 'contractor',
+              render: (contractor) => (
+                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
+                )
+            },{
+              title: 'Specialty',
+              dataIndex: 'specialty.name',
+              sorter: true,
+              key: 'specialty',
+            },{
+              title: 'Grade',
+              dataIndex: 'grade',
+              key: 'grade',
+            },{
+              title: 'Passed',
+              dataIndex: 'passed',
+              key: 'passed',
+            }]
         };
         this.getContractor = this.getContractor.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
@@ -265,12 +303,12 @@ class Contractor extends Component {
                             <Col span={12}/>
                             <Col span={12}>
                                 <FormItem>
-                                     <Button htmlType="submit">
+                                     <Button htmlType="submit" type="primary">
                                         Save
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                     <Button type="Submit" onClick={this.handleEdit}>
+                                     <Button type="danger" onClick={this.handleEdit}>
                                         Cancel
                                     </Button>
                                 </FormItem>
@@ -380,7 +418,7 @@ class Contractor extends Component {
                     <Row gutter={16}>
                         <Col span={12}/>
                         <Col span={12}>
-                            <Button className="edit-contractor-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
+                            <Button className="edit-contractor-button" type="primary" onClick={this.handleEdit}>Edit</Button>
                         </Col>
                     </Row>
                     </div>
@@ -391,6 +429,19 @@ class Contractor extends Component {
                 <h1 className="page-title">Contractor {this.state.contractor.name}</h1>
                 <div className="contractor-content">
                         {content} 
+
+                    <div className="trainees-list">
+                        <Table 
+                            {...this.state}
+                            title={() => {return ( 
+                                <div className="table-header">
+                                    <span className="table-title"> Trainees </span>
+                                </div> 
+                                )}}
+                            columns={this.state.columnsT} 
+                            dataSource={this.state.contractor._embedded.seminarTrainees}
+                        />
+                    </div>
                 </div>
             </div>
         );

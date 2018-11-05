@@ -95,6 +95,16 @@ export function updateItem(item) {
     });
 }
 
+export function updateCost(key, cost) {
+    return request({
+        url: API_BASE_URL + "/seminarTrainees/" + key,
+        method: 'PUT',
+        body: `{
+            "cost": ${cost}
+        }`
+    });
+}
+
 export function insertItem(item, type) {
     return request({
         url: API_BASE_URL + '/' + type,
