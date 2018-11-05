@@ -1,6 +1,7 @@
 package com.vetx.starter.repository;
 
 import com.vetx.starter.model.*;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -25,4 +26,14 @@ public interface SeminarTraineeRepository extends JpaRepository<SeminarTrainee, 
   List<SeminarTrainee> findDistinctBySeminar(Seminar seminar);
 
   Optional<SeminarTrainee> findBySeminarAndContractorAndTraineeAndSpecialty(Seminar seminar, Contractor contractor, Trainee trainee, Specialty specialty);
+
+  default SeminarTrainee save(SeminarTrainee seminarTrainee) {
+    List<SeminarTrainee> seminarTrainees = findByTraineeAndSeminar(seminarTrainee.getTrainee(), seminarTrainee.getSeminar());
+    for (SeminarTrainee seminarTrain: seminarTrainees) {
+      seminarTrain.setCost(seminarTrainee.getCost());
+      saveAndFlush(seminarTrain);
+    }
+    return saveAndFlush(seminarTrainee);
+  }
+
 }
