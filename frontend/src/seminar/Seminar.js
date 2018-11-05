@@ -85,6 +85,27 @@ class Seminar extends Component {
               title: 'Passed',
               dataIndex: 'passed',
               key: 'passed',
+            },{
+              title: 'Total Cost',
+              dataIndex: 'trainee',
+              key: 'cost',
+              render: (trainee) => {
+                return (
+                    ((this.state.costEdit.trainee && this.state.costEdit.specialty) && (this.state.costEdit.trainee == trainee.key && this.state.costEdit.specialty == trainee.specialty.key))?
+                    (<span>{trainee.cost}</span>):
+                    (<Input defaultValue={trainee.cost}/>)
+                );
+              }
+
+            },{
+              render: (trainee) => {
+                return (
+                    ((this.state.costEdit.trainee && this.state.costEdit.specialty) && (this.state.costEdit.trainee == trainee.key && this.state.costEdit.specialty == trainee.specialty.key))?
+                    (<Button>Edit</Button>):
+                    (<Button>Save</Button>,<Button>Cancel</Button>)
+                );
+              }
+
             }], 
             isLoading: false,
             seminar: {},
@@ -94,7 +115,8 @@ class Seminar extends Component {
             file: '',
             ama: '',
             afm: '',
-            spec: ''
+            spec: '',
+            costEdit: ''
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
