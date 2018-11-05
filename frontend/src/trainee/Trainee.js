@@ -98,7 +98,8 @@ class Trainee extends Component {
 
     update(){
         this.setState({
-            isLoading: true
+            isLoading: true,
+            isEdit: false,
         });
         let promise;
 

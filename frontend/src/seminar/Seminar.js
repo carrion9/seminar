@@ -42,7 +42,7 @@ class Seminar extends Component {
                 key: 'key',
                 render: (key) => {
                   return (
-                        <Button onClick={this.handleAttendance.bind(this, key)} >
+                        <Button type='primary' onClick={this.handleAttendance.bind(this, key)} >
                             Attendances
                         </Button>
                   )
@@ -126,7 +126,8 @@ class Seminar extends Component {
 
     update(){
         this.setState({
-            isLoading: true
+            isLoading: true,
+            isEdit: false,
         });
         let promise;
 
@@ -504,12 +505,12 @@ class Seminar extends Component {
                             <Col span={12}/>
                             <Col span={12}>
                                 <FormItem>
-                                     <Button htmlType="submit">
+                                     <Button htmlType="submit" type='primary'>
                                         Save
                                     </Button>
                                 </FormItem>
                                 <FormItem>
-                                     <Button type="Submit" onClick={this.handleEdit}>
+                                     <Button type="danger" onClick={this.handleEdit}>
                                         Cancel
                                     </Button>
                                 </FormItem>
@@ -587,13 +588,13 @@ class Seminar extends Component {
                                 name="seminar"
                                 action={this.uploadFile}
                                 showUploadList={false}>
-                                <Button>
+                                <Button type='primary'>
                                     <Icon type="upload" /> Upload Contractor
                                 </Button>
                             </Upload>
                         </Col>
                         <Col span={12}>
-                            <Button className="edit-seminar-button" type="Submit" onClick={this.handleEdit}>Edit</Button>
+                            <Button className="edit-seminar-button" type='primary' onClick={this.handleEdit}>Edit</Button>
                         </Col>
                     </Row>
                     </div>
@@ -611,7 +612,7 @@ class Seminar extends Component {
                     />
                 </FormItem>
                 <FormItem>
-                  <Button htmlType="Submit">
+                  <Button htmlType="Submit" type='primary'>
                     Add
                   </Button>
                 </FormItem>
@@ -647,7 +648,7 @@ class Seminar extends Component {
                     </Select>
                 </FormItem>
                 <FormItem>
-                  <Button htmlType="submit">
+                  <Button htmlType="submit" type='primary'>
                     Add
                   </Button>
                 </FormItem>
@@ -667,7 +668,7 @@ class Seminar extends Component {
                                 <div className="table-header">
                                     <span className="table-title"> Specialities </span>
                                     <Popover content={addSpecContent} title="Add Specialty" trigger="click">
-                                        <Button className="add-to-seminar-button" type="Submit" >Add Specialty</Button>
+                                        <Button className="add-to-seminar-button" type="primary" >Add Specialty</Button>
                                     </Popover>
                                 </div> 
                                 )}}
@@ -684,7 +685,7 @@ class Seminar extends Component {
                                 <div className="table-header">
                                     <span className="table-title"> Trainees </span>
                                     <Popover content={addTraineeContent} title="Add Trainee" trigger="click">
-                                        <Button className="add-to-seminar-button" type="Submit" >Add Trainee</Button>
+                                        <Button className="add-to-seminar-button" type="primary">Add Trainee</Button>
                                     </Popover>
                                 </div> 
                                 )}}
