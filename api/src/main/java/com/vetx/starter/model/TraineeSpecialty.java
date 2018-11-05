@@ -1,10 +1,7 @@
 package com.vetx.starter.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -15,6 +12,9 @@ import javax.validation.constraints.PositiveOrZero;
 @EqualsAndHashCode
 @AllArgsConstructor
 @RequiredArgsConstructor
+@Builder
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames =
+    {"specialty_id", "trainee_id"})})
 public class TraineeSpecialty {
 
   @Id

@@ -52,7 +52,7 @@ public class Contractor extends UserDateAudit {
 
   @EqualsAndHashCode.Exclude
   @OneToMany(
-      mappedBy = "seminar",
+      mappedBy = "contractor",
       targetEntity = SeminarTrainee.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.LAZY,

@@ -25,9 +25,9 @@ public class SeminarTrainee extends UserDateAudit {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
-  private Long cost;
-
-  private Long actualCost;
+  @PositiveOrZero
+  @Builder.Default
+  private Double cost = 60.0;
 
   @PositiveOrZero
   @Builder.Default

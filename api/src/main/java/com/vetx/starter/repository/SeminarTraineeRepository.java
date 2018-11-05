@@ -29,9 +29,18 @@ public interface SeminarTraineeRepository extends JpaRepository<SeminarTrainee, 
 
   default SeminarTrainee save(SeminarTrainee seminarTrainee) {
     List<SeminarTrainee> seminarTrainees = findByTraineeAndSeminar(seminarTrainee.getTrainee(), seminarTrainee.getSeminar());
-    for (SeminarTrainee seminarTrain: seminarTrainees) {
-      seminarTrain.setCost(seminarTrainee.getCost());
-      saveAndFlush(seminarTrain);
+    for (SeminarTrainee sameTraineeInSeminar: seminarTrainees) {
+      sameTraineeInSeminar.setCost(seminarTrainee.getCost());
+      saveAndFlush(sameTraineeInSeminar);
+    }
+    if (seminarTrainee.isPassed()) {
+      TraineeSpecialty traineeSpecialty = TraineeSpecialty
+          .builder()
+          .specialty(seminarTrainee.getSpecialty())
+          .trainee(seminarTrainee.getTrainee())
+          .grade(seminarTrainee.getGrade())
+          .build();
+      // somehow call traineeSpecialtyRepository... ill have to make my own implementation it seems
     }
     return saveAndFlush(seminarTrainee);
   }
