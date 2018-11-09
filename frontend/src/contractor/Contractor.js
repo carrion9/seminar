@@ -56,6 +56,13 @@ class Contractor extends Component {
               title: 'Passed',
               dataIndex: 'passed',
               key: 'passed',
+              render: (passed) => {
+                    if (passed)
+                        return (<div style={{ color: '#008000' }}>Passed</div>)
+                    else
+                        return (<div style={{ color: '#FF0000' }}>Failed</div>)
+                    
+              }
             }]
         };
         this.getContractor = this.getContractor.bind(this);

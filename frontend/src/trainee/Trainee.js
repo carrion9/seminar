@@ -30,44 +30,6 @@ class Trainee extends Component {
             }],
             columnsT: [{
               title: 'AMA',
-              dataIndex: 'trainee.ama',
-              sorter: true,
-              key: 'ama',
-              render: (ama, record ) => (
-                  <Link to={"/trainees/" + record.key}>{ama}</Link>
-              )
-            }, {
-              title: 'Full Name',
-              dataIndex: 'trainee',
-              sorter: true,
-              key: 'name',
-              render: (trainee) => (
-                  <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
-              )
-            },{
-              title: 'Contractor',
-              dataIndex: 'contractor',
-              sorter: true,
-              key: 'contractor',
-              render: (contractor) => (
-                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
-                )
-            },{
-              title: 'Specialty',
-              dataIndex: 'specialty.name',
-              sorter: true,
-              key: 'specialty',
-            },{
-              title: 'Grade',
-              dataIndex: 'grade',
-              key: 'grade',
-            },{
-              title: 'Passed',
-              dataIndex: 'passed',
-              key: 'passed',
-            }], 
-            columnsT: [{
-              title: 'AMA',
               dataIndex: 'trainee',
               sorter: true,
               key: 'ama',
@@ -103,6 +65,13 @@ class Trainee extends Component {
               title: 'Passed',
               dataIndex: 'passed',
               key: 'passed',
+              render: (passed) => {
+                    if (passed)
+                        return (<div style={{ color: '#008000' }}>Passed</div>)
+                    else
+                        return (<div style={{ color: '#FF0000' }}>Failed</div>)
+                    
+              }
             }],
             isLoading: false,
             trainee: {},
