@@ -67,9 +67,9 @@ class Trainee extends Component {
               key: 'passed',
               render: (passed) => {
                     if (passed)
-                        return (<div style={{ color: '#008000' }}>Passed</div>)
+                        return (<div style={{ color: '#008000' }}>Pass</div>)
                     else
-                        return (<div style={{ color: '#FF0000' }}>Failed</div>)
+                        return (<div style={{ color: '#FF0000' }}>Fail</div>)
                     
               }
             }],
