@@ -3,6 +3,7 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

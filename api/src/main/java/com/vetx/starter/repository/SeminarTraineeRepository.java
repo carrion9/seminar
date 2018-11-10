@@ -45,4 +45,11 @@ public interface SeminarTraineeRepository extends JpaRepository<SeminarTrainee, 
     return saveAndFlush(seminarTrainee);
   }
 
+  List<SeminarTrainee> findDistinctTraineeBySeminar(Seminar seminar);
+
+  default Double getTotalCostBySeminar( Seminar seminar) {
+    List<SeminarTrainee> perTainee = findDistinctBySeminar(seminar);
+    return perTainee.stream().mapToDouble(SeminarTrainee::getCost).sum();
+  }
+
 }
