@@ -202,7 +202,7 @@ export function uploadImage(uploadRequest) {
 
 export function getSeminarById(id) {
     return request({
-        url: API_BASE_URL + "/seminars/" + id,
+        url: API_BASE_URL + "/seminars/" + id + "?projection=seminarProjection",
         method: 'GET'
     });
 }
