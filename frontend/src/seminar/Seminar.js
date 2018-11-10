@@ -85,7 +85,8 @@ class Seminar extends Component {
                         style={{ width: 75 }}
                         name={record.key} 
                         defaultValue={record.grade} 
-                        onPressEnter={this.updateGrade.bind(this)} 
+                        onPressEnter={this.updateGrade.bind(this)}
+                        onBlur={this.updateGrade.bind(this)}
                         onChange={(event) => this.handleGradeChange(event)}/>
                 )
             },{
@@ -111,7 +112,8 @@ class Seminar extends Component {
                         style={{ width: 75 }}
                         name={record.key} 
                         defaultValue={record.cost} 
-                        onPressEnter={this.updateCost.bind(this)} 
+                        onPressEnter={this.updateCost.bind(this)}
+                        onBlur={this.updateCost.bind(this)}
                         onChange={(event) => this.handleCostChange(event)}/>
                 )
             }], 
@@ -222,9 +224,6 @@ class Seminar extends Component {
     updateGrade(){
         if (!this.state.gradeEdit)
             return
-        this.setState({
-            isLoading: true,
-        });
         let promise;
 
         promise = updateGrade(this.state.gradeEdit.key, this.state.gradeEdit.grade);
@@ -234,26 +233,16 @@ class Seminar extends Component {
                 message: 'Seminar App',
                 description: "Sucessfully changed grade!",
             }); 
-            this.setState({
-                isLoading: false
-            });
-            this.getSeminar();
         })
         .catch(error => {
             notification.error({
                 message: 'Seminar App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
             });
-            this.setState({
-                isLoading: false
-            });
         });
     }
 
     updatePassed(value, key){
-        this.setState({
-            isLoading: true,
-        });
         let promise;
 
         promise = updatePassed(key, value);
@@ -263,18 +252,11 @@ class Seminar extends Component {
                 message: 'Seminar App',
                 description: "Sucessfully changed!",
             }); 
-            this.setState({
-                isLoading: false
-            });
-            this.getSeminar();
         })
         .catch(error => {
             notification.error({
                 message: 'Seminar App',
                 description: error.message || 'Sorry! Something went wrong. Please try again!'
-            });
-            this.setState({
-                isLoading: false
             });
         });
     }
