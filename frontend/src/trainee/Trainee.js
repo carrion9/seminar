@@ -75,8 +75,7 @@ class Trainee extends Component {
             }],
             isLoading: false,
             trainee: {},
-            specialties: [],
-            trainSpec: [],
+            seminarTrainees: [],
             isEdit: false
         };
         this.getTrainee = this.getTrainee.bind(this);
@@ -149,8 +148,7 @@ class Trainee extends Component {
 
                 this.setState({
                     trainee: response,
-                    specialties: response._embedded ? response._embedded.traineeSpecialties: [],
-                    trainSpec: response._embedded ? response._embedded.traineeTrainees: [],
+                    seminarTrainees: response._embedded ? response._embedded.seminarTrainees: [],
                     isLoading: false
                 })
             }).catch(error => {
@@ -614,7 +612,7 @@ class Trainee extends Component {
                                 </div> 
                                 )}}
                             columns={this.state.columnsT} 
-                            dataSource={this.state.trainee._embedded.seminarTrainees}
+                            dataSource={this.state.seminarTrainees}
                         />
                     </div>
                 </div>

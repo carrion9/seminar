@@ -18,6 +18,7 @@ class Contractor extends Component {
             pagination: false,
             isLoading: false,
             contractor: {},
+            seminarTrainees: [],
             isEdit: false,
             columnsT: [{
               title: 'AMA',
@@ -136,8 +137,7 @@ class Contractor extends Component {
 
                 this.setState({
                     contractor: response,
-                    specialties: response._embedded ? response._embedded.contractorSpecialties: [],
-                    trainSpec: response._embedded ? response._embedded.contractorTrainees: [],
+                    seminarTrainees: response._embedded ? response._embedded.seminarTrainees: [],
                     isLoading: false
                 })
             }).catch(error => {
@@ -446,7 +446,7 @@ class Contractor extends Component {
                                 </div> 
                                 )}}
                             columns={this.state.columnsT} 
-                            dataSource={this.state.contractor._embedded.seminarTrainees}
+                            dataSource={this.state.seminarTrainees}
                         />
                     </div>
                 </div>
