@@ -296,8 +296,8 @@ class Seminar extends Component {
 
                 this.setState({
                     seminar: response,
-                    specialties: response._embedded ? response._embedded.seminarSpecialties: [],
-                    trainSpec: response._embedded ? response._embedded.seminarTrainees: [],
+                    specialties: response ? response.seminarSpecialties: [],
+                    trainSpec: response ? response.seminarTrainees: [],
                     isLoading: false
                 })
             }).catch(error => {
