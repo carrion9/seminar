@@ -37,6 +37,11 @@ class SeminarList extends Component {
                   humanize(seminarType)
               )
             }, {
+              title: 'Total Cost',
+              dataIndex: 'cost',
+              sorter: true,
+              key: 'cost',
+            }, {
               title: 'Created',
               dataIndex: 'createdBy',
               sorter: true,

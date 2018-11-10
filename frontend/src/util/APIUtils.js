@@ -98,9 +98,29 @@ export function updateItem(item) {
 export function updateCost(key, cost) {
     return request({
         url: API_BASE_URL + "/seminarTrainees/" + key,
-        method: 'PUT',
+        method: 'PATCH',
         body: `{
             "cost": ${cost}
+        }`
+    });
+}
+
+export function updateGrade(key, grade) {
+    return request({
+        url: API_BASE_URL + "/seminarTrainees/" + key,
+        method: 'PATCH',
+        body: `{
+            "grade": ${grade}
+        }`
+    });
+}
+
+export function updatePassed(key, passed) {
+    return request({
+        url: API_BASE_URL + "/seminarTrainees/" + key,
+        method: 'PATCH',
+        body: `{
+            "passed": ${passed}
         }`
     });
 }

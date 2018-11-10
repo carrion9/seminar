@@ -16,8 +16,8 @@ import {
     Upload
 } from 'antd';
 import { Link } from 'react-router-dom';
-import { getSeminarById, deleteItem, updateItem, updateCost, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
-import { formatDate } from '../util/Helpers';
+import { getSeminarById, deleteItem, updateItem, updateCost, updateGrade, updatePassed, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
+import { formatDate,humanize } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import LoadingIndicator from '../common/LoadingIndicator';
 import moment from 'moment';
@@ -79,24 +79,40 @@ class Seminar extends Component {
               key: 'specialty',
             },{
               title: 'Grade',
-              dataIndex: 'grade',
               key: 'grade',
+              render: (record) => (
+                    <Input 
+                        style={{ width: 75 }}
+                        name={record.key} 
+                        defaultValue={record.grade} 
+                        onPressEnter={this.updateGrade.bind(this)} 
+                        onChange={(event) => this.handleGradeChange(event)}/>
+                )
             },{
               title: 'Passed',
-              dataIndex: 'passed',
               key: 'passed',
-              render: (passed) => {
-                    if (passed)
-                        return (<div style={{ color: '#008000' }}>Pass</div>)
-                    else
-                        return (<div style={{ color: '#FF0000' }}>Fail</div>)
+              render: (record) => (
+                    <Select 
+                        size="large"
+                        name={record.key}
+                        style={{ width: 150 }}
+                        defaultValue={record.passed.toString()} 
+                        onSelect={(value) => this.updatePassed(value, record.key)} >  
+                            <Option key="true"><div style={{ color: '#008000' }}>Pass</div></Option>
+                            <Option key="false"><div style={{ color: '#FF0000' }}>Fail</div></Option>
+                    </Select>
                     
-              }
+              )
             },{
               title: 'Total Cost',
               key: 'cost',
               render: (record) => (
-                    <Input name={record.key} defaultValue={record.cost} onPressEnter={this.updateCost.bind(this)} onChange={(event) => this.handleCostChange(event)}/>
+                    <Input
+                        style={{ width: 75 }}
+                        name={record.key} 
+                        defaultValue={record.cost} 
+                        onPressEnter={this.updateCost.bind(this)} 
+                        onChange={(event) => this.handleCostChange(event)}/>
                 )
             }], 
             isLoading: false,
@@ -108,7 +124,9 @@ class Seminar extends Component {
             ama: '',
             afm: '',
             spec: '',
-            costEdit: ''
+            costEdit: '',
+            gradeEdit: '',
+            passedEdit: ''
         };
         this.getSeminar = this.getSeminar.bind(this);
         this.handleEdit = this.handleEdit.bind(this);
@@ -116,6 +134,8 @@ class Seminar extends Component {
         this.handleAddSpecialty = this.handleAddSpecialty.bind(this);
         this.handleAddTrainee = this.handleAddTrainee.bind(this);
         this.updateCost = this.updateCost.bind(this);
+        this.updateGrade = this.updateGrade.bind(this);
+        this.updatePassed = this.updatePassed.bind(this);
         // this.uploadFile = this.uploadFile().bind(this);
     }
 
@@ -182,6 +202,66 @@ class Seminar extends Component {
             notification.success({
                 message: 'Seminar App',
                 description: "Sucessfully changed cost!",
+            }); 
+            this.setState({
+                isLoading: false
+            });
+            this.getSeminar();
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
+
+    updateGrade(){
+        if (!this.state.gradeEdit)
+            return
+        this.setState({
+            isLoading: true,
+        });
+        let promise;
+
+        promise = updateGrade(this.state.gradeEdit.key, this.state.gradeEdit.grade);
+        promise
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully changed grade!",
+            }); 
+            this.setState({
+                isLoading: false
+            });
+            this.getSeminar();
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+            this.setState({
+                isLoading: false
+            });
+        });
+    }
+
+    updatePassed(value, key){
+        this.setState({
+            isLoading: true,
+        });
+        let promise;
+
+        promise = updatePassed(key, value);
+        promise
+        .then(response => {
+            notification.success({
+                message: 'Seminar App',
+                description: "Sucessfully changed!",
             }); 
             this.setState({
                 isLoading: false
@@ -273,10 +353,46 @@ class Seminar extends Component {
         });
     }
 
+    handleGradeChange(event) {
+        if (!event)
+            return
+        const target = event.target;
+        const inputKey = target.name;        
+        const inputValue = target.value;
+
+        this.setState({
+            gradeEdit: {
+                grade: inputValue,
+                key: inputKey
+            }
+        });
+    }
+
+    handlePassedChange(value,key) {
+
+        this.setState({
+            passedEdit: {
+                passed: value,
+                key: key
+            }
+        });
+
+        this.updatePassed();
+    }
+
     handleSelectChange(inputValue) {
         
         this.setState({
                 spec: inputValue
+        });
+    }
+
+    handleTypeChange(inputValue) {
+        
+        const seminarEdit = this.state.seminar;
+        seminarEdit.seminarType = inputValue
+        this.setState({
+                seminar: seminarEdit
         });
     }
 
@@ -532,12 +648,31 @@ class Seminar extends Component {
                             </Col>
                             <Col span={12}>
                                 <FormItem>
-                                    <Input 
-                                        defaultValue={this.state.seminar.seminarType}
+                                     <Select 
+                                        size="large"
                                         name="seminarType"
-                                        onChange={(event) => this.handleInputChange(event)}
-                                    />
+                                        autoComplete="off"
+                                        defaultValue={this.state.seminar.seminarType}
+                                        onChange={(value) => this.handleTypeChange(value)} >  
+                                            <Option key="MOTOROIL_BASIC">Motoroil Basic</Option>
+                                            <Option key="ELPE_BASIC">ELPE Basic</Option>
+                                            <Option key="ELPE_SECOND">ELPE Second</Option>
+                                            <Option key="ELPE_FIRST_RETRY">ELPE First Retry</Option>
+                                            <Option key="ELPE_SECOND_RETRY">ELPE Second Retry</Option>
+                                        </Select> 
                                 </FormItem>
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <span label="seminarCostTitle" className="seminar-tag">
+                                    Seminar's Total Cost:
+                                </span>
+                            </Col>
+                            <Col span={12}>
+                                <span label="seminarType">
+                                    {this.state.seminar.cost}
+                                </span>
                             </Col>
                         </Row>
                         <Row gutter={16}>
@@ -616,7 +751,19 @@ class Seminar extends Component {
                         </Col>
                         <Col span={12}>
                             <span label="seminarType">
-                                {this.state.seminar.seminarType}
+                                {humanize(this.state.seminar.seminarType)}
+                            </span>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <span label="seminarCostTitle" className="seminar-tag">
+                                Seminar's Total Cost:
+                            </span>
+                        </Col>
+                        <Col span={12}>
+                            <span label="seminarType">
+                                {this.state.seminar.cost}
                             </span>
                         </Col>
                     </Row>
