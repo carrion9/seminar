@@ -139,7 +139,7 @@ public class AttendanceDocService {
               switch (colCt) {
                 case 0:
                   cell.setWidth("05.00%");
-                  rh.setText(Integer.toString(rowCt-1));
+                  rh.setText(Integer.toString(rowCt));
                   break;
                 case 1:
                   cell.setWidth("23.00%");

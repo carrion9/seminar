@@ -57,7 +57,7 @@ public class ExcelImporterTest {
 
   @Test
   public void importExcel() throws IOException {
-    ApiResponse response = excelImporter.importExcel(seminar, data);
+    ApiResponse response = excelImporter.importExcel(seminar, data, FILE_NAME);
 
 
     //Trainee No1

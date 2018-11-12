@@ -65,7 +65,7 @@ public class FileController {
     }
 
     byte[] bytes = file.getBytes();
-    ApiResponse apiResponse = excelImporter.importExcel(seminar.get(), bytes);
+    ApiResponse apiResponse = excelImporter.importExcel(seminar.get(), bytes, file.getOriginalFilename());
     return new ResponseEntity(apiResponse,HttpStatus.OK);
   }
 

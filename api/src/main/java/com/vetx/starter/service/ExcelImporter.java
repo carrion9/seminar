@@ -3,6 +3,7 @@ package com.vetx.starter.service;
 import com.vetx.starter.model.*;
 import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.repository.*;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -36,7 +37,7 @@ public class ExcelImporter {
     this.seminarSpecialtyRepository = seminarSpecialtyRepository;
   }
 
-  public ApiResponse importExcel(Seminar seminar, byte[] uploadedExcelFile) throws IOException {
+  public ApiResponse importExcel(Seminar seminar, byte[] uploadedExcelFile, String originalFileName) throws IOException {
 
     Contractor contractor = null;
     Trainee trainee = null;
@@ -64,7 +65,7 @@ public class ExcelImporter {
     Map<Integer, Specialty> specialtyList = new HashMap<>();
 
     try {
-      Workbook workbook = new XSSFWorkbook(excelInputStream);
+      Workbook workbook = originalFileName.endsWith("xls") ? new HSSFWorkbook(excelInputStream) : new XSSFWorkbook(excelInputStream);
       Sheet datatypeSheet = workbook.getSheetAt(0);
       Iterator<Row> iterator = datatypeSheet.iterator();
 
@@ -161,7 +162,7 @@ public class ExcelImporter {
                 case 6:
                 case 7:
                 case 8:
-                  XSSFCellStyle cellStyle = (XSSFCellStyle) datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
+                  CellStyle cellStyle = datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
                   if (IndexedColors.AUTOMATIC.index != cellStyle.getFillForegroundColor()) {
                     switch (cell.getColumnIndex()) {
                       case 6:
@@ -188,7 +189,7 @@ public class ExcelImporter {
                 case 10:
                   break;
                 default:
-                  XSSFCellStyle specialtyCellStyle = (XSSFCellStyle) datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
+                  CellStyle specialtyCellStyle = datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
                   if (IndexedColors.AUTOMATIC.getIndex() != specialtyCellStyle.getFillForegroundColor()) {
                     //TODO Import to seminarTraineeSpecialties
                     seminarTraineeList.add(SeminarTrainee.builder().specialty(specialtyList.get(cell.getColumnIndex())).build());
