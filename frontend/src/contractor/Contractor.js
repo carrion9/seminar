@@ -37,12 +37,12 @@ class Contractor extends Component {
                   <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
               )
             },{
-              title: 'Contractor',
-              dataIndex: 'contractor',
+              title: 'Seminar',
+              dataIndex: 'seminar',
               sorter: true,
-              key: 'contractor',
-              render: (contractor) => (
-                    <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
+              key: 'seminar',
+              render: (seminar) => (
+                    <Link to={"/seminar/" + seminar.key}>{seminar.name}</Link>
                 )
             },{
               title: 'Specialty',

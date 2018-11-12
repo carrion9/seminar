@@ -29,20 +29,12 @@ class Trainee extends Component {
                   )
             }],
             columnsT: [{
-              title: 'AMA',
-              dataIndex: 'trainee',
+              title: 'Seminar',
+              dataIndex: 'seminar',
               sorter: true,
-              key: 'ama',
-              render: (trainee ) => (
-                  <Link to={"/trainee/" + trainee.key}>{trainee.ama}</Link>
-              )
-            }, {
-              title: 'Full Name',
-              dataIndex: 'trainee',
-              sorter: true,
-              key: 'name',
-              render: (trainee) => (
-                  <Link to={"/trainee/" + trainee.key}>{trainee.surname} {trainee.name}</Link>
+              key: 'seminar',
+              render: (seminar) => (
+                  <Link to={"/seminar/" + seminar.key}>{seminar.name}</Link>
               )
             },{
               title: 'Contractor',

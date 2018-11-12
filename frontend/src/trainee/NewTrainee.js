@@ -162,11 +162,13 @@ class NewTrainee extends Component {
                                 size="large"
                                 name="cardType"
                                 autoComplete="off"
-                                onChange={(value) => this.handleSelectChange(value, 'cardType')} >  
+                                defaultValue="NO_CARD"
+                                onChange={(value) => this.handleSelectChange(value, 'cardType')} >
                                     <Option key="RED">RED</Option>
                                     <Option key="GREEN">GREEN</Option>
                                     <Option key="YELLOW">YELLOW</Option>
-                            </Select>     
+                                    <Option key="NO_CARD">NO CARD</Option>
+                            </Select>
                         </FormItem>
 
                         <FormItem label="Card Status" required={true}>
@@ -174,6 +176,7 @@ class NewTrainee extends Component {
                                 size="large"
                                 name="cardStatus"
                                 autoComplete="off"
+                                defaultValue="PENDING"
                                 onChange={(value) => this.handleSelectChange(value, 'cardStatus')} >  
                                     <Option key="DELIVERED">DELIVERED</Option>
                                     <Option key="PENDING">PENDING</Option>

@@ -38,40 +38,47 @@ class TraineeList extends Component {
               sorter: true,
               key: 'nationality',
             }, {
-              title: 'Cart Type',
+              title: 'Card Type',
               dataIndex: 'cardType',
               sorter: true,
               key: 'cardType',
+                render: (cardType) => (
+                    humanize(cardType)
+                )
             }, {
-              title: 'Cart Status',
+              title: 'Card Status',
               dataIndex: 'cardStatus',
               sorter: true,
               key: 'cardStatus',
+                render: (cardStatus) => (
+                    humanize(cardStatus)
+                )
+            }, {
+                title: 'Document Type',
+                dataIndex: 'docType',
+                sorter: true,
+                key: 'docType',
+                render: (docType) => (
+                    humanize(docType)
+                )
             }, {
               title: 'Document Code',
               dataIndex: 'documentCode',
               sorter: true,
               key: 'documentCode',
             }, {
-              title: 'Created',
-              dataIndex: 'createdBy',
-              sorter: true,
-              key: 'created',
-              render: (created, trainee) => {
-                return(
-                    <span>{trainee.createdBy} at {formatDate(trainee.createdAt)}</span>
-                 )
-              }
-            }, {
-              title: 'Updated',
-              dataIndex: 'updatedBy',
-              sorter: true,
-              key: 'updatedBy',
-              render: (updated, trainee) => {
-                return(
-                    <span>{trainee.updatedBy} at {formatDate(trainee.updatedAt)}</span>
-                  )
-              }
+                title: 'Image Uploaded',
+                dataIndex: 'imageLocation',
+                sorter: true,
+                key: 'imageLocation',
+                render: (imageLocation) => {
+                    if (imageLocation != null)
+                        return (<div style={{ color: '#008000' }}>Yes</div>)
+                    else
+                        return (<div style={{ color: '#FF0000' }}>No</div>)
+
+                }
+
             }, {
               key: 'delete',
               render: (trainee) => {
