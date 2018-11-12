@@ -9,6 +9,7 @@ import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,15 +54,18 @@ public class Trainee extends UserDateAudit {
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
-  private CardType cardType;
+  @NotNull
+  private CardType cardType = CardType.NO_CARD;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
-  private DocType docType;
+  @NotNull
+  private DocType docType = DocType.NONE;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
-  private CardStatus cardStatus;
+  @NotNull
+  private CardStatus cardStatus = CardStatus.PENDING;
 
   private String imageLocation;
 

@@ -5,7 +5,6 @@ import com.vetx.starter.repository.TraineeRepository;
 import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.service.TraineeImageService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,15 +38,19 @@ public class TraineeImageController {
     
     @PostMapping(value="/traineeImageUpload")
     //@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public ResponseEntity handleImageUpload(@RequestParam("traineeId") Long traineeId, @RequestParam("image") MultipartFile file) throws IOException {
+    public ResponseEntity<ApiResponse> handleImageUpload(@RequestParam("traineeId") Long traineeId, @RequestParam("image") MultipartFile file) throws IOException {
         Optional<Trainee> trainee = traineeRepository.findById((traineeId));
         if(!trainee.isPresent()) {
-            return new ResponseEntity(new ApiResponse(false, "Create Trainee first"),
+            return new ResponseEntity<>(new ApiResponse(false, "Create Trainee first"),
                 HttpStatus.BAD_REQUEST);
         }
+      if (!file.getOriginalFilename().endsWith("jpg") && !file.getOriginalFilename().endsWith("png") && !file.getOriginalFilename().endsWith("jpeg") && !file.getOriginalFilename().endsWith("gif")) {
+        return new ResponseEntity<>(new ApiResponse(false, "Formats supported: png, jpg and gif"),
+            HttpStatus.BAD_REQUEST);
+      }
 
-        ApiResponse apiResponse = traineeImageService.uploadImage(trainee.get(), file);
-        return new ResponseEntity(apiResponse,HttpStatus.OK);      
+      ApiResponse apiResponse = traineeImageService.uploadImage(trainee.get(), file);
+      return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
 }
 

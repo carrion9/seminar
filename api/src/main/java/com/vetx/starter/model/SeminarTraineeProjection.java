@@ -13,4 +13,5 @@ public interface SeminarTraineeProjection {
   Double getGrade();
   boolean isPassed();
   Specialty getSpecialty();
+  Seminar getSeminar();
 }

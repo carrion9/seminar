@@ -5,8 +5,7 @@ import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.repository.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
@@ -90,7 +89,12 @@ public class ExcelImporter {
                 contractorActivity = contractorActivity.split(":")[1].trim();
               } else if (cell.getColumnIndex() == 6)     //ΑΦΜ
               {
-                contractorAfm = cell.getStringCellValue().trim();
+                if(cell.getCellType() == CellType.NUMERIC) {
+                  contractorAfm = NumberToTextConverter.toText(cell.getNumericCellValue());
+                }
+                else {
+                  contractorAfm = cell.getStringCellValue().trim();
+                }
               }
               break;
             case 3:
@@ -110,10 +114,6 @@ public class ExcelImporter {
                   }
                   Specialty specialty = specialtyRepository.findByName(cell.getStringCellValue().trim()).get();
                   specialtyList.put(cell.getColumnIndex(), specialty);
-                  if(!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialty)) {
-                    SeminarSpecialty seminarSpecialty = SeminarSpecialty.builder().seminar(seminar).specialty(specialty).build();
-                    seminarSpecialtyRepository.save(seminarSpecialty);
-                  }
                 }
               }
               break;
@@ -193,6 +193,10 @@ public class ExcelImporter {
                   if (IndexedColors.AUTOMATIC.getIndex() != specialtyCellStyle.getFillForegroundColor()) {
                     //TODO Import to seminarTraineeSpecialties
                     seminarTraineeList.add(SeminarTrainee.builder().specialty(specialtyList.get(cell.getColumnIndex())).build());
+                    if(!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialtyList.get(cell.getColumnIndex()))) {
+                      SeminarSpecialty seminarSpecialty = SeminarSpecialty.builder().seminar(seminar).specialty(specialtyList.get(cell.getColumnIndex())).build();
+                      seminarSpecialtyRepository.save(seminarSpecialty);
+                    }
                   }
 
               }
