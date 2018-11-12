@@ -141,7 +141,7 @@ class NewTrainee extends Component {
                                 placeholder="Trainee's full name"
                                 onChange={(event) => this.handleInputChange(event)} />    
                         </FormItem>
-                        <FormItem label="Father's ame" required={true}>
+                        <FormItem label="Father's Name" required={true}>
                             <Input 
                                 size="large"
                                 name="fathersName"
