@@ -420,7 +420,7 @@ class Seminar extends Component {
             return
         }
         const seminarEdit = this.state.seminar;
-        seminarEdit.date = date;
+        seminarEdit.date = date.format('YYYY-MM-DD');
 
         this.setState({
             seminar: seminarEdit
