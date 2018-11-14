@@ -55,4 +55,15 @@ public class Seminar extends UserDateAudit {
       orphanRemoval = true
   )
   private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
+
+  @Builder.Default
+  @EqualsAndHashCode.Exclude
+  @OneToMany(
+      mappedBy = "seminar",
+      targetEntity = SeminarContractor.class,
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true
+  )
+  private Set<SeminarContractor> seminarContractors = new HashSet<>();
 }

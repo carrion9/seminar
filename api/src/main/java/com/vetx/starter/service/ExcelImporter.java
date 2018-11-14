@@ -26,14 +26,16 @@ public class ExcelImporter {
   private ContractorRepository contractorRepository;
   private SpecialtyRepository specialtyRepository;
   private SeminarSpecialtyRepository seminarSpecialtyRepository;
+  private SeminarContractorRepository seminarContractorRepository;
 
   @Autowired
-  public ExcelImporter(TraineeRepository traineeRepository, SeminarTraineeRepository seminarTraineeRepository, ContractorRepository contractorRepository, SpecialtyRepository specialtyRepository, SeminarSpecialtyRepository seminarSpecialtyRepository) {
+  public ExcelImporter(TraineeRepository traineeRepository, SeminarTraineeRepository seminarTraineeRepository, ContractorRepository contractorRepository, SpecialtyRepository specialtyRepository, SeminarSpecialtyRepository seminarSpecialtyRepository, SeminarContractorRepository seminarContractorRepository) {
     this.traineeRepository = traineeRepository;
     this.seminarTraineeRepository = seminarTraineeRepository;
     this.contractorRepository = contractorRepository;
     this.specialtyRepository = specialtyRepository;
     this.seminarSpecialtyRepository = seminarSpecialtyRepository;
+    this.seminarContractorRepository = seminarContractorRepository;
   }
 
   public ApiResponse importExcel(Seminar seminar, byte[] uploadedExcelFile, String originalFileName) throws IOException {
@@ -249,6 +251,11 @@ public class ExcelImporter {
       traineeOptional.get().setNationality(trainee.getNationality());
       traineeOptional.get().setSurname(trainee.getSurname());
       trainee = traineeRepository.save(traineeOptional.get());
+    }
+
+    Optional<SeminarContractor> seminarContractorOptional = seminarContractorRepository.findBySeminarAndContractor(seminar, contractor);
+    if(!seminarContractorOptional.isPresent()) {
+      seminarContractorRepository.save(SeminarContractor.builder().contractor(contractor).seminar(seminar).build());
     }
 
     Contractor finalContractor = contractor;

@@ -100,7 +100,7 @@ export function updateItem(item) {
 
 export function updateCost(key, cost) {
     return request({
-        url: API_BASE_URL + "/seminarTrainees/" + key,
+        url: API_BASE_URL + "/seminarContractors/" + key,
         method: 'PATCH',
         body: `{
             "cost": ${cost}
@@ -160,6 +160,18 @@ export function insertSeminarSpecialty(seminarId, specialtyId) {
         body: `{
             "seminar":"${API_BASE_URL}/seminars/${seminarId}",
             "specialty":"${API_BASE_URL}/specialties/${specialtyId}"
+        }`
+    });
+}
+
+export function insertSeminarContractor(seminarId, contractorId) {
+    return request({
+        url: API_BASE_URL + '/seminarContractors',
+        method: 'POST',
+        body: `{
+            "cost": 0.0,
+            "seminar":"${API_BASE_URL}/seminars/${seminarId}",
+            "contractor":"${API_BASE_URL}/contractors/${contractorId}"
         }`
     });
 }

@@ -25,31 +25,8 @@ public interface SeminarTraineeRepository extends JpaRepository<SeminarTrainee, 
 
   List<SeminarTrainee> findDistinctBySeminar(Seminar seminar);
 
+  Long countDistinctTraineeBySeminarAndContractor(Seminar seminar, Contractor contractor);
+
   Optional<SeminarTrainee> findBySeminarAndContractorAndTraineeAndSpecialty(Seminar seminar, Contractor contractor, Trainee trainee, Specialty specialty);
-
-  default SeminarTrainee save(SeminarTrainee seminarTrainee) {
-    List<SeminarTrainee> seminarTrainees = findByTraineeAndSeminar(seminarTrainee.getTrainee(), seminarTrainee.getSeminar());
-    for (SeminarTrainee sameTraineeInSeminar: seminarTrainees) {
-      sameTraineeInSeminar.setCost(seminarTrainee.getCost());
-      saveAndFlush(sameTraineeInSeminar);
-    }
-    if (seminarTrainee.isPassed()) {
-      TraineeSpecialty traineeSpecialty = TraineeSpecialty
-          .builder()
-          .specialty(seminarTrainee.getSpecialty())
-          .trainee(seminarTrainee.getTrainee())
-          .grade(seminarTrainee.getGrade())
-          .build();
-      // somehow call traineeSpecialtyRepository... ill have to make my own implementation it seems
-    }
-    return saveAndFlush(seminarTrainee);
-  }
-
-  List<SeminarTrainee> findDistinctTraineeBySeminar(Seminar seminar);
-
-  default Double getTotalCostBySeminar(Seminar seminar) {
-    List<SeminarTrainee> perTainee = findDistinctTraineeBySeminar(seminar);
-    return perTainee.stream().mapToDouble(SeminarTrainee::getCost).sum();
-  }
 
 }

@@ -5,4 +5,5 @@ public enum CardStatus {
   PRINTED,
   PENDING,
   DELIVERED,
+  NO_CARD
 }

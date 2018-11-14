@@ -22,6 +22,8 @@ public interface SeminarProjection {
 
   Set<SeminarSpecialtyProjection> getSeminarSpecialties();
 
+  Set<SeminarContractorProjection> getSeminarContractors();
+
   String getCreatedBy();
 
   String getUpdatedBy();
@@ -30,7 +32,7 @@ public interface SeminarProjection {
 
   Instant getUpdatedAt();
 
-  @Value("#{@seminarTraineeRepository.getTotalCostBySeminar(target)}")
+  @Value("#{@seminarContractorRepository.getTotalCostBySeminar(target)}")
   Double getCost();
 
 }

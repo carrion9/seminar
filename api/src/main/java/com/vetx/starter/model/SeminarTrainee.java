@@ -27,10 +27,6 @@ public class SeminarTrainee extends UserDateAudit {
 
   @PositiveOrZero
   @Builder.Default
-  private Double cost = 60.0;
-
-  @PositiveOrZero
-  @Builder.Default
   private  Double grade = 0.0;
 
   @Builder.Default

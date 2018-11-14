@@ -55,17 +55,20 @@ public class Trainee extends UserDateAudit {
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
   @NotNull
+  @Builder.Default
   private CardType cardType = CardType.NO_CARD;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
   @NotNull
+  @Builder.Default
   private DocType docType = DocType.NONE;
 
   @Enumerated(EnumType.STRING)
   @Column(length = 60)
   @NotNull
-  private CardStatus cardStatus = CardStatus.PENDING;
+  @Builder.Default
+  private CardStatus cardStatus = CardStatus.NO_CARD;
 
   private String imageLocation;
 
