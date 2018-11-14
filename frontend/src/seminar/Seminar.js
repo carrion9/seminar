@@ -13,11 +13,12 @@ import {
     Row,
     DatePicker,
     Popover,
-    Upload
+    Upload,
+    Popconfirm
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { getSeminarById, deleteItem, updateItem, updateCost, updateGrade, updatePassed, insertItem, getAttendance, upload, getTraineeByAMA, getContractorByAFM, insertSeminarTraineeContractorSpecialty, getSpecialtyByName, insertSeminarSpecialty } from '../util/APIUtils';
-import { formatDate,humanize } from '../util/Helpers';
+import { formatDate,humanize, reverseDate } from '../util/Helpers';
 import { withRouter } from 'react-router-dom';
 import LoadingIndicator from '../common/LoadingIndicator';
 import moment from 'moment';
@@ -45,6 +46,15 @@ class Seminar extends Component {
                         <Button type='primary' onClick={this.handleAttendance.bind(this, key)} >
                             Attendances
                         </Button>
+                  )
+              }
+            }, {
+              key: 'delete',
+              render: (trainee) => {
+                  return (
+                      <Popconfirm title="Are you sure delete this specialty?" onConfirm={this.confirm.bind(this, trainee, "specialties")} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                        <Button type="danger" >Delete</Button>
+                      </Popconfirm>
                   )
               }
             }],
@@ -85,9 +95,7 @@ class Seminar extends Component {
                         style={{ width: 75 }}
                         name={record.key} 
                         defaultValue={record.grade} 
-                        onPressEnter={this.updateGrade.bind(this)}
-                        onBlur={this.updateGrade.bind(this)}
-                        onChange={(event) => this.handleGradeChange(event)}/>
+                        onChange={(event) => this.updateGrade(event)}/>
                 )
             },{
               title: 'Passed',
@@ -116,6 +124,15 @@ class Seminar extends Component {
                         onBlur={this.updateCost.bind(this)}
                         onChange={(event) => this.handleCostChange(event)}/>
                 )
+            }, {
+              key: 'delete',
+              render: (trainee) => {
+                  return (
+                      <Popconfirm title="Are you sure delete this record?" onConfirm={this.confirm.bind(this, trainee, "trainSpec")} onCancel={this.cancel.bind(this)} okText="Yes" cancelText="No">
+                        <Button type="danger" >Delete</Button>
+                      </Popconfirm>
+                  )
+              }
             }], 
             isLoading: false,
             seminar: {},
@@ -142,23 +159,36 @@ class Seminar extends Component {
     }
 
 
-    confirm(trainee) {
-        this.remove.bind(this, trainee);
-        this.remove(trainee);
-        message.success('Removed');
+    confirm(record, type) {
+        this.remove.bind(this, record, type);
+        this.remove(record, type);
     }
 
     cancel(e) {
         message.error('Canceled remove');
     }
 
-    remove(trainee){
+    remove(record, type){
         let promise;
 
-        promise = deleteItem(trainee);
-
-        const trainees = this.state.trainees.filter(i => i.key !== trainee.key)
-        this.setState({trainees})
+        promise = deleteItem(record);
+        promise
+        .then(response => {
+           notification.success({
+                message: 'Seminar App',
+                description: "Removed!",
+            });
+            const records = this.state[type].filter(i => i.key !== record.key)
+            this.setState({
+                [type]: records
+            })
+        })
+        .catch(error => {
+            notification.error({
+                message: 'Seminar App',
+                description: error.message || 'Sorry! Something went wrong. Please try again!'
+            });
+        });
     }
 
     update(){
@@ -190,7 +220,7 @@ class Seminar extends Component {
         });
     }
 
-    updateCost(){
+    updateCost(event){
         if (!this.state.costEdit)
             return
         this.setState({
@@ -221,12 +251,18 @@ class Seminar extends Component {
         });
     }
 
-    updateGrade(){
-        if (!this.state.gradeEdit)
+    updateGrade(event){
+        if (!event)
             return
+        const target = event.target;
+        const inputKey = target.name;        
+        let inputValue = target.value;
+        while (inputValue.startsWith("0") && inputValue.length > 1)
+            inputValue = inputValue.substring(1);
+
         let promise;
 
-        promise = updateGrade(this.state.gradeEdit.key, this.state.gradeEdit.grade);
+        promise = updateGrade(inputKey, inputValue);
         promise
         .then(response => {
             notification.success({
@@ -379,12 +415,12 @@ class Seminar extends Component {
     }
 
 
-    handleDateChange(event, validationFun) {
-        if (event == null){
+    handleDateChange(dateString, validationFun) {
+        if (!dateString){
             return
         }
         const seminarEdit = this.state.seminar;
-        seminarEdit.date = event._i;
+        seminarEdit.date = reverseDate(dateString);
 
         this.setState({
             seminar: seminarEdit
@@ -617,7 +653,7 @@ class Seminar extends Component {
                                         defaultValue={moment(formatDate(this.state.seminar.date), 'DD/MM/YYYY')}
                                         format='DD/MM/YYYY'
                                         name="date"
-                                        onChange={(event) => this.handleDateChange(event)}
+                                        onChange={(date, dateString) => this.handleDateChange(dateString)}
                                     />
                                 </FormItem>
                             </Col>

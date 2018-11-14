@@ -30,10 +30,10 @@ class NewTrainee extends Component {
                 value: ''
             },
             cardType: {
-                value: ''
+                value: 'NO_CARD'
             },
             cardStatus: {
-                value: ''
+                value: 'NO_CARD'
             },
             documentCode: {
                 value: ''
@@ -164,10 +164,10 @@ class NewTrainee extends Component {
                                 autoComplete="off"
                                 defaultValue="NO_CARD"
                                 onChange={(value) => this.handleSelectChange(value, 'cardType')} >
-                                    <Option key="RED">RED</Option>
-                                    <Option key="GREEN">GREEN</Option>
-                                    <Option key="YELLOW">YELLOW</Option>
-                                    <Option key="NO_CARD">NO CARD</Option>
+                                    <Option key="NO_CARD">No card</Option>
+                                    <Option key="GREEN">Green</Option>
+                                    <Option key="YELLOW">Yellow</Option> 
+                                    <Option key="RED">Red</Option>
                             </Select>
                         </FormItem>
 
@@ -176,11 +176,12 @@ class NewTrainee extends Component {
                                 size="large"
                                 name="cardStatus"
                                 autoComplete="off"
-                                defaultValue="PENDING"
-                                onChange={(value) => this.handleSelectChange(value, 'cardStatus')} >  
-                                    <Option key="DELIVERED">DELIVERED</Option>
-                                    <Option key="PENDING">PENDING</Option>
-                                    <Option key="PRINTED">PRINTED</Option>
+                                defaultValue="NO_CARD"
+                                onChange={(value) => this.handleSelectChange(value, 'cardStatus')} >   
+                                    <Option key="NO_CARD">No card</Option>
+                                    <Option key="PENDING">Pending</Option>
+                                    <Option key="PRINTED">Printed</Option>
+                                    <Option key="DELIVERED">Delivered</Option>
                             </Select>    
                         </FormItem>
                         <FormItem label="Document Code" required={true}>
@@ -197,10 +198,10 @@ class NewTrainee extends Component {
                                 name="docType"
                                 autoComplete="off"
                                 onChange={(value) => this.handleSelectChange(value, 'docType')} >  
-                                    <Option key="NONE">NONE</Option>
-                                    <Option key="DRIVING_LICENSE">DRIVING LICENSE</Option>
-                                    <Option key="PASSPORT">PASSPORT</Option>
-                                    <Option key="IDENTITY">IDENTITY</Option>
+                                    <Option key="NONE">None</Option>
+                                    <Option key="IDENTITY">Identity</Option>
+                                    <Option key="DRIVING_LICENSE">Driving License</Option>
+                                    <Option key="PASSPORT">Passport</Option>
                             </Select>  
                         </FormItem>
 

@@ -17,10 +17,15 @@ export function formatHumanDate(dateString) {
 
 export function formatDate(dateString) {
     const date = new Date(dateString);
-    const month = date.getMonth();
+    const month = date.getMonth()+1;
     const year = date.getFullYear();
 
-    return date.getDate() + '/' +month + '/' + year
+    return date.getDate() + '/' +month + '/' + year;
+}
+
+export function reverseDate(dateString) {
+    const date = dateString.split("/");
+    return date[2] + '-' + date[1] + '-' + date[0];
 }
   
 export function formatDateTime(dateTimeString) {

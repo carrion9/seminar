@@ -81,8 +81,11 @@ const downloadFile = (options) => {
 };
 
 export function deleteItem(item) {
+    let url = item._links.self.href;
+    if (url.endsWith("{?projection}"))
+        url = url.substring(0, url.length - 13)
     return request({
-        url: item._links.self.href,
+        url: url,
         method: 'DELETE'
     });
 }
