@@ -415,12 +415,12 @@ class Seminar extends Component {
     }
 
 
-    handleDateChange(dateString, validationFun) {
-        if (!dateString){
+    handleDateChange(date) {
+        if (date){
             return
         }
         const seminarEdit = this.state.seminar;
-        seminarEdit.date = reverseDate(dateString);
+        seminarEdit.date = date;
 
         this.setState({
             seminar: seminarEdit
@@ -653,7 +653,7 @@ class Seminar extends Component {
                                         defaultValue={moment(formatDate(this.state.seminar.date), 'DD/MM/YYYY')}
                                         format='DD/MM/YYYY'
                                         name="date"
-                                        onChange={(date, dateString) => this.handleDateChange(dateString)}
+                                        onChange={(date) => this.handleDateChange(date)}
                                     />
                                 </FormItem>
                             </Col>
