@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,7 +71,7 @@ public class ExcelImporter {
 
       for (Row row : datatypeSheet) {
         traineeAma = null;
-        List<SeminarTrainee> seminarTraineeList = new ArrayList<>();
+        List<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialtyList = new ArrayList<>();
         for (Cell cell : row) {
           switch (cell.getRowIndex()) {
             case 0:
@@ -194,7 +193,7 @@ public class ExcelImporter {
                   CellStyle specialtyCellStyle = datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
                   if (IndexedColors.AUTOMATIC.getIndex() != specialtyCellStyle.getFillForegroundColor()) {
                     //TODO Import to seminarTraineeSpecialties
-                    seminarTraineeList.add(SeminarTrainee.builder().specialty(specialtyList.get(cell.getColumnIndex())).build());
+                    seminarContractorTraineeSpecialtyList.add(SeminarContractorTraineeSpecialty.builder().specialty(specialtyList.get(cell.getColumnIndex())).build());
                     if(!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialtyList.get(cell.getColumnIndex()))) {
                       SeminarSpecialty seminarSpecialty = SeminarSpecialty.builder().seminar(seminar).specialty(specialtyList.get(cell.getColumnIndex())).build();
                       seminarSpecialtyRepository.save(seminarSpecialty);
@@ -213,7 +212,7 @@ public class ExcelImporter {
           contractor = Contractor.builder().activity(contractorActivity).address(contractorAddress).afm(contractorAfm).doy(contractorDOY).name(contractorName)
               .email(contractorEmail).representativeName(contractorRepresentativeName).phoneNumber(contractorPhoneNumber).build();
           //Save Contractor and Trainee to database (Update/override if already exists)
-          saveContractorAndTrainee(contractor, trainee, seminarTraineeList, seminar);
+          saveContractorAndTrainee(contractor, trainee, seminarContractorTraineeSpecialtyList, seminar);
         }
       }
     } catch (IOException e) {
@@ -223,7 +222,7 @@ public class ExcelImporter {
     return new ApiResponse(true, "File uploaded succesfully");
   }
 
-  private void saveContractorAndTrainee(Contractor contractor, Trainee trainee, List<SeminarTrainee> seminarTraineeList, Seminar seminar) {
+  private void saveContractorAndTrainee(Contractor contractor, Trainee trainee, List<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialtyList, Seminar seminar) {
     // Save Contractor to repo
     Optional<Contractor> contractorOptional = contractorRepository.findByAfm(contractor.getAfm());
     if (!contractorOptional.isPresent()) {
@@ -261,10 +260,10 @@ public class ExcelImporter {
     Contractor finalContractor = contractor;
     Trainee finalTrainee = trainee;
 
-    seminarTraineeList.forEach(seminarTrainee -> {
-      Optional<SeminarTrainee> seminarTraineeOptional = seminarTraineeRepository.findBySeminarAndContractorAndTraineeAndSpecialty(seminar, finalContractor, finalTrainee, seminarTrainee.getSpecialty());
+    seminarContractorTraineeSpecialtyList.forEach(seminarTrainee -> {
+      Optional<SeminarContractorTraineeSpecialty> seminarTraineeOptional = seminarTraineeRepository.findBySeminarAndContractorAndTraineeAndSpecialty(seminar, finalContractor, finalTrainee, seminarTrainee.getSpecialty());
       if (!seminarTraineeOptional.isPresent()) {
-        seminarTrainee.setContractor(finalContractor);
+        seminarTrainee.setSeminarContractor(finalContractor);
         seminarTrainee.setTrainee(finalTrainee);
         seminarTrainee.setSeminar(seminar);
         seminarTraineeRepository.save(seminarTrainee);

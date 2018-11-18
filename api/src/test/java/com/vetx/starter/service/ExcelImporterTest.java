@@ -70,10 +70,10 @@ public class ExcelImporterTest {
 
     //Validate Contractor
 
-    List<SeminarTrainee> seminarTrainees = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
+    List<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialties = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
 
     //Validate seminarTrainee
-    assertEquals(6, seminarTrainees.size());
+    assertEquals(6, seminarContractorTraineeSpecialties.size());
 
 
     // Trainee No2
@@ -86,10 +86,10 @@ public class ExcelImporterTest {
 
     //Validate Contractor
 
-    seminarTrainees = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
+    seminarContractorTraineeSpecialties = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
 
     //Validate seminarTrainee
-    assertEquals(6, seminarTrainees.size());
+    assertEquals(6, seminarContractorTraineeSpecialties.size());
 
     // Trainee No3
     trainee = traineeRepository.findByAma("1987983");
@@ -101,10 +101,10 @@ public class ExcelImporterTest {
 
     //Validate Contractor
 
-    seminarTrainees = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
+    seminarContractorTraineeSpecialties = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
 
     //Validate seminarTrainee
-    assertEquals(7, seminarTrainees.size());
+    assertEquals(7, seminarContractorTraineeSpecialties.size());
 
     // Trainee No4
     trainee = traineeRepository.findByAma("9833521");
@@ -116,10 +116,10 @@ public class ExcelImporterTest {
 
     //Validate Contractor
 
-    seminarTrainees = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
+    seminarContractorTraineeSpecialties = seminarTraineeRepository.findByTraineeAndSeminar(trainee.get(), seminar);
 
     //Validate seminarTrainee
-    assertEquals(6, seminarTrainees.size());
+    assertEquals(6, seminarContractorTraineeSpecialties.size());
 
 
     assertEquals("ΑΛΕΞΙΟΥ", trainee.get().getSurname());

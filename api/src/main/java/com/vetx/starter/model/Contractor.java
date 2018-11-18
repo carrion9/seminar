@@ -52,18 +52,7 @@ public class Contractor extends UserDateAudit {
 
   @EqualsAndHashCode.Exclude
   @OneToMany(
-      mappedBy = "contractor",
-      targetEntity = SeminarTrainee.class,
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true
-  )
-  @Builder.Default
-  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
-
-  @EqualsAndHashCode.Exclude
-  @OneToMany(
-      mappedBy = "contractor",
+      mappedBy = "seminarContractor",
       targetEntity = SeminarContractor.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.LAZY,

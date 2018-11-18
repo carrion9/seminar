@@ -33,28 +33,16 @@ public class Seminar extends UserDateAudit {
   @NotBlank
   @Column(unique = true)
   private String name;
-
+  
   @Builder.Default
   @EqualsAndHashCode.Exclude
-  @OneToMany(
+  @ManyToMany(
       mappedBy = "seminar",
-      targetEntity = SeminarTrainee.class,
-      cascade = CascadeType.ALL,
+      targetEntity = Specialty.class,
       fetch = FetchType.LAZY,
-      orphanRemoval = true
+      cascade = CascadeType.ALL
   )
-  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
-
-  @Builder.Default
-  @EqualsAndHashCode.Exclude
-  @OneToMany(
-      mappedBy = "seminar",
-      targetEntity = SeminarSpecialty.class,
-      fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL,
-      orphanRemoval = true
-  )
-  private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
+  private Set<Specialty> specialties = new HashSet<>();
 
   @Builder.Default
   @EqualsAndHashCode.Exclude

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Projection(name = "seminarProjection", types = Seminar.class)
-public interface SeminarProjection {
+public interface SeminarWithCost {
 
   Long getKey();
 
@@ -18,11 +18,9 @@ public interface SeminarProjection {
 
   String getName();
 
-  Set<SeminarTraineeProjection> getSeminarTrainees();
+  Set<Specialty> getSpecialties();
 
-  Set<SeminarSpecialtyProjection> getSeminarSpecialties();
-
-  Set<SeminarContractorProjection> getSeminarContractors();
+  Set<SeminarContractorWithSuggestedCostAndNumOfTrainees> getSeminarContractors();
 
   String getCreatedBy();
 

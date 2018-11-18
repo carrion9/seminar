@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -23,6 +25,17 @@ public class SeminarContractor {
   @Builder.Default
   @NotNull
   private Double cost = 0.0;
+
+  @Builder.Default
+  @EqualsAndHashCode.Exclude
+  @OneToMany(
+      mappedBy = "seminarContractor",
+      targetEntity = SeminarContractorTraineeSpecialty.class,
+      cascade = CascadeType.ALL,
+      fetch = FetchType.LAZY,
+      orphanRemoval = true
+  )
+  private Set<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialties = new HashSet<>();
 
   @ManyToOne
   @JoinColumn(name = "contractor_id")

@@ -2,7 +2,7 @@ package com.vetx.starter.service;
 
 import com.vetx.starter.model.Contractor;
 import com.vetx.starter.model.Seminar;
-import com.vetx.starter.model.SeminarTrainee;
+import com.vetx.starter.model.SeminarContractorTraineeSpecialty;
 import com.vetx.starter.model.Specialty;
 import com.vetx.starter.repository.SeminarTraineeRepository;
 import org.apache.poi.xwpf.usermodel.*;
@@ -54,10 +54,10 @@ public class AttendanceDocService {
 
       for (Contractor contractor : contractors) {
 
-        List<SeminarTrainee> seminarTrainees = seminarTraineeRepository.findAllBySeminarAndContractorAndSpecialty(seminar, contractor, specialty);
+        List<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialties = seminarTraineeRepository.findAllBySeminarAndContractorAndSpecialty(seminar, contractor, specialty);
 
         // Create a new table with 6 rows and 3 columns
-        int nRows = seminarTrainees.size() + 1; // number of trainees per contractor in current seminar
+        int nRows = seminarContractorTraineeSpecialties.size() + 1; // number of trainees per seminarContractor in current seminar
         int nCols = 6;
 
         XWPFParagraph paragraph = doc.createParagraph();
@@ -143,19 +143,19 @@ public class AttendanceDocService {
                   break;
                 case 1:
                   cell.setWidth("23.00%");
-                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getSurname());
+                  rh.setText(seminarContractorTraineeSpecialties.get(rowCt-1).getTrainee().getSurname());
                   break;
                 case 2:
                   cell.setWidth("16.00%");
-                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getName());
+                  rh.setText(seminarContractorTraineeSpecialties.get(rowCt-1).getTrainee().getName());
                   break;
                 case 3:
                   cell.setWidth("16.00%");
-                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getFathersName());
+                  rh.setText(seminarContractorTraineeSpecialties.get(rowCt-1).getTrainee().getFathersName());
                   break;
                 case 4:
                   cell.setWidth("16.00%");
-                  rh.setText(seminarTrainees.get(rowCt-1).getTrainee().getDocumentCode());
+                  rh.setText(seminarContractorTraineeSpecialties.get(rowCt-1).getTrainee().getDocumentCode());
                   break;
                 default:
                   cell.setWidth("24.00%");

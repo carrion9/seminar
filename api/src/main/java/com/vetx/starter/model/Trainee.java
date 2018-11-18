@@ -1,21 +1,16 @@
 package com.vetx.starter.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.awt.Image;
 
 @Data
 @Entity
@@ -76,21 +71,10 @@ public class Trainee extends UserDateAudit {
   @Builder.Default
   @OneToMany(
       mappedBy = "trainee",
-      targetEntity = SeminarTrainee.class,
+      targetEntity = SeminarContractorTraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.LAZY,
       orphanRemoval = true
   )
-  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
-
-  @EqualsAndHashCode.Exclude
-  @Builder.Default
-  @OneToMany(
-      mappedBy = "trainee",
-      targetEntity = TraineeSpecialty.class,
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true
-  )
-  private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
+  private Set<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialties = new HashSet<>();
 }

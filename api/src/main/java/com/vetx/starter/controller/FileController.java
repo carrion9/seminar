@@ -1,7 +1,6 @@
 package com.vetx.starter.controller;
 
 import com.vetx.starter.model.Seminar;
-import com.vetx.starter.model.SeminarSpecialty;
 import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.repository.SeminarRepository;
 import com.vetx.starter.security.CurrentUser;
@@ -10,27 +9,16 @@ import com.vetx.starter.service.AttendanceDocService;
 import com.vetx.starter.service.ExcelImporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
-import javax.print.attribute.standard.MediaTray;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Date;
 import java.util.Optional;
 
 @Controller

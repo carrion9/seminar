@@ -26,34 +26,22 @@ public class Specialty extends UserDateAudit {
 
   @EqualsAndHashCode.Exclude
   @Builder.Default
-  @OneToMany(
+  @ManyToMany(
       mappedBy = "specialty",
-      targetEntity = SeminarSpecialty.class,
+      targetEntity = Seminar.class,
       cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true
+      fetch = FetchType.LAZY
   )
-  private Set<SeminarSpecialty> seminarSpecialties = new HashSet<>();
+  private Set<Seminar> seminars = new HashSet<>();
 
   @EqualsAndHashCode.Exclude
   @Builder.Default
   @OneToMany(
       mappedBy = "specialty",
-      targetEntity = TraineeSpecialty.class,
+      targetEntity = SeminarContractorTraineeSpecialty.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.LAZY,
       orphanRemoval = true
   )
-  private Set<TraineeSpecialty> traineeSpecialties = new HashSet<>();
-
-  @EqualsAndHashCode.Exclude
-  @Builder.Default
-  @OneToMany(
-      mappedBy = "specialty",
-      targetEntity = SeminarTrainee.class,
-      cascade = CascadeType.ALL,
-      fetch = FetchType.LAZY,
-      orphanRemoval = true
-  )
-  private Set<SeminarTrainee> seminarTrainees = new HashSet<>();
+  private Set<SeminarContractorTraineeSpecialty> seminarContractorTraineeSpecialties = new HashSet<>();
 }

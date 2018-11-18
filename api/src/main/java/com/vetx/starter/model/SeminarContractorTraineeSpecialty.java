@@ -18,8 +18,8 @@ import java.util.Set;
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames =
-    {"contractor_id", "seminar_id", "trainee_id", "specialty_id"})})
-public class SeminarTrainee extends UserDateAudit {
+    {"seminarContractor_id", "trainee_id", "specialty_id"})})
+public class SeminarContractorTraineeSpecialty extends UserDateAudit {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +33,8 @@ public class SeminarTrainee extends UserDateAudit {
   private boolean passed = false;
 
   @ManyToOne
-  @JoinColumn(name="contractor_id")
-  private Contractor contractor;
-
-  @ManyToOne
-  @JoinColumn(name="seminar_id")
-  private Seminar seminar;
+  @JoinColumn(name="seminarContractor_id")
+  private SeminarContractor seminarContractor;
 
   @ManyToOne
   @JoinColumn(name="trainee_id")

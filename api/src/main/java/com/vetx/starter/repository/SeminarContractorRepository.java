@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@RepositoryRestResource(excerptProjection = SeminarContractorProjection.class)
+@RepositoryRestResource(excerptProjection = SeminarContractorWithSuggestedCostAndNumOfTrainees.class)
 @CrossOrigin
 //@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 public interface SeminarContractorRepository extends JpaRepository<SeminarContractor, Long> {
@@ -18,7 +18,7 @@ public interface SeminarContractorRepository extends JpaRepository<SeminarContra
   List<SeminarContractor> findAllBySeminar(Seminar seminar);
 
   default Double getTotalCostBySeminar(Seminar seminar) {
-    List<SeminarContractor> seminarConrtactors = findAllBySeminar(seminar);
-    return seminarConrtactors.stream().mapToDouble(SeminarContractor::getCost).sum();
+    List<SeminarContractor> seminarContractors = findAllBySeminar(seminar);
+    return seminarContractors.stream().mapToDouble(SeminarContractor::getCost).sum();
   }
 }
