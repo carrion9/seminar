@@ -3,11 +3,12 @@ package com.vetx.starter.model;
 import lombok.*;
 import javax.persistence.*;
 
-@Entity
 @Data
+@Entity
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Builder
+@EqualsAndHashCode(callSuper = false)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames =
     {"specialty_id", "seminar_id"})})
 public class SeminarSpecialty {

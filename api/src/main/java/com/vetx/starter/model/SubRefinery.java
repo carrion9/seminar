@@ -3,41 +3,30 @@ package com.vetx.starter.model;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
 @Data
+@Entity
+@Builder
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Builder
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames =
-    {"contractor_id", "seminar_id"})})
-public class SeminarContractor {
+@EqualsAndHashCode(callSuper = false)
+public class SubRefinery {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long key;
 
-  @PositiveOrZero
-  @Builder.Default
-  @NotNull
-  private Double cost = 0.0;
-
-  @ManyToOne
-  @JoinColumn(name = "contractor_id")
-  private Contractor contractor;
-
-  @ManyToOne
-  @JoinColumn(name = "seminar_id")
-  private Seminar seminar;
+  @NotBlank
+  @Column(unique = true)
+  private String name;
 
   @Builder.Default
   @EqualsAndHashCode.Exclude
   @OneToMany(
-      mappedBy = "seminarContractor",
+      mappedBy = "subRefinery",
       targetEntity = SeminarContractorSubRefinery.class,
       cascade = CascadeType.ALL,
       fetch = FetchType.LAZY,

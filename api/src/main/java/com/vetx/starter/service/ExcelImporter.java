@@ -8,7 +8,6 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,15 +26,21 @@ public class ExcelImporter {
   private SpecialtyRepository specialtyRepository;
   private SeminarSpecialtyRepository seminarSpecialtyRepository;
   private SeminarContractorRepository seminarContractorRepository;
+  private SeminarContractorSubRefineryRepository seminarContractorSubRefineryRepository;
+  private SubRefineryRepository subRefineryRepository;
+
+  private Map<Integer, String> subRefineryNames = new HashMap<>();
 
   @Autowired
-  public ExcelImporter(TraineeRepository traineeRepository, SeminarTraineeRepository seminarTraineeRepository, ContractorRepository contractorRepository, SpecialtyRepository specialtyRepository, SeminarSpecialtyRepository seminarSpecialtyRepository, SeminarContractorRepository seminarContractorRepository) {
+  public ExcelImporter(TraineeRepository traineeRepository, SeminarTraineeRepository seminarTraineeRepository, ContractorRepository contractorRepository, SpecialtyRepository specialtyRepository, SeminarSpecialtyRepository seminarSpecialtyRepository, SeminarContractorRepository seminarContractorRepository, SeminarContractorSubRefineryRepository seminarContractorSubRefineryRepository, SubRefineryRepository subRefineryRepository) {
     this.traineeRepository = traineeRepository;
     this.seminarTraineeRepository = seminarTraineeRepository;
     this.contractorRepository = contractorRepository;
     this.specialtyRepository = specialtyRepository;
     this.seminarSpecialtyRepository = seminarSpecialtyRepository;
     this.seminarContractorRepository = seminarContractorRepository;
+    this.seminarContractorSubRefineryRepository = seminarContractorSubRefineryRepository;
+    this.subRefineryRepository = subRefineryRepository;
   }
 
   public ApiResponse importExcel(Seminar seminar, byte[] uploadedExcelFile, String originalFileName) throws IOException {
@@ -91,10 +96,9 @@ public class ExcelImporter {
                 contractorActivity = contractorActivity.split(":")[1].trim();
               } else if (cell.getColumnIndex() == 6)     //ΑΦΜ
               {
-                if(cell.getCellType() == CellType.NUMERIC) {
+                if (cell.getCellType() == CellType.NUMERIC) {
                   contractorAfm = NumberToTextConverter.toText(cell.getNumericCellValue());
-                }
-                else {
+                } else {
                   contractorAfm = cell.getStringCellValue().trim();
                 }
               }
@@ -136,8 +140,14 @@ public class ExcelImporter {
               break;
             case 6:
             case 7:
+              addSubRefineryIfSelected(datatypeSheet, cell);
+              break;
             case 8:
+              addSubRefineryIfSelected(datatypeSheet, cell);
+              break;
             case 9:
+              addSubRefineryIfSelected(datatypeSheet, cell);
+              break;
             case 10:
             case 11:
               //do nothing for now
@@ -195,7 +205,7 @@ public class ExcelImporter {
                   if (IndexedColors.AUTOMATIC.getIndex() != specialtyCellStyle.getFillForegroundColor()) {
                     //TODO Import to seminarTraineeSpecialties
                     seminarTraineeList.add(SeminarTrainee.builder().specialty(specialtyList.get(cell.getColumnIndex())).build());
-                    if(!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialtyList.get(cell.getColumnIndex()))) {
+                    if (!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialtyList.get(cell.getColumnIndex()))) {
                       SeminarSpecialty seminarSpecialty = SeminarSpecialty.builder().seminar(seminar).specialty(specialtyList.get(cell.getColumnIndex())).build();
                       seminarSpecialtyRepository.save(seminarSpecialty);
                     }
@@ -205,15 +215,19 @@ public class ExcelImporter {
               break;
           }
         }
+        if (row.getRowNum() == 11) {
+          contractor = Contractor.builder().activity(contractorActivity).address(contractorAddress).afm(contractorAfm).doy(contractorDOY).name(contractorName)
+              .email(contractorEmail).representativeName(contractorRepresentativeName).phoneNumber(contractorPhoneNumber).build();
+          //Save Contractor and Trainee to database (Update/override if already exists)
+          contractor = saveContractorRelatedEntities(contractor, seminar);
+        }
+
         //Build Trainne from excel
         if (traineeAma != null) {
           trainee = Trainee.builder().docType(docType).ama(traineeAma).documentCode(traineeDocumentCode)
               .name(traineeName).surname(traineeSurname).fathersName(traineeFathersName).nationality(traineeNationality).build();
-          //Build Contractor from excel
-          contractor = Contractor.builder().activity(contractorActivity).address(contractorAddress).afm(contractorAfm).doy(contractorDOY).name(contractorName)
-              .email(contractorEmail).representativeName(contractorRepresentativeName).phoneNumber(contractorPhoneNumber).build();
           //Save Contractor and Trainee to database (Update/override if already exists)
-          saveContractorAndTrainee(contractor, trainee, seminarTraineeList, seminar);
+          saveTraineeRelatedEntities(contractor, trainee, seminarTraineeList, seminar);
         }
       }
     } catch (IOException e) {
@@ -223,7 +237,19 @@ public class ExcelImporter {
     return new ApiResponse(true, "File uploaded succesfully");
   }
 
-  private void saveContractorAndTrainee(Contractor contractor, Trainee trainee, List<SeminarTrainee> seminarTraineeList, Seminar seminar) {
+  private void addSubRefineryIfSelected(Sheet datatypeSheet, Cell cell) {
+    if (cell.getColumnIndex() == 0) {
+      subRefineryNames.put(cell.getRowIndex(), cell.getStringCellValue().trim());
+    }
+    if (cell.getColumnIndex() == 3) {
+      CellStyle specialtyCellStyle = datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
+      if (IndexedColors.AUTOMATIC.getIndex() == specialtyCellStyle.getFillForegroundColor()) {
+        subRefineryNames.remove(cell.getRowIndex());
+      }
+    }
+  }
+
+  private Contractor saveContractorRelatedEntities(Contractor contractor, Seminar seminar) {
     // Save Contractor to repo
     Optional<Contractor> contractorOptional = contractorRepository.findByAfm(contractor.getAfm());
     if (!contractorOptional.isPresent()) {
@@ -239,6 +265,33 @@ public class ExcelImporter {
       contractor = contractorRepository.save(contractorOptional.get());
     }
 
+    Optional<SeminarContractor> seminarContractorOptional = seminarContractorRepository.findBySeminarAndContractor(seminar, contractor);
+    SeminarContractor seminarContractor;
+    if (!seminarContractorOptional.isPresent()) {
+      seminarContractor = seminarContractorRepository.save(SeminarContractor.builder().contractor(contractor).seminar(seminar).build());
+    } else {
+      seminarContractor = seminarContractorOptional.get();
+    }
+
+    subRefineryNames.forEach((subRefineryPosition, subRefineryName) -> {
+      Optional<SubRefinery> subRefineryOptional = subRefineryRepository.findByName(subRefineryName);
+      SeminarContractorSubRefinery seminarContractorSubRefinery;
+      if (subRefineryOptional.isPresent()) {
+        seminarContractorSubRefinery = SeminarContractorSubRefinery.builder().subRefinery(subRefineryOptional.get()).seminarContractor(seminarContractor).build();
+      } else {
+        SubRefinery subRefinery = SubRefinery.builder().name(subRefineryName).build();
+        subRefinery = subRefineryRepository.save(subRefinery);
+        seminarContractorSubRefinery = SeminarContractorSubRefinery.builder().subRefinery(subRefinery).seminarContractor(seminarContractor).build();
+      }
+      if (!seminarContractorSubRefineryRepository.existsBySeminarContractorAndSubRefinery(seminarContractorSubRefinery.getSeminarContractor(), seminarContractorSubRefinery.getSubRefinery())) {
+        seminarContractorSubRefineryRepository.save(seminarContractorSubRefinery);
+      }
+    });
+    return contractor;
+  }
+
+  private void saveTraineeRelatedEntities(Contractor contractor, Trainee trainee, List<SeminarTrainee> seminarTraineeList, Seminar seminar) {
+
     //Save Trainee to repo
     Optional<Trainee> traineeOptional = traineeRepository.findByAma(trainee.getAma());
     if (!traineeOptional.isPresent()) {
@@ -251,11 +304,6 @@ public class ExcelImporter {
       traineeOptional.get().setNationality(trainee.getNationality());
       traineeOptional.get().setSurname(trainee.getSurname());
       trainee = traineeRepository.save(traineeOptional.get());
-    }
-
-    Optional<SeminarContractor> seminarContractorOptional = seminarContractorRepository.findBySeminarAndContractor(seminar, contractor);
-    if(!seminarContractorOptional.isPresent()) {
-      seminarContractorRepository.save(SeminarContractor.builder().contractor(contractor).seminar(seminar).build());
     }
 
     Contractor finalContractor = contractor;

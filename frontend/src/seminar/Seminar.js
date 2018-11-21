@@ -14,7 +14,7 @@ import {
     DatePicker,
     Popover,
     Upload,
-    Popconfirm
+    Popconfirm, Tag
 } from 'antd';
 import {Link} from 'react-router-dom';
 import {
@@ -164,6 +164,15 @@ class Seminar extends Component {
                     render: (contractor) => (
                         <Link to={"/contractor/" + contractor.key}>{contractor.name}</Link>
                     )
+                }, {
+                    title: 'Sub Refineries',
+                    dataIndex: 'seminarContractorSubRefineries',
+                    key: 'seminarContractorSubRefineries',
+                    render: seminarContractorSubRefineries => (
+                        <span>
+                            {seminarContractorSubRefineries.map(subRefinery => <Tag color="blue" key={subRefinery.key}>{subRefinery.subRefinery.name}</Tag>)}
+                        </span>
+                    ),
                 }, {
                     title: 'No of Trainees',
                     dataIndex: 'numOfTrainees',
@@ -744,22 +753,19 @@ class Seminar extends Component {
                     <Row gutter={16}>
                         <Col span={12}>
                                 <span label="seminarTypeTitle" className="seminar-tag">
-                                    Seminar's Type:
+                                    Seminar's Refinery:
                                 </span>
                         </Col>
                         <Col span={12}>
                             <FormItem>
                                 <Select
                                     size="large"
-                                    name="seminarType"
+                                    name="seminarRefinery"
                                     autoComplete="off"
                                     defaultValue={this.state.seminar.seminarType}
                                     onChange={(value) => this.handleTypeChange(value)}>
-                                    <Option key="MOTOROIL_BASIC">Motoroil Basic</Option>
-                                    <Option key="ELPE_BASIC">ELPE Basic</Option>
-                                    <Option key="ELPE_SECOND">ELPE Second</Option>
-                                    <Option key="ELPE_FIRST_RETRY">ELPE First Retry</Option>
-                                    <Option key="ELPE_SECOND_RETRY">ELPE Second Retry</Option>
+                                    <Option key="MOTOROIL_BASIC">Motoroil</Option>
+                                    <Option key="ELPE_BASIC">ELPE</Option>
                                 </Select>
                             </FormItem>
                         </Col>
@@ -847,7 +853,7 @@ class Seminar extends Component {
                     <Row gutter={16}>
                         <Col span={12}>
                             <span label="seminarTypeTitle" className="seminar-tag">
-                                Seminar's Type:
+                                Seminar's Refinery:
                             </span>
                         </Col>
                         <Col span={12}>
