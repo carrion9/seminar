@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +36,7 @@ public class AttendanceDocServiceTest {
 
   @Test
   public void createStyledTable() throws Exception {
-    Seminar seminar = Seminar.builder().seminarType(SeminarType.ELPE_BASIC).name("foo").date(LocalDate.now()).build();
+    Seminar seminar = Seminar.builder().refinery(RefineryEnum.ELPE).name("foo").date(LocalDate.now()).build();
 
     Specialty specialty1 = Specialty.builder().name("specialty1").build();
     Specialty specialty2 = Specialty.builder().name("specialty2").build();

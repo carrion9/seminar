@@ -1,6 +1,6 @@
 package com.vetx.starter.model;
 
-public enum SeminarType {
+public enum RefineryEnum {
   MOTOROIL,
   ELPE,
 }

@@ -38,7 +38,7 @@ public class WelcomeDocServiceTest {
 
   @Test
   public void createDocument() throws Exception {
-//    Seminar seminar = Seminar.builder().seminarType(SeminarType.ELPE_BASIC).name("foo").date(Instant.now()).build();
+//    Seminar seminar = Seminar.builder().refinery(RefineryEnum.ELPE_BASIC).name("foo").date(Instant.now()).build();
 //
 //    Specialty specialty1 = Specialty.builder().name("specialty1").build();
 //    Specialty specialty2 = Specialty.builder().name("specialty2").build();

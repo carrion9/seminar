@@ -29,12 +29,12 @@ class SeminarList extends Component {
                 formatHumanDate(date)
               )
             }, {
-              title: 'Type',
-              dataIndex: 'seminarType',
+              title: 'Refinery',
+              dataIndex: 'refinery',
               sorter: true,
-              key: 'seminarType',
-              render: (seminarType) => (
-                  humanize(seminarType)
+              key: 'refinery',
+              render: (refinery) => (
+                  humanize(refinery)
               )
             }, {
               title: 'Total Cost',

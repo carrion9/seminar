@@ -273,7 +273,7 @@ class Seminar extends Component {
         const editRequest = {
             name: this.state.seminar.name,
             date: this.state.seminar.date,
-            seminarType: this.state.seminar.seminarType,
+            refinery: this.state.seminar.refinery,
             _links: this.state.seminar._links
         };
         let promise;
@@ -455,7 +455,7 @@ class Seminar extends Component {
     handleTypeChange(inputValue) {
 
         const seminarEdit = this.state.seminar;
-        seminarEdit.seminarType = inputValue
+        seminarEdit.refinery = inputValue
         this.setState({
             seminar: seminarEdit
         });
@@ -752,7 +752,7 @@ class Seminar extends Component {
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                                <span label="seminarTypeTitle" className="seminar-tag">
+                                <span label="refineryTitle" className="seminar-tag">
                                     Seminar's Refinery:
                                 </span>
                         </Col>
@@ -762,7 +762,7 @@ class Seminar extends Component {
                                     size="large"
                                     name="seminarRefinery"
                                     autoComplete="off"
-                                    defaultValue={this.state.seminar.seminarType}
+                                    defaultValue={this.state.seminar.refinery}
                                     onChange={(value) => this.handleTypeChange(value)}>
                                     <Option key="MOTOROIL_BASIC">Motoroil</Option>
                                     <Option key="ELPE_BASIC">ELPE</Option>
@@ -777,7 +777,7 @@ class Seminar extends Component {
                                 </span>
                         </Col>
                         <Col span={12}>
-                                <span label="seminarType">
+                                <span label="refinery">
                                     {this.state.seminar.cost}
                                 </span>
                         </Col>
@@ -852,13 +852,13 @@ class Seminar extends Component {
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <span label="seminarTypeTitle" className="seminar-tag">
+                            <span label="refineryTitle" className="seminar-tag">
                                 Seminar's Refinery:
                             </span>
                         </Col>
                         <Col span={12}>
-                            <span label="seminarType">
-                                {humanize(this.state.seminar.seminarType)}
+                            <span label="refinery">
+                                {humanize(this.state.seminar.refinery)}
                             </span>
                         </Col>
                     </Row>
@@ -869,7 +869,7 @@ class Seminar extends Component {
                             </span>
                         </Col>
                         <Col span={12}>
-                            <span label="seminarType">
+                            <span label="refinery">
                                 {this.state.seminar.cost}
                             </span>
                         </Col>

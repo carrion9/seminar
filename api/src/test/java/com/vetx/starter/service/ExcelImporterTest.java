@@ -40,6 +40,15 @@ public class ExcelImporterTest {
   @Autowired
   private  SeminarSpecialtyRepository seminarSpecialtyRepository;
 
+  @Autowired
+  private SeminarContractorRepository seminarContractorRepository;
+
+  @Autowired
+  private  SeminarContractorSubRefineryRepository seminarContractorSubRefineryRepository;
+
+  @Autowired
+  private SubRefineryRepository subRefineryRepository;
+
   private ExcelImporter excelImporter;
 
   private static final String FILE_NAME = "contractor-registration-elpe.xlsx";
@@ -50,7 +59,7 @@ public class ExcelImporterTest {
 
   @Before
   public void setUp() throws Exception {
-    excelImporter = new ExcelImporter(traineeRepository, seminarTraineeRepository, contractorRepository, specialtyRepository, seminarSpecialtyRepository);
+    excelImporter = new ExcelImporter(traineeRepository, seminarTraineeRepository, contractorRepository, specialtyRepository, seminarSpecialtyRepository, seminarContractorRepository, seminarContractorSubRefineryRepository,subRefineryRepository);
     data = Files.readAllBytes(Paths.get(this.getClass().getClassLoader().getResource(FILE_NAME).toURI()));
     seminar = seminarRepository.findById(1L).get();
   }

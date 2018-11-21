@@ -12,7 +12,7 @@ public interface SeminarProjection {
 
   Long getKey();
 
-  SeminarType getSeminarType();
+  RefineryEnum getRefinery();
 
   LocalDate getDate();
 

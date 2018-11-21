@@ -77,7 +77,7 @@ public class AttendanceDocService {
         r2.setColor("c00000");
         r2.setFontSize(14);
         r2.setItalic(true);
-        r2.setText(MessageFormat.format("Ενημερωτικό  Σεμινάριο «{0}» για τα {1} ",specialty.getName(), seminar.getSeminarType().toString()));
+        r2.setText(MessageFormat.format("Ενημερωτικό  Σεμινάριο «{0}» για τα {1} ",specialty.getName(), seminar.getRefinery().toString()));
 
         XWPFTable table = doc.createTable(nRows, nCols);
         table.setWidth("96.30%");

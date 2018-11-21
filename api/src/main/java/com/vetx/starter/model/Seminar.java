@@ -3,7 +3,6 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vetx.starter.model.audit.UserDateAudit;
 import lombok.*;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -25,7 +24,7 @@ public class Seminar extends UserDateAudit {
 
   @NotNull
   @Enumerated(EnumType.STRING)
-  private SeminarType seminarType;
+  private RefineryEnum refinery;
 
   @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd",timezone = "UTC")
   private LocalDate date;

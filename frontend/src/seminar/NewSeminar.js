@@ -20,7 +20,7 @@ class NewSeminar extends Component {
             date: {
                 value: moment()
             },
-            seminarType: {
+            refinery: {
                 value: ''
             },
             isLoading: false,
@@ -47,7 +47,7 @@ class NewSeminar extends Component {
 
     handleSelectChange(value) {
         this.setState({
-            seminarType : {
+            refinery : {
                 value: value
             }
         });
@@ -67,7 +67,7 @@ class NewSeminar extends Component {
         const newRequest = {
             name: this.state.name.value,
             date: this.state.date.value.format('YYYY-MM-DD'),
-            seminarType: this.state.seminarType.value
+            refinery: this.state.refinery.value
         };
         this.setState({
             isLoading: true
@@ -93,7 +93,7 @@ class NewSeminar extends Component {
     isFormInvalid() {
         return !(this.state.date.validateStatus === 'success' &&
                  this.state.name.value !== '' &&
-                 this.state.seminarType.value !== '');
+                 this.state.refinery.value !== '');
     }
 
     validateDate(date){
@@ -151,10 +151,10 @@ class NewSeminar extends Component {
                             required={true}>
                                 <Select 
                                     size="large"
-                                    name="seminarType"
+                                    name="refinery"
                                     autoComplete="off"
                                     placeholder="Seminar's type"
-                                    value={this.state.seminarType.value}
+                                    value={this.state.refinery.value}
                                     onChange={(value) => this.handleSelectChange(value)} >  
                                         <Option key="MOTOROIL_BASIC">Motoroil Basic</Option>
                                         <Option key="ELPE_BASIC">ELPE Basic</Option>
