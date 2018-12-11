@@ -31,7 +31,9 @@ import {
     getContractorByAFM,
     insertSeminarTraineeContractorSpecialty,
     getSpecialtyByName,
-    insertSeminarSpecialty, insertSeminarContractor
+    insertSeminarSpecialty, 
+    insertSeminarContractor,
+    getWelcomeDoc
 } from '../util/APIUtils';
 import {formatDate, humanize, reverseDate} from '../util/Helpers';
 import {withRouter} from 'react-router-dom';
@@ -670,6 +672,14 @@ class Seminar extends Component {
         }
     };
 
+    handleWelcomeDoc = () => {
+        let me;
+        me = getWelcomeDoc(this.state.seminar.key, "welcome-document-" + this.state.seminar.name.replace(/\s+/g, '-').toLowerCase() + ".docx");
+        if (!me) {
+            return;
+        }
+    };
+
     uploadFile = (file) => {
         this.setState({
             isLoading: true,
@@ -910,7 +920,12 @@ class Seminar extends Component {
                                 </Button>
                             </Upload>
                         </Col>
-                        <Col span={12}>
+                        <Col span={6} >
+                            <Button className="welcome-button" type='primary' onClick={this.handleWelcomeDoc.bind(this)}>
+                                Welcome Document
+                            </Button>
+                        </Col>
+                        <Col span={6}>
                             <Button className="edit-seminar-button" type='primary'
                                     onClick={this.handleEdit}>Edit</Button>
                         </Col>

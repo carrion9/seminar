@@ -192,11 +192,18 @@
 }
 
 .edit-seminar-button{
-    width: 28%;
+    width: 40%;
     text-align: center;
     float: right;
     margin-top: 1.5%;
     margin-right: 2%;
+}
+
+.welcome-button{
+    width: 50%;
+    text-align: center;
+    float: center;
+    margin-top: 1.5%;
 }
 
 .add-button{

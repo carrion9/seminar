@@ -199,6 +199,14 @@ export function getAttendance(seminarId, specialtyId, name) {
     });
 }
 
+export function getWelcomeDoc(seminarId, name) {
+    return downloadFile({
+        url: API_BASE_URL + "/seminars/" + seminarId + "/welcome-document",
+        method: 'GET',
+        name: name
+    });
+}
+
 export function upload(uploadRequest) {
     return uploadFile({
         url: API_BASE_URL + "/upload",
