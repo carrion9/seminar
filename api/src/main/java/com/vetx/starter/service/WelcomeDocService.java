@@ -82,7 +82,7 @@ public class WelcomeDocService {
         format = XWPFDocument.PICTURE_TYPE_WPG;
       }
 
-      try (FileInputStream is = new FileInputStream(imgFile)) {
+      try (FileInputStream is = new FileInputStream(imgFile.replace("traineeImageUpload", "upload-dir"))) {
         r2.addPicture(is, format, imgFile, Units.toEMU(50), Units.toEMU(100));// 200x200 pixels
 
       }
