@@ -4,37 +4,24 @@ import com.vetx.starter.model.Seminar;
 import com.vetx.starter.model.SeminarSpecialty;
 import com.vetx.starter.payload.ApiResponse;
 import com.vetx.starter.repository.SeminarRepository;
-import com.vetx.starter.security.CurrentUser;
-import com.vetx.starter.security.UserPrincipal;
 import com.vetx.starter.service.AttendanceDocService;
 import com.vetx.starter.service.ExcelImporter;
 import com.vetx.starter.service.WelcomeDocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.print.attribute.standard.Media;
-import javax.print.attribute.standard.MediaTray;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Date;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class FileController {
 
@@ -52,15 +39,15 @@ public class FileController {
   }
 
 
-
-  @GetMapping(value="/upload")
-  public @ResponseBody  String provideUploadInfo() {
+  @GetMapping(value = "/upload")
+  public @ResponseBody
+  String provideUploadInfo() {
     return "You can upload a file by posting to this same URL.";
   }
 
-  @PostMapping(value="/upload")
-//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-  public ResponseEntity  handleFileUpload(@RequestParam("seminarId") Long seminarId, @RequestParam("file") MultipartFile file) throws IOException {
+  @PostMapping(value = "/upload")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity handleFileUpload(@RequestParam("seminarId") Long seminarId, @RequestParam("file") MultipartFile file) throws IOException {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
       return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),
@@ -69,7 +56,7 @@ public class FileController {
 
     byte[] bytes = file.getBytes();
     ApiResponse apiResponse = excelImporter.importExcel(seminar.get(), bytes, file.getOriginalFilename());
-    return new ResponseEntity(apiResponse,HttpStatus.OK);
+    return new ResponseEntity(apiResponse, HttpStatus.OK);
   }
 
   @GetMapping(value = "/seminars/{seminarId}/attendance-document/{seminarSpecialtyId}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
@@ -97,7 +84,7 @@ public class FileController {
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "attendance-document-" + seminar.get().getDate().toString() +".docx")
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "attendance-document-" + seminar.get().getDate().toString() + ".docx")
         .body(resource);
   }
 
@@ -115,7 +102,7 @@ public class FileController {
     return ResponseEntity
         .ok()
         .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "welcome-document-" + seminar.get().getDate().toString() +".docx")
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "welcome-document-" + seminar.get().getDate().toString() + ".docx")
         .body(resource);
   }
 
