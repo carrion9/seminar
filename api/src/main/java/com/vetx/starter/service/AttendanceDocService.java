@@ -8,6 +8,7 @@ import com.vetx.starter.repository.SeminarTraineeRepository;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -44,7 +45,7 @@ public class AttendanceDocService {
     List<Contractor> contractors = seminarTraineeRepository.findDistinctContractorBySeminarAndSpecialty(seminar, specialty);
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
-    try (XWPFDocument doc = new XWPFDocument(new FileInputStream("attendanceTemplate.docx"))) {
+    try (XWPFDocument doc = new XWPFDocument(new ClassPathResource("attendanceTemplate.docx").getInputStream())) {
       // hack to remove existing paragraph in template
       doc.removeBodyElement(doc.getParagraphPos(0));
 

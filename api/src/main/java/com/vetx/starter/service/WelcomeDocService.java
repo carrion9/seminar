@@ -8,6 +8,7 @@ import org.apache.poi.util.Units;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
@@ -30,7 +31,7 @@ public class WelcomeDocService {
     List<SeminarTrainee> seminarTrainees = seminarTraineeRepository.findDistinctBySeminar(seminar);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
 
-    try (XWPFDocument doc = new XWPFDocument(new FileInputStream("welcomeTemplate.docx"))) {
+    try (XWPFDocument doc = new XWPFDocument(new ClassPathResource("welcomeTemplate.docx").getInputStream())) {
       for (SeminarTrainee seminarTrainee : seminarTrainees) {
         firstTable(doc);
 
@@ -82,7 +83,7 @@ public class WelcomeDocService {
         format = XWPFDocument.PICTURE_TYPE_WPG;
       }
 
-      try (FileInputStream is = new FileInputStream(imgFile.replace("traineeImageUpload", "upload-dir"))) {
+      try (FileInputStream is = new FileInputStream(imgFile.replace("traineeImageUpload", "/upload-dir"))) {
         r2.addPicture(is, format, imgFile, Units.toEMU(50), Units.toEMU(100));// 200x200 pixels
 
       }
