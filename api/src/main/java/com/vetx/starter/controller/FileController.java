@@ -46,7 +46,6 @@ public class FileController {
   }
 
   @PostMapping(value = "/upload")
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ResponseEntity handleFileUpload(@RequestParam("seminarId") Long seminarId, @RequestParam("file") MultipartFile file) throws IOException {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
@@ -60,7 +59,6 @@ public class FileController {
   }
 
   @GetMapping(value = "/seminars/{seminarId}/attendance-document/{seminarSpecialtyId}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ResponseEntity<Resource> getAttendanceDocument(@PathVariable("seminarId") Long seminarId, @PathVariable("seminarSpecialtyId") Long seminarSpecialtyId) throws Exception {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
@@ -89,7 +87,6 @@ public class FileController {
   }
 
   @GetMapping(value = "/seminars/{seminarId}/welcome-document", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ResponseEntity<Resource> getWelcomeDocument(@PathVariable("seminarId") Long seminarId) throws Exception {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
