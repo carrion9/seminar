@@ -8,6 +8,7 @@ import com.vetx.starter.security.CurrentUser;
 import com.vetx.starter.security.UserPrincipal;
 import com.vetx.starter.service.AttendanceDocService;
 import com.vetx.starter.service.ExcelImporter;
+import com.vetx.starter.service.WelcomeDocService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -40,14 +41,16 @@ public class FileController {
   private ExcelImporter excelImporter;
   private SeminarRepository seminarRepository;
   private AttendanceDocService attendanceDocService;
+  private WelcomeDocService welcomeDocService;
 
-  public FileController(ExcelImporter excelImporter, SeminarRepository seminarRepository, AttendanceDocService attendanceDocService) {
+  @Autowired
+  public FileController(ExcelImporter excelImporter, SeminarRepository seminarRepository, AttendanceDocService attendanceDocService, WelcomeDocService welcomeDocService) {
     this.excelImporter = excelImporter;
     this.seminarRepository = seminarRepository;
     this.attendanceDocService = attendanceDocService;
+    this.welcomeDocService = welcomeDocService;
   }
 
-  @Autowired
 
 
   @GetMapping(value="/upload")
@@ -95,6 +98,24 @@ public class FileController {
         .ok()
         .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "attendance-document-" + seminar.get().getDate().toString() +".docx")
+        .body(resource);
+  }
+
+  @GetMapping(value = "/seminars/{seminarId}/welcome-document", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity<Resource> getWelcomeDocument(@CurrentUser UserPrincipal currentUser, @PathVariable("seminarId") Long seminarId) throws Exception {
+    Optional<Seminar> seminar = seminarRepository.findById(seminarId);
+    if (!seminar.isPresent()) {
+      return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),
+          HttpStatus.BAD_REQUEST);
+    }
+
+    Resource resource = new ByteArrayResource(welcomeDocService.createDocument(seminar.get()).toByteArray());
+
+    return ResponseEntity
+        .ok()
+        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ "welcome-document-" + seminar.get().getDate().toString() +".docx")
         .body(resource);
   }
 
