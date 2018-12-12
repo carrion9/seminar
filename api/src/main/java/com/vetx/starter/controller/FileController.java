@@ -73,8 +73,8 @@ public class FileController {
   }
 
   @GetMapping(value = "/seminars/{seminarId}/attendance-document/{seminarSpecialtyId}", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-  public ResponseEntity<Resource> getAttendanceDocument(@CurrentUser UserPrincipal currentUser, @PathVariable("seminarId") Long seminarId, @PathVariable("seminarSpecialtyId") Long seminarSpecialtyId) throws Exception {
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity<Resource> getAttendanceDocument(@PathVariable("seminarId") Long seminarId, @PathVariable("seminarSpecialtyId") Long seminarSpecialtyId) throws Exception {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
       return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),
@@ -102,8 +102,8 @@ public class FileController {
   }
 
   @GetMapping(value = "/seminars/{seminarId}/welcome-document", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
-//  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-  public ResponseEntity<Resource> getWelcomeDocument(@CurrentUser UserPrincipal currentUser, @PathVariable("seminarId") Long seminarId) throws Exception {
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity<Resource> getWelcomeDocument(@PathVariable("seminarId") Long seminarId) throws Exception {
     Optional<Seminar> seminar = seminarRepository.findById(seminarId);
     if (!seminar.isPresent()) {
       return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),

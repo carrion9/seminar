@@ -63,7 +63,7 @@ const downloadFile = (options) => {
     return fetch(options.url, options)
         .then(response => {
             if(!response.ok) {
-                return Promise.reject(response.json());
+                return Promise.reject(response);
             }
             if (response.status === 204) {
                 return Promise.resolve(response);
