@@ -56,16 +56,15 @@ public class WelcomeDocService {
     try (XWPFDocument doc = new XWPFDocument(new ClassPathResource("welcomeTemplate.docx").getInputStream())) {
       for (SeminarTrainee seminarTrainee : seminarTrainees) {
         seminarDetailsTable(doc, seminarTrainee);
+        insertTraineePicture(doc, seminarTrainee);
 
         addBreakLines(doc, 1);
 
         traineeDetailsTable(doc, seminarTrainee);
         addBreakLines(doc, 1);
 
-        specialtyDetailsTable(doc,seminarTrainee, seminarSpecialties);
+        specialtyDetailsTable(doc, seminarTrainee, seminarSpecialties);
         addDisclaimer(doc);
-
-//        insertTraineePicture(doc, seminarTrainee);
 
         XWPFParagraph lastParagraph = doc.createParagraph();
         lastParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -74,7 +73,7 @@ public class WelcomeDocService {
         traineeDetailsTable(doc, seminarTrainee);
         addBreakLines(doc, 1);
 
-        traineeSpecialtiesTable(doc,seminarTrainee);
+        traineeSpecialtiesTable(doc, seminarTrainee);
 
         lastParagraph = doc.createParagraph();
         lastParagraph.setAlignment(ParagraphAlignment.CENTER);
@@ -104,8 +103,8 @@ public class WelcomeDocService {
     headings.add("%");
     headings.add("Τελική Βαθμ.");
 
-    XWPFTable table = doc.createTable(traineeSpecialties.size() + 2, 6);
-
+    XWPFTable table = doc.createTable(traineeSpecialties.size() * 2 + 2, 6);
+    table.setWidth("98.6%");
 
     // Set the table style. If the style is not defined, the table style
     // will become "Normal".
@@ -124,6 +123,7 @@ public class WelcomeDocService {
       // add content to each cell
       for (int i1 = 0; i1 < cells.size(); i1++) {
         XWPFTableCell cell = cells.get(i1);
+        cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
         // get a table cell properties element (tcPr)
         CTTcPr tcpr = cell.getCTTc().addNewTcPr();
         // set vertical alignment to "center"
@@ -144,16 +144,31 @@ public class WelcomeDocService {
             rh.setText("Ειδικότητες για τις οποίες έχει εξεταστεί");
             rh.setBold(true);
             rh.setColor("0070c0");
+            CTHMerge hMerge = CTHMerge.Factory.newInstance();
+            hMerge.setVal(STMerge.RESTART);
+            cell.getCTTc().getTcPr().setHMerge(hMerge);
+          } else {
+            CTHMerge hMerge = CTHMerge.Factory.newInstance();
+            hMerge.setVal(STMerge.CONTINUE);
+            cell.getCTTc().getTcPr().setHMerge(hMerge);
           }
         } else if (i == 1) {
           rh.setText(headings.get(i1));
           rh.setBold(true);
           rh.setColor("0070c0");
 
-        }
-        else {
+        } else if (i % 2 == 0) {
           if (i1 == 0) {
-            rh.setText(traineeSpecialties.get(i-2));
+            rh.setText(traineeSpecialties.get((i - 2) / 2));
+            CTVMerge vMerge = CTVMerge.Factory.newInstance();
+            vMerge.setVal(STMerge.RESTART);
+            cell.getCTTc().getTcPr().setVMerge(vMerge);
+          }
+        } else {
+          if (i1 == 0) {
+            CTVMerge vMerge = CTVMerge.Factory.newInstance();
+            vMerge.setVal(STMerge.CONTINUE);
+            cell.getCTTc().getTcPr().setVMerge(vMerge);
           }
         }
         para.setAlignment(ParagraphAlignment.LEFT);
@@ -161,23 +176,18 @@ public class WelcomeDocService {
         // style cell as desired
       }
     }
-    //merge heading
-    CTHMerge hMerge = CTHMerge.Factory.newInstance();
-    hMerge.setVal(STMerge.RESTART);
-    table.getRow(0).getCell(0).getCTTc().getTcPr().setHMerge(hMerge);
-    table.getRow(0).getCell(1).getCTTc().getTcPr().setHMerge(hMerge);
   }
 
   private void addDisclaimer(XWPFDocument doc) throws XmlException {
     List<String> disclaimers = new ArrayList<>();
     disclaimers.add("Τα στοιχεία της παρούσας αίτησης είναι αληθή.");
     disclaimers.add("Γνωρίζει ότι η επιτυχής ολοκλήρωση του τεστ αξιολόγησης είναι ένα από τα μέτρα ασφαλείας των εγκαταστάσεων των " +
-            "Διυλιστηρίων, και δεν αποτελεί πιστοποίηση ικανοτήτων του εξεταζόμενου.");
+        "Διυλιστηρίων, και δεν αποτελεί πιστοποίηση ικανοτήτων του εξεταζόμενου.");
     disclaimers.add("Εξουσιοδοτεί το Φορέα να παράσχει χωρίς ειδοποίηση οποιαδήποτε πληροφορία  σχετικά με τα αποτελέσματα της " +
-            "διαδικασίας αξιολόγησης που την/τον αφορά στις άμεσα  ενδιαφερόμενες εταιρείες (Διυλιστήριο στο οποίο θα εργαστεί και " +
-            "στην Εργολαβική εταιρεία που ανήκει).");
+        "διαδικασίας αξιολόγησης που την/τον αφορά στις άμεσα  ενδιαφερόμενες εταιρείες (Διυλιστήριο στο οποίο θα εργαστεί και " +
+        "στην Εργολαβική εταιρεία που ανήκει).");
     disclaimers.add("Δεν θα αποκαλύψει σε φυσικό ή νομικό πρόσωπο οποιαδήποτε πληροφορία που να αφορά την διαδικασία αξιολόγησης " +
-            "στην οποία  θα λάβει μέρος.");
+        "στην οποία  θα λάβει μέρος.");
 
     XWPFParagraph p = doc.createParagraph();
     p.setAlignment(ParagraphAlignment.LEFT);
@@ -208,14 +218,14 @@ public class WelcomeDocService {
     XWPFParagraph mainParagraph = doc.createParagraph();
     mainParagraph.setAlignment(ParagraphAlignment.LEFT);
     XWPFRun mainRun = mainParagraph.createRun();
-    for (int i = 0 ; i< numberOfBreakLines ; i++) {
+    for (int i = 0; i < numberOfBreakLines; i++) {
       mainRun.addBreak();
     }
   }
 
   private void insertTraineePicture(XWPFDocument doc, SeminarTrainee seminarTrainee) throws IOException, InvalidFormatException {
     XWPFParagraph p = doc.createParagraph();
-    p.setAlignment(ParagraphAlignment.RIGHT);
+    p.setAlignment(ParagraphAlignment.LEFT);
     XWPFRun r = p.createRun();
 
     String imgFile = seminarTrainee.getTrainee().getImageLocation();
@@ -244,8 +254,7 @@ public class WelcomeDocService {
         format = XWPFDocument.PICTURE_TYPE_WPG;
       }
       try (FileInputStream is = new FileInputStream(imgFile.replace("traineeImageUpload", "/upload-dir"))) {
-        r.addPicture(is, format, imgFile, Units.toEMU(50), Units.toEMU(100));// 200x200 pixels
-
+        r.addPicture(is, format, imgFile, Units.toEMU(70), Units.toEMU(100));// 200x200 pixels
       }
 
     }
@@ -268,7 +277,7 @@ public class WelcomeDocService {
     input.add("Ημερομηνία: " + seminarTrainee.getSeminar().getDate().format(formatter));
     input.add("Για τις Εγκαταστάσεις των: " + subRefineriesNames);
     input.add("Ημερομηνία Σεμιναρίου Βασικού Επιπέδου: " + seminarTrainee.getSeminar().getDate().format(formatter));
-    input.add("Βαθμολογία Βασικού Επιπέδου: " );  // I believe it has to be blank
+    input.add("Βαθμολογία Βασικού Επιπέδου: ");  // I believe it has to be blank
 
     XWPFTable table = doc.createTable(5, 1);
 
@@ -312,12 +321,13 @@ public class WelcomeDocService {
     LinkedList<String> input = new LinkedList<>();
     input.add("Επώνυμο: " + seminarTrainee.getTrainee().getSurname());
     input.add("Όνομα: " + seminarTrainee.getTrainee().getName());
-    input.add("Όνομα Πατρός: " +  seminarTrainee.getTrainee().getFathersName());
+    input.add("Όνομα Πατρός: " + seminarTrainee.getTrainee().getFathersName());
     input.add("ΑΜΑ: " + seminarTrainee.getTrainee().getAma());
     input.add("Αριθμός Εγγράφου Ταυτοπροσωπίας: " + seminarTrainee.getTrainee().getDocumentCode());  // I believe it has to be blank
     input.add("Τύπος Εγγράφου: " + StringUtils.capitalize(seminarTrainee.getTrainee().getDocType().toString()));
 
     XWPFTable table = doc.createTable(4, 2);
+    table.setWidth("98.6%");
 
     // Set the table style. If the style is not defined, the table style
     // will become "Normal".
@@ -356,6 +366,13 @@ public class WelcomeDocService {
             rh.setText("Στοιχεία Εργαζόμενου");
             rh.setBold(true);
             rh.setColor("0070c0");
+            CTHMerge hMerge = CTHMerge.Factory.newInstance();
+            hMerge.setVal(STMerge.RESTART);
+            cell.getCTTc().getTcPr().setHMerge(hMerge);
+          } else {
+            CTHMerge hMerge = CTHMerge.Factory.newInstance();
+            hMerge.setVal(STMerge.CONTINUE);
+            cell.getCTTc().getTcPr().setHMerge(hMerge);
           }
         } else {
           rh.setText(input.pop());
@@ -365,12 +382,6 @@ public class WelcomeDocService {
         // style cell as desired
       }
     }
-    //merge heading
-    CTHMerge hMerge = CTHMerge.Factory.newInstance();
-    hMerge.setVal(STMerge.RESTART);
-    table.getRow(0).getCell(0).getCTTc().getTcPr().setHMerge(hMerge);
-    table.getRow(0).getCell(1).getCTTc().getTcPr().setHMerge(hMerge);
-
   }
 
   private void specialtyDetailsTable(XWPFDocument doc, SeminarTrainee seminarTrainee, LinkedList<String> seminarSpecialties) {
@@ -383,7 +394,8 @@ public class WelcomeDocService {
     LinkedList<String> copySeminarSpecialties = new LinkedList<>();
     copySeminarSpecialties.addAll(seminarSpecialties);
 
-    XWPFTable table = doc.createTable(seminarTrainee.getSeminar().getSeminarSpecialties().size() /2 + 1, 4);
+    XWPFTable table = doc.createTable(seminarTrainee.getSeminar().getSeminarSpecialties().size() / 2 + 1, 4);
+    table.setWidth("98.6%");
 
 
     // Set the table style. If the style is not defined, the table style
@@ -423,13 +435,19 @@ public class WelcomeDocService {
             rh.setText("Ειδικότητες για τις οποίες θέλει να εξεταστεί");
             rh.setBold(true);
             rh.setColor("0070c0");
+            CTHMerge hMerge = CTHMerge.Factory.newInstance();
+            hMerge.setVal(STMerge.RESTART);
+            cell.getCTTc().getTcPr().setHMerge(hMerge);
+          } else {
+            CTHMerge hMerge = CTHMerge.Factory.newInstance();
+            hMerge.setVal(STMerge.CONTINUE);
+            cell.getCTTc().getTcPr().setHMerge(hMerge);
           }
         } else {
           String tempSpecialty = copySeminarSpecialties.get(0);
           if (i1 % 2 == 0) {
             rh.setText(tempSpecialty);
-          }
-          else {
+          } else {
             if (traineeSpecialties.contains(tempSpecialty)) {
               rh.setText("X");
             }
@@ -441,11 +459,5 @@ public class WelcomeDocService {
         // style cell as desired
       }
     }
-    //merge heading
-    CTHMerge hMerge = CTHMerge.Factory.newInstance();
-    hMerge.setVal(STMerge.RESTART);
-    table.getRow(0).getCell(0).getCTTc().getTcPr().setHMerge(hMerge);
-    table.getRow(0).getCell(1).getCTTc().getTcPr().setHMerge(hMerge);
-
   }
 }
