@@ -147,21 +147,18 @@ class NewSeminar extends Component {
                                     format='DD/MM/YYYY'/>
                         </FormItem>
                         <FormItem 
-                            label="Type"
+                            label="Refinery"
                             required={true}>
                                 <Select 
                                     size="large"
                                     name="refinery"
                                     autoComplete="off"
-                                    placeholder="Seminar's type"
+                                    placeholder="Seminar's Refinery"
                                     value={this.state.refinery.value}
                                     onChange={(value) => this.handleSelectChange(value)} >  
-                                        <Option key="MOTOROIL_BASIC">Motoroil Basic</Option>
-                                        <Option key="ELPE_BASIC">ELPE Basic</Option>
-                                        <Option key="ELPE_SECOND">ELPE Second</Option>
-                                        <Option key="ELPE_FIRST_RETRY">ELPE First Retry</Option>
-                                        <Option key="ELPE_SECOND_RETRY">ELPE Second Retry</Option>
-                                </Select>  
+                                        <Option key="MOTOROIL">Motoroil</Option>
+                                        <Option key="ELPE">ELPE</Option>
+                                </Select>
                         </FormItem>   
                         <FormItem>
                             <Button 

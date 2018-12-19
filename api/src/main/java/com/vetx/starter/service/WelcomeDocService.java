@@ -1,13 +1,18 @@
 package com.vetx.starter.service;
 
+import com.vetx.starter.model.DocType;
 import com.vetx.starter.model.Seminar;
 import com.vetx.starter.model.SeminarTrainee;
 import com.vetx.starter.repository.SeminarTraineeRepository;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.util.Units;
+import org.apache.poi.wp.usermodel.HeaderFooterType;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlException;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTGraphicalObject;
+import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTAnchor;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -15,13 +20,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -30,6 +35,13 @@ public class WelcomeDocService {
 
   private SeminarTraineeRepository seminarTraineeRepository;
   private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
+
+  private Map<DocType, String> docTypeMapping = Stream.of(
+      new AbstractMap.SimpleImmutableEntry<>(DocType.IDENTITY, "ΤΑΥΤΟΤΗΤΑ"),
+      new AbstractMap.SimpleImmutableEntry<>(DocType.DRIVING_LICENSE, "ΔΙΠΛΩΜΑ ΟΔΗΓΗΣΗΣ"),
+      new AbstractMap.SimpleImmutableEntry<>(DocType.PASSPORT, "ΔΙΑΒΑΤΗΡΙΟ"),
+      new AbstractMap.SimpleImmutableEntry<>(DocType.NONE, "N/A"))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
   private static String cTAbstractNumBulletXML =
       "<w:abstractNum xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" w:abstractNumId=\"0\">"
@@ -53,10 +65,14 @@ public class WelcomeDocService {
         .map(seminarSpecialty -> seminarSpecialty.getSpecialty().getName())
         .collect(Collectors.toCollection(LinkedList::new));
 
-    try (XWPFDocument doc = new XWPFDocument(new ClassPathResource("welcomeTemplate.docx").getInputStream())) {
+    try (XWPFDocument doc = new XWPFDocument(new ClassPathResource("welcomeTemplate2.docx").getInputStream())) {
+      // hack to remove existing paragraph in template
+      doc.removeBodyElement(doc.getParagraphPos(0));
+      initHeaderFooter(doc);
+
       for (SeminarTrainee seminarTrainee : seminarTrainees) {
-        seminarDetailsTable(doc, seminarTrainee);
         insertTraineePicture(doc, seminarTrainee);
+        seminarDetailsTable(doc, seminarTrainee);
 
         addBreakLines(doc, 1);
 
@@ -88,6 +104,43 @@ public class WelcomeDocService {
 
   }
 
+  private void initHeaderFooter(XWPFDocument doc) throws NoSuchFieldException, IllegalAccessException {
+    // create header/footer functions insert an empty paragraph
+    XWPFHeader head = doc.createHeader(HeaderFooterType.DEFAULT);
+    head.createParagraph().createRun().setFontSize(14);
+    head.getParagraphs().get(0).getRuns().get(0).setColor("191970");
+    head.getParagraphs().get(0).getRuns().get(0).setText("ΕΝΤΥΠΟ ΥΠΟΔΟΧΗΣ ΥΠΟΨΗΦΙΟΥ                                                       Αρ. Θέσης: ");
+//    head.getParagraphs().get(0).getCTP().addNewFldSimple().setInstr("PAGE / 2 \\* MERGEFORMAT");
+
+    XWPFFooter foot = doc.createFooter(HeaderFooterType.DEFAULT);
+    foot.createParagraph().createRun().setText("Ονοματεπώνυμο Αξιολογητή:                                                                     Υπογραφή:");
+
+    head = doc.createHeader(HeaderFooterType.EVEN);
+    head.createParagraph().createRun().setFontSize(14);
+    head.getParagraphs().get(0).getRuns().get(0).setColor("191970");
+    head.getParagraphs().get(0).getRuns().get(0).setText("ΦΥΛΛΟ ΒΑΘΜΟΛΟΓΙΑΣ                                                                     Αρ. Θέσης: ");
+
+
+    Field _settings = XWPFDocument.class.getDeclaredField("settings");
+    _settings.setAccessible(true);
+    XWPFSettings xwpfsettings = (XWPFSettings)_settings.get(doc);
+    Field _ctSettings = XWPFSettings.class.getDeclaredField("ctSettings");
+    _ctSettings.setAccessible(true);
+    org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSettings ctsettings =
+        (org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSettings)_ctSettings.get(xwpfsettings);
+
+    ctsettings.addNewEvenAndOddHeaders();
+
+    //
+// head.getParagraphs().get(0).getCTP().addNewFldSimple().setInstr("PAGE / 2 \\* MERGEFORMAT");
+
+//    head = doc.createHeader(HeaderFooterType.EVEN);
+//    head.createParagraph().createRun().setFontSize(14);
+//    head.getParagraphs().get(0).getRuns().get(0).setColor("191970");
+//    head.getParagraphs().get(0).getRuns().get(0).setText("ΕΝΤΥΠΟ ΥΠΟΔΟΧΗΣ ΥΠΟΨΗΦΙΟΥ                                                       Αρ. Θέσης: ");
+//    head.getParagraphs().get(0).getCTP().addNewFldSimple().setInstr("PAGE / 2 \\* MERGEFORMAT");
+  }
+
   private void traineeSpecialtiesTable(XWPFDocument doc, SeminarTrainee seminarTrainee) {
     List<String> traineeSpecialties = seminarTraineeRepository
         .findByTraineeAndSeminar(seminarTrainee.getTrainee(), seminarTrainee.getSeminar())
@@ -115,14 +168,14 @@ public class WelcomeDocService {
     // Get a list of the rows in the table
     List<XWPFTableRow> rows = table.getRows();
 
-    for (int i = 0; i < rows.size(); i++) {
-      XWPFTableRow row = rows.get(i);
+    for (int rowPos = 0; rowPos < rows.size(); rowPos++) {
+      XWPFTableRow row = rows.get(rowPos);
       row.setHeight(1);
       // get the cells in this row
       List<XWPFTableCell> cells = row.getTableCells();
       // add content to each cell
-      for (int i1 = 0; i1 < cells.size(); i1++) {
-        XWPFTableCell cell = cells.get(i1);
+      for (int cellPos = 0; cellPos < cells.size(); cellPos++) {
+        XWPFTableCell cell = cells.get(cellPos);
         cell.setVerticalAlignment(XWPFTableCell.XWPFVertAlign.CENTER);
         // get a table cell properties element (tcPr)
         CTTcPr tcpr = cell.getCTTc().addNewTcPr();
@@ -138,8 +191,8 @@ public class WelcomeDocService {
         XWPFParagraph para = cell.getParagraphs().get(0);
         // create a run to contain the content
         XWPFRun rh = para.createRun();
-        if (i == 0) {
-          if (i1 == 0) {
+        if (rowPos == 0) {
+          if (cellPos == 0) {
             // header row
             rh.setText("Ειδικότητες για τις οποίες έχει εξεταστεί");
             rh.setBold(true);
@@ -152,20 +205,22 @@ public class WelcomeDocService {
             hMerge.setVal(STMerge.CONTINUE);
             cell.getCTTc().getTcPr().setHMerge(hMerge);
           }
-        } else if (i == 1) {
-          rh.setText(headings.get(i1));
+        } else if (rowPos == 1) {
+          rh.setText(headings.get(cellPos));
           rh.setBold(true);
           rh.setColor("0070c0");
 
-        } else if (i % 2 == 0) {
-          if (i1 == 0) {
-            rh.setText(traineeSpecialties.get((i - 2) / 2));
+        } else if (rowPos % 2 == 0) {
+          if (cellPos == 0) {
+            rh.setText(traineeSpecialties.get((rowPos - 2) / 2));
+          }
+          if (cellPos == 0 || cellPos == cells.size() -1) {
             CTVMerge vMerge = CTVMerge.Factory.newInstance();
             vMerge.setVal(STMerge.RESTART);
             cell.getCTTc().getTcPr().setVMerge(vMerge);
           }
         } else {
-          if (i1 == 0) {
+          if (cellPos == 0  || cellPos == cells.size() -1) {
             CTVMerge vMerge = CTVMerge.Factory.newInstance();
             vMerge.setVal(STMerge.CONTINUE);
             cell.getCTTc().getTcPr().setVMerge(vMerge);
@@ -223,10 +278,10 @@ public class WelcomeDocService {
     }
   }
 
-  private void insertTraineePicture(XWPFDocument doc, SeminarTrainee seminarTrainee) throws IOException, InvalidFormatException {
-    XWPFParagraph p = doc.createParagraph();
-    p.setAlignment(ParagraphAlignment.LEFT);
-    XWPFRun r = p.createRun();
+  private void insertTraineePicture(XWPFDocument doc, SeminarTrainee seminarTrainee) throws Exception {
+    XWPFParagraph paragraph = doc.createParagraph();
+    paragraph.setAlignment(ParagraphAlignment.RIGHT);
+    XWPFRun run = paragraph.createRun();
 
     String imgFile = seminarTrainee.getTrainee().getImageLocation();
     if (imgFile != null) {
@@ -253,8 +308,15 @@ public class WelcomeDocService {
       } else if (imgFile.endsWith(".wpg")) {
         format = XWPFDocument.PICTURE_TYPE_WPG;
       }
-      try (FileInputStream is = new FileInputStream(imgFile.replace("traineeImageUpload", "/upload-dir"))) {
-        r.addPicture(is, format, imgFile, Units.toEMU(70), Units.toEMU(100));// 200x200 pixels
+      try (FileInputStream in = new FileInputStream(imgFile.replace("traineeImageUpload", "/upload-dir"))) {
+        run.addPicture(in, format, imgFile, Units.toEMU(70), Units.toEMU(100));
+        in.close();
+        CTDrawing drawing = run.getCTR().getDrawingArray(0);
+
+        CTAnchor anchor = getAnchorWithGraphic(drawing, imgFile, false /*behind text*/);
+
+        drawing.setAnchorArray(new CTAnchor[] {anchor});
+        drawing.removeInline(0);
       }
 
     }
@@ -271,7 +333,7 @@ public class WelcomeDocService {
         .getSeminarContractorSubRefineries()
         .stream()
         .map(seminarContractorSubRefinery -> seminarContractorSubRefinery.getSubRefinery().getName())
-        .collect(Collectors.joining("/"));
+        .collect(Collectors.joining(" / "));
     LinkedList<String> input = new LinkedList<>();
     input.add("Επωνυμία Εργοδότη: " + seminarTrainee.getContractor().getName());
     input.add("Ημερομηνία: " + seminarTrainee.getSeminar().getDate().format(formatter));
@@ -280,6 +342,7 @@ public class WelcomeDocService {
     input.add("Βαθμολογία Βασικού Επιπέδου: ");  // I believe it has to be blank
 
     XWPFTable table = doc.createTable(5, 1);
+    table.setWidth("70%");
 
     // Set the table style. If the style is not defined, the table style
     // will become "Normal".
@@ -324,7 +387,7 @@ public class WelcomeDocService {
     input.add("Όνομα Πατρός: " + seminarTrainee.getTrainee().getFathersName());
     input.add("ΑΜΑ: " + seminarTrainee.getTrainee().getAma());
     input.add("Αριθμός Εγγράφου Ταυτοπροσωπίας: " + seminarTrainee.getTrainee().getDocumentCode());  // I believe it has to be blank
-    input.add("Τύπος Εγγράφου: " + StringUtils.capitalize(seminarTrainee.getTrainee().getDocType().toString()));
+    input.add("Τύπος Εγγράφου: " + docTypeMapping.get(seminarTrainee.getTrainee().getDocType()));
 
     XWPFTable table = doc.createTable(4, 2);
     table.setWidth("98.6%");
@@ -459,5 +522,29 @@ public class WelcomeDocService {
         // style cell as desired
       }
     }
+  }
+
+  private static CTAnchor getAnchorWithGraphic(CTDrawing drawing /*inline drawing*/,
+                                               String drawingDescr, boolean behind) throws Exception {
+
+    CTGraphicalObject graphicalobject = drawing.getInlineArray(0).getGraphic();
+    long width = drawing.getInlineArray(0).getExtent().getCx();
+    long height = drawing.getInlineArray(0).getExtent().getCy();
+
+    String anchorXML =
+        "<wp:anchor xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\" "
+            + "simplePos=\"0\" relativeHeight=\"0\" behindDoc=\"" + ((behind) ? 1 : 0) + "\" locked=\"0\" layoutInCell=\"1\" allowOverlap=\"1\">"
+            + "<wp:simplePos x=\"0\" y=\"0\"/>"
+            + "<wp:positionH relativeFrom=\"column\"><wp:posOffset>4668520</wp:posOffset></wp:positionH>"
+            + "<wp:positionV relativeFrom=\"paragraph\"><wp:posOffset>284480</wp:posOffset></wp:positionV>"
+            + "<wp:extent cx=\"" + width + "\" cy=\"" + height + "\"/>"
+            + "<wp:effectExtent l=\"0\" t=\"0\" r=\"13335\" b=\"17145\"/><wp:wrapNone/>"
+            + "<wp:docPr id=\"1\" name=\"Drawing 0\" descr=\"" + drawingDescr + "\"/><wp:cNvGraphicFramePr/>"
+            + "</wp:anchor>";
+
+    drawing = CTDrawing.Factory.parse(anchorXML);
+    CTAnchor anchor = drawing.getAnchorArray(0);
+    anchor.setGraphic(graphicalobject);
+    return anchor;
   }
 }
