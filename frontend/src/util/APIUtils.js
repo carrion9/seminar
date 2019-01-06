@@ -73,7 +73,8 @@ const downloadFile = (options) => {
                 let url = window.URL.createObjectURL(blob);
                 let a = document.createElement('a');
                 a.href = url;
-                a.download = filename;
+                a.setAttribute('download', filename);
+                document.body.appendChild(a);
                 a.click();
             });
             }
