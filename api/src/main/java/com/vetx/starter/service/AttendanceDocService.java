@@ -1,9 +1,6 @@
 package com.vetx.starter.service;
 
-import com.vetx.starter.model.Contractor;
-import com.vetx.starter.model.Seminar;
-import com.vetx.starter.model.SeminarTrainee;
-import com.vetx.starter.model.Specialty;
+import com.vetx.starter.model.*;
 import com.vetx.starter.repository.SeminarTraineeRepository;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
@@ -45,7 +42,9 @@ public class AttendanceDocService {
     List<Contractor> contractors = seminarTraineeRepository.findDistinctContractorBySeminarAndSpecialty(seminar, specialty);
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/M/yyyy").withZone(ZoneId.systemDefault());
-    try (XWPFDocument doc = new XWPFDocument(new ClassPathResource("attendanceTemplate.docx").getInputStream())) {
+    String templateName = seminar.getRefinery().equals(RefineryEnum.ELPE) ? "attendanceTemplate-elpe.docx" : "attendanceTemplate-motorOil.docx";
+
+    try (XWPFDocument doc = new XWPFDocument(new ClassPathResource(templateName).getInputStream())) {
       // hack to remove existing paragraph in template
       doc.removeBodyElement(doc.getParagraphPos(0));
 

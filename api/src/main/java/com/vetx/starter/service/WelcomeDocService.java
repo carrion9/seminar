@@ -309,7 +309,7 @@ public class WelcomeDocService {
         format = XWPFDocument.PICTURE_TYPE_WPG;
       }
       try (FileInputStream in = new FileInputStream(imgFile.replace("traineeImageUpload", "/upload-dir"))) {
-        run.addPicture(in, format, imgFile, Units.toEMU(70), Units.toEMU(100));
+        run.addPicture(in, format, imgFile, Units.toEMU(100), Units.toEMU(100));
         in.close();
         CTDrawing drawing = run.getCTR().getDrawingArray(0);
 

@@ -774,8 +774,8 @@ class Seminar extends Component {
                                     autoComplete="off"
                                     defaultValue={this.state.seminar.refinery}
                                     onChange={(value) => this.handleTypeChange(value)}>
-                                    <Option key="MOTOROIL_BASIC">Motoroil</Option>
-                                    <Option key="ELPE_BASIC">ELPE</Option>
+                                    <Option key="MOTOROIL">Motoroil</Option>
+                                    <Option key="ELPE">ELPE</Option>
                                 </Select>
                             </FormItem>
                         </Col>

@@ -6,6 +6,7 @@ import com.vetx.starter.repository.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.NumberToTextConverter;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -202,8 +203,10 @@ public class ExcelImporter {
                   break;
                 default:
                   CellStyle specialtyCellStyle = datatypeSheet.getRow(cell.getRowIndex()).getCell(cell.getColumnIndex()).getCellStyle();
-                  if (IndexedColors.AUTOMATIC.getIndex() != specialtyCellStyle.getFillForegroundColor()) {
-                    //TODO Import to seminarTraineeSpecialties
+                  if (IndexedColors.AUTOMATIC.getIndex() != specialtyCellStyle.getFillForegroundColor()
+                      && 31  == ((XSSFColor) specialtyCellStyle.getFillForegroundColorColor()).getARGB()[1]
+                      && 73  == ((XSSFColor) specialtyCellStyle.getFillForegroundColorColor()).getARGB()[2]
+                      && 125 == ((XSSFColor) specialtyCellStyle.getFillForegroundColorColor()).getARGB()[3]) {
                     seminarTraineeList.add(SeminarTrainee.builder().specialty(specialtyList.get(cell.getColumnIndex())).build());
                     if (!seminarSpecialtyRepository.existsSeminarSpecialtyBySeminarAndSpecialty(seminar, specialtyList.get(cell.getColumnIndex()))) {
                       SeminarSpecialty seminarSpecialty = SeminarSpecialty.builder().seminar(seminar).specialty(specialtyList.get(cell.getColumnIndex())).build();
@@ -222,7 +225,7 @@ public class ExcelImporter {
           contractor = saveContractorRelatedEntities(contractor, seminar);
         }
 
-        //Build Trainne from excel
+        //Build Trainee from excel
         if (traineeAma != null) {
           trainee = Trainee.builder().docType(docType).ama(traineeAma).documentCode(traineeDocumentCode)
               .name(traineeName).surname(traineeSurname).fathersName(traineeFathersName).nationality(traineeNationality).build();
@@ -315,6 +318,7 @@ public class ExcelImporter {
         seminarTrainee.setContractor(finalContractor);
         seminarTrainee.setTrainee(finalTrainee);
         seminarTrainee.setSeminar(seminar);
+        seminarTrainee.setSpecialty(seminarTrainee.getSpecialty());
         seminarTraineeRepository.save(seminarTrainee);
       }
     });
