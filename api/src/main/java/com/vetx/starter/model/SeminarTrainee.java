@@ -3,9 +3,7 @@ package com.vetx.starter.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.vetx.starter.model.audit.UserDateAudit;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
 import javax.persistence.*;
@@ -15,6 +13,8 @@ import java.util.Set;
 
 @Entity
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = false)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames =
