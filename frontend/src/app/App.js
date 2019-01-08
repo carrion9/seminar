@@ -18,6 +18,7 @@ import Contractor from '../contractor/Contractor';
 import TraineeList from '../trainee/TraineeList';
 import NewTrainee from '../trainee/NewTrainee';
 import Trainee from '../trainee/Trainee';
+import UserList from '../user/UserList';
 import Login from '../user/login/Login';
 import Signup from '../user/signup/Signup';
 import Profile from '../user/profile/Profile';
@@ -121,9 +122,7 @@ class App extends Component {
                             <Route
                                 path="/login" render={(props) => <Login onLogin={this.handleLogin} {...props} />}>
                             </Route>
-                            <Route
-                                path="/signup" component={Signup}>
-                            </Route>
+                            
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated}
                                 exact path="/"
@@ -143,6 +142,12 @@ class App extends Component {
                                 handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
+                                authenticated={this.state.isAuthenticated}
+                                exact path="/adminpanel"
+                                component={UserList}
+                                handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/seminar/new" component={NewSeminar} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
@@ -159,6 +164,9 @@ class App extends Component {
                             </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/trainee/:id" component={Trainee} handleLogout={this.handleLogout}>
+                            </PrivateRoute>
+                            <PrivateRoute
+                                authenticated={this.state.isAuthenticated} path="/user/new" component={Signup} handleLogout={this.handleLogout}>
                             </PrivateRoute>
                             <PrivateRoute
                                 authenticated={this.state.isAuthenticated} path="/user/:username" component={Profile} handleLogout={this.handleLogout}>

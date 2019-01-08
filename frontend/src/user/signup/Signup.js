@@ -64,7 +64,7 @@ class Signup extends Component {
                 message: 'Seminar App',
                 description: "Thank you! You're successfully registered. Please Login to continue!",
             });          
-            this.props.history.push("/login");
+            this.props.history.push("/adminpanel");
         }).catch(error => {
             notification.error({
                 message: 'Seminar App',
@@ -84,7 +84,7 @@ class Signup extends Component {
     render() {
         return (
             <div className="signup-container">
-                <h1 className="page-title">Sign Up</h1>
+                <h1 className="page-title">Create New User</h1>
                 <div className="signup-content">
                     <Form onSubmit={this.handleSubmit} className="signup-form">
                         <FormItem 
@@ -145,8 +145,8 @@ class Signup extends Component {
                                 htmlType="submit" 
                                 size="large" 
                                 className="signup-form-button"
-                                disabled={this.isFormInvalid()}>Sign up</Button>
-                            Already registed? <Link to="/login">Login now!</Link>
+                                disabled={this.isFormInvalid()}>Create</Button>
+                            
                         </FormItem>
                     </Form>
                 </div>

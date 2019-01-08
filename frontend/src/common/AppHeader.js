@@ -39,11 +39,11 @@ class AppHeader extends Component {
                   <Icon type="contacts" alt="trainees" />
               </Link>
             </Menu.Item>,
-          //  <Menu.Item key="/specialties">
-          //    <Link to="/specialties">
-          //        <Icon type="hdd" alt="specialties" />
-          //    </Link>
-          //  </Menu.Item>,
+           <Menu.Item key="/adminpanel">
+             <Link to="/adminpanel">
+                 <Icon type="hdd" alt="adminpanel" />
+             </Link>
+           </Menu.Item>,
             <Menu.Item key="/profile" className="profile-menu">
             <ProfileDropdownMenu
               currentUser={this.props.currentUser}
@@ -54,10 +54,7 @@ class AppHeader extends Component {
           menuItems = [
             <Menu.Item key="/login">
               <Link to="/login">Login</Link>
-            </Menu.Item>,
-            <Menu.Item key="/signup">
-              <Link to="/signup">Signup</Link>
-            </Menu.Item>                  
+            </Menu.Item>                 
           ];
         }
 

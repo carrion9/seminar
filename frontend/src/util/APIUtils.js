@@ -360,3 +360,18 @@ export function getUserProfile(username) {
         method: 'GET'
     });
 }
+
+export function getAllUsers(page, size, sorter) {
+    page = page || 0;
+    size = size || LIST_SIZE;
+    if (!sorter || !sorter.field) {
+        sorter = {field:"key",order:"asc"};
+    }
+    sorter.order === "ascend" ? sorter.order = "asc" : null;
+    sorter.order === "descend" ? sorter.order = "desc" : null;
+
+    return request({
+        url: API_BASE_URL + "/user?page=" + page + "&size=" + size + "&sort=" +sorter.field + "," + sorter.order,
+        method: 'GET'
+    });
+}
