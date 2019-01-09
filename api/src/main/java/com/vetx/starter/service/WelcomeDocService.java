@@ -457,7 +457,7 @@ public class WelcomeDocService {
     LinkedList<String> copySeminarSpecialties = new LinkedList<>();
     copySeminarSpecialties.addAll(seminarSpecialties);
 
-    XWPFTable table = doc.createTable(seminarTrainee.getSeminar().getSeminarSpecialties().size() / 2 + 1, 4);
+    XWPFTable table = doc.createTable(seminarTrainee.getSeminar().getSeminarSpecialties().size() / 2 + 1 + seminarTrainee.getSeminar().getSeminarSpecialties().size() % 2, 4);
     table.setWidth("98.6%");
 
 
@@ -470,14 +470,14 @@ public class WelcomeDocService {
     // Get a list of the rows in the table
     List<XWPFTableRow> rows = table.getRows();
 
-    for (int i = 0; i < rows.size(); i++) {
-      XWPFTableRow row = rows.get(i);
+    for (int rowCount = 0; rowCount < rows.size(); rowCount++) {
+      XWPFTableRow row = rows.get(rowCount);
       row.setHeight(1);
       // get the cells in this row
       List<XWPFTableCell> cells = row.getTableCells();
       // add content to each cell
-      for (int i1 = 0; i1 < cells.size(); i1++) {
-        XWPFTableCell cell = cells.get(i1);
+      for (int cellCount = 0; cellCount < cells.size(); cellCount++) {
+        XWPFTableCell cell = cells.get(cellCount);
         // get a table cell properties element (tcPr)
         CTTcPr tcpr = cell.getCTTc().addNewTcPr();
         // set vertical alignment to "center"
@@ -492,8 +492,8 @@ public class WelcomeDocService {
         XWPFParagraph para = cell.getParagraphs().get(0);
         // create a run to contain the content
         XWPFRun rh = para.createRun();
-        if (i == 0) {
-          if (i1 == 0) {
+        if (rowCount == 0) {
+          if (cellCount == 0) {
             // header row
             rh.setText("Ειδικότητες για τις οποίες θέλει να εξεταστεί");
             rh.setBold(true);
@@ -506,9 +506,9 @@ public class WelcomeDocService {
             hMerge.setVal(STMerge.CONTINUE);
             cell.getCTTc().getTcPr().setHMerge(hMerge);
           }
-        } else {
-          String tempSpecialty = copySeminarSpecialties.get(0);
-          if (i1 % 2 == 0) {
+        } else if(!copySeminarSpecialties.isEmpty()) {
+          String tempSpecialty = copySeminarSpecialties.getFirst();
+          if (cellCount % 2 == 0) {
             rh.setText(tempSpecialty);
           } else {
             if (traineeSpecialties.contains(tempSpecialty)) {

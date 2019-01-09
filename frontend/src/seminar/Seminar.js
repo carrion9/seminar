@@ -26,6 +26,7 @@ import {
     updatePassed,
     insertItem,
     getAttendance,
+    getAttendanceSeminar,
     upload,
     getTraineeByAMA,
     getContractorByAFM,
@@ -666,7 +667,7 @@ class Seminar extends Component {
 
     handleAttendance = (specialtyKey) => {
         let me;
-        me = getAttendance(this.state.seminar.key, specialtyKey, "attendance-document-" + this.state.seminar.name.replace(/\s+/g, '-').toLowerCase() + ".docx");
+        me = getAttendance(this.state.seminar.key, specialtyKey, "attendance-document-" + this.state.seminar.name.replace(/\s+/g, '-').toLowerCase() + "-" + this.state.seminar.seminarSpecialties[specialtyKey -1].specialty.name.replace(/\s+/g, '-').toLowerCase() + ".docx");
         if (!me) {
             return;
         }
@@ -675,6 +676,14 @@ class Seminar extends Component {
     handleWelcomeDoc = () => {
         let me;
         me = getWelcomeDoc(this.state.seminar.key, "welcome-document-" + this.state.seminar.name.replace(/\s+/g, '-').toLowerCase() + ".docx");
+        if (!me) {
+            return;
+        }
+    };
+
+    handleAttendanceSeminar = () => {
+        let me;
+        me = getAttendanceSeminar(this.state.seminar.key, "attendance-document-" + this.state.seminar.name.replace(/\s+/g, '-').toLowerCase() + ".docx");
         if (!me) {
             return;
         }
@@ -909,7 +918,7 @@ class Seminar extends Component {
                         </Col>
                     </Row>
                     <Row gutter={16}>
-                        <Col span={12}>
+                        <Col span={6}>
                             <Upload
                                 className="add-button"
                                 name="seminar"
@@ -920,9 +929,16 @@ class Seminar extends Component {
                                 </Button>
                             </Upload>
                         </Col>
-                        <Col span={6} >
-                            <Button className="welcome-button" type='primary' onClick={this.handleWelcomeDoc.bind(this)}>
-                                Welcome Document
+                        <Col span={6}>
+                            <Button className="welcome-button" type='primary'
+                                    onClick={this.handleAttendanceSeminar.bind(this)}>
+                                Attendance Doc
+                            </Button>
+                        </Col>
+                        <Col span={6}>
+                            <Button className="welcome-button" type='primary'
+                                    onClick={this.handleWelcomeDoc.bind(this)}>
+                                Welcome Doc
                             </Button>
                         </Col>
                         <Col span={6}>

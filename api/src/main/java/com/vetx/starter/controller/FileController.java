@@ -89,6 +89,24 @@ public class FileController {
         .body(resource);
   }
 
+  @GetMapping(value = "/seminars/{seminarId}/attendance-document", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+  public ResponseEntity<Resource> getSeminarAttendanceDocument(@PathVariable("seminarId") Long seminarId) throws Exception {
+    Optional<Seminar> seminar = seminarRepository.findById(seminarId);
+    if (!seminar.isPresent()) {
+      return new ResponseEntity(new ApiResponse(false, "Create the Seminar first"),
+          HttpStatus.BAD_REQUEST);
+    }
+
+    Resource resource = new ByteArrayResource(attendanceDocService.createDocument(seminar.get()).toByteArray());
+
+    return ResponseEntity
+        .ok()
+        .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.wordprocessingml.document"))
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "welcome-document-" + seminar.get().getDate().toString() + ".docx")
+        .body(resource);
+  }
+
   @GetMapping(value = "/seminars/{seminarId}/welcome-document", produces = "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
   public ResponseEntity<Resource> getWelcomeDocument(@PathVariable("seminarId") Long seminarId) throws Exception {

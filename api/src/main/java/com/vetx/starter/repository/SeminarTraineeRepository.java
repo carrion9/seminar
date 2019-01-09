@@ -20,6 +20,8 @@ public interface SeminarTraineeRepository extends JpaRepository<SeminarTrainee, 
 
   List<SeminarTrainee> findAllBySeminarAndContractorAndSpecialty(Seminar seminar, Contractor contractor, Specialty specialty);
 
+  List<SeminarTrainee> findAllBySeminarAndSpecialty(Seminar seminar, Specialty specialty);
+
   @Query("SELECT DISTINCT a.contractor FROM SeminarTrainee as a WHERE a.seminar=?1 and a.specialty=?2")
   List<Contractor> findDistinctContractorBySeminarAndSpecialty(Seminar seminar, Specialty specialty);
 
