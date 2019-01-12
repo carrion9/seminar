@@ -11,20 +11,14 @@ import com.vetx.starter.security.UserPrincipal;
 import com.vetx.starter.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.*;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.hateoas.PagedResources;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 @RestController
 @Slf4j
@@ -33,28 +27,22 @@ public class UserController {
 
   private UserRepository userRepository;
 
-  private EntityLinks links;
-
   @Autowired
-  public UserController(UserRepository userRepository, EntityLinks entityLinks) {
+  public UserController(UserRepository userRepository) {
     this.userRepository = userRepository;
-    this.links = entityLinks;
   }
 
-  @GetMapping(produces =MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<PagedResources<UserProfile>> getUsers(
+  @GetMapping()
+  public PagedResources getUsers(
       UserPrincipal currentUser,
       @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
       @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
-      PagedResourcesAssembler assembler) {
+      PersistentEntityResourceAssembler assembler,
+      PagedResourcesAssembler pagedResourcesAssembler) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 
-    Page<UserProfile> userProfiles = userRepository.findAll(pageable).map(UserProfile::fromEntity);
-    PagedResources < UserProfile > pr = assembler.toResource(userProfiles, linkTo(UserController.class).slash("/api/user").withSelfRel());
-    HttpHeaders responseHeaders = new HttpHeaders();
-//    responseHeaders.add("Link", createLinkHeader(pr));
-    return new ResponseEntity <> (assembler.toResource(userProfiles, linkTo(UserController.class).slash("/api/user").withSelfRel()), responseHeaders, HttpStatus.OK);
+    return pagedResourcesAssembler.toResource(userRepository.findAll(pageable), assembler);
   }
 
   @GetMapping("/me")
@@ -80,19 +68,8 @@ public class UserController {
   public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
     User user = userRepository.findByUsername(username)
         .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-    return UserProfile.fromEntity(user);
-  }
 
-  private String createLinkHeader(PagedResources < UserProfile > pr) {
-    return buildLinkHeader(
-        pr.getLinks("first").get(0).getHref(), "first") +
-        ", " +
-        buildLinkHeader(pr.getLinks("next").get(0).getHref(), "next"
-        );
-  }
-
-  public static String buildLinkHeader(final String uri, final String rel) {
-    return "<" + uri + ">; rel=\"" + rel + "\"";
+    return new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt());
   }
 
 }
