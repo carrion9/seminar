@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import { LIST_SIZE } from '../constants';
 import { formatHumanDate } from '../util/Helpers';
-import { deleteItem, getAllUsers } from '../util/APIUtils';
+import {deleteItem, deleteUser, getAllUsers} from '../util/APIUtils';
 
 class UserList extends Component {
     constructor(props) {
@@ -81,18 +81,25 @@ class UserList extends Component {
         });
     }
 
-    deleteRecord(item){
+    deleteRecord(item) {
 
-          let promise;
+        let promise;
+        promise = deleteUser(item.id);
+        promise
+            .then(response => {
+                this.setState({
+                    dataSource: this.state.dataSource.filter(i => i.id !== item.id),
+                    isLoading: false
+                });
+                message.success('Deleted');
+            }).catch(error => {
+            this.setState({
+                isLoading: false
+            });
+            message.error('Deleted');
+        });
 
-          promise = deleteItem(item);
-
-          const dataSource = this.state.dataSource.filter(i => i.id !== item.id)
-          this.setState({dataSource})
-
-          message.success('Deleted');
-
-      }
+    }
 
     componentWillReceiveProps(nextProps) {
         if(this.props.isAuthenticated !== nextProps.isAuthenticated) {

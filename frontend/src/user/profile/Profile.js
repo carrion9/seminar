@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getUserProfile, updateItem } from '../../util/APIUtils';
+import {getUserProfile, updateItem, updateUser} from '../../util/APIUtils';
 import { Avatar, Tabs, Input, Form, notification, Button } from 'antd';
 import { getAvatarColor } from '../../util/Colors';
 import { formatDate } from '../../util/Helpers';
@@ -49,18 +49,10 @@ class Profile extends Component {
     handleSubmit(event) {
         event.preventDefault();
         
-        const uRequest = {
-            name: this.state.user.value,
-            email: this.state.user.value,
-            username: this.state.user.value,
-            _links: {
-                self: {
-                    href: this.state.user._links.self.href
-                }
-            },
-            password: this.state.password.value
-        };
-        updateItem(uRequest)
+        const usr = this.state.user;
+        usr.password = this.state.password.value;
+
+        updateUser(usr)
         .then(response => {
             notification.success({
                 message: 'Seminar App',
@@ -146,7 +138,7 @@ class Profile extends Component {
                             <div className="full-name">{this.state.user.name}</div>
                             <div className="username">@{this.state.user.username}</div>
                             <div className="user-joined">
-                                Joined {formatDate(this.state.user.joinedAt)}
+                                Joined {formatDate(this.state.user.createdAt)}
                             </div>
                         </div>
                         <br />

@@ -384,3 +384,26 @@ export function getAllUsers(page, size, sorter) {
         method: 'GET'
     });
 }
+
+export function deleteUser(id) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/user/" + id,
+        method: 'DELETE'
+    });
+}
+
+export function updateUser(item) {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/user/" + item.id,
+        method: 'PUT',
+        body: JSON.stringify(item)
+    });
+}

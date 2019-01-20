@@ -1,24 +1,29 @@
 package com.vetx.starter.controller;
 
+import com.vetx.starter.exception.CannotDeleteUserException;
 import com.vetx.starter.exception.ResourceNotFoundException;
+import com.vetx.starter.exception.UserNotFoundException;
+import com.vetx.starter.model.auth.RoleName;
 import com.vetx.starter.model.auth.User;
 import com.vetx.starter.repository.UserRepository;
 import com.vetx.starter.payload.UserIdentityAvailability;
-import com.vetx.starter.payload.UserProfile;
 import com.vetx.starter.payload.UserSummary;
 import com.vetx.starter.security.CurrentUser;
 import com.vetx.starter.security.UserPrincipal;
 import com.vetx.starter.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
-import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @Slf4j
@@ -26,23 +31,25 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
   private UserRepository userRepository;
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserController(UserRepository userRepository) {
+  public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
-  @GetMapping()
-  public PagedResources getUsers(
-      UserPrincipal currentUser,
+  @GetMapping(produces =MediaType.APPLICATION_JSON_VALUE)
+  public Page<User> getUsers(
+      @CurrentUser UserPrincipal currentUser,
       @RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-      @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size,
-      PersistentEntityResourceAssembler assembler,
-      PagedResourcesAssembler pagedResourcesAssembler) {
+      @RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size
+      ) {
 
     Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 
-    return pagedResourcesAssembler.toResource(userRepository.findAll(pageable), assembler);
+    Page<User> users = userRepository.findAll(pageable);
+    return users;
   }
 
   @GetMapping("/me")
@@ -65,11 +72,28 @@ public class UserController {
   }
 
   @GetMapping("/{username}")
-  public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
-    User user = userRepository.findByUsername(username)
+  public User getUserProfile(@PathVariable(value = "username") String username) {
+    return userRepository.findByUsername(username)
         .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-
-    return new UserProfile(user.getId(), user.getUsername(), user.getName(), user.getCreatedAt());
   }
 
+  @DeleteMapping("/{id}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteUser(@PathVariable Long id, @CurrentUser UserPrincipal currentUser) {
+    User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    if ((user.getEmail().equals(currentUser.getEmail())) ||
+        (user.getRoles().stream().filter(role -> role.getName().equals(RoleName.ROLE_ADMIN)).count() != 0))
+    {
+      throw new CannotDeleteUserException();
+    }
+    userRepository.deleteById(id);
+  }
+
+  @PutMapping("/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public User updateUser(@PathVariable Long id, @Valid @RequestBody User updatedUser) {
+    User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+    return userRepository.save(user);
+  }
 }
